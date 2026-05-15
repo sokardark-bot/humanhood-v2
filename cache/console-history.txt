@@ -1,0 +1,5 @@
+npx hardhat run scripts/deploy.js --network localhost
+await contract.isHuman("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+await contract.verifyMe()
+const contract = await ethers.getContractAt("HumanProof", address)
+const address = "0x...." // Pon la dirección que te salió en el despliegue

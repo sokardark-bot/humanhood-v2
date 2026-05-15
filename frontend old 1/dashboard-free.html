@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Humanhood | Control de clientes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-svg {
+            width: 40px;
+            height: 40px;
+        }
+        h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card h2 {
+            margin-bottom: 16px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .input-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            padding: 12px 16px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #f1f5f9;
+            font-size: 0.9rem;
+        }
+        input {
+            flex: 1;
+        }
+        textarea {
+            width: 100%;
+            resize: vertical;
+            font-family: inherit;
+        }
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
+        }
+        .danger-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        .secondary-btn {
+            background: #334155;
+        }
+        .result {
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 16px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #334155;
+        }
+        th {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        .status-ok {
+            color: #4ade80;
+            font-weight: 600;
+        }
+        .status-warning {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        .status-danger {
+            color: #f87171;
+            font-weight: 600;
+        }
+        .client-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .add-client {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .info-text {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+        .delete-client {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .delete-client:hover {
+            background: #dc2626;
+        }
+        .note-cell {
+            max-width: 200px;
+            word-break: break-word;
+        }
+        .edit-note {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-left: 8px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge-active {
+            background: #22c55e20;
+            color: #4ade80;
+        }
+        .badge-warning {
+            background: #f59e0b20;
+            color: #fbbf24;
+        }
+        .badge-blocked {
+            background: #ef444420;
+            color: #f87171;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-area">
+                <svg class="logo-svg" width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="16" cy="11" r="5" stroke="url(#grad)" stroke-width="2" fill="none"/>
+                    <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad)"/>
+                    <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad)"/>
+                    <circle cx="10" cy="22" r="2" fill="url(#grad)"/>
+                    <circle cx="22" cy="22" r="2" fill="url(#grad)"/>
+                    <defs>
+                        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea"/>
+                            <stop offset="100%" style="stop-color:#764ba2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>Humanhood Dashboard</h1>
+            </div>
+            <div>
+                <span class="badge badge-active">🟢 Panel de control</span>
+            </div>
+        </div>
+        <p class="subtitle">Control de clientes, consultas gratis y gestión de notas</p>
+
+        <!-- Contrato Info -->
+        <div class="card">
+            <h2>📜 Contrato Free (Polygon Amoy)</h2>
+            <p style="font-family: monospace; word-break: break-all;" id="contractAddress">
+                Cargando dirección...
+            </p>
+        </div>
+
+        <!-- Consultar cliente individual -->
+        <div class="card">
+            <h2>🔍 Consultar cliente individual</h2>
+            <div class="input-group">
+                <input type="text" id="clientAddress" placeholder="Dirección del cliente (0x...)" spellcheck="false">
+                <button id="checkClientBtn">Consultar</button>
+            </div>
+            <div id="clientResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Lista de clientes -->
+        <div class="card">
+            <h2>📋 Mis clientes</h2>
+            <p class="info-text">Añade las direcciones de tus clientes, asígnale un nombre y controla sus consultas gratis</p>
+            
+            <div class="add-client">
+                <input type="text" id="newClientAddress" placeholder="Dirección del cliente (0x...)" spellcheck="false">
+                <input type="text" id="newClientName" placeholder="Nombre de la empresa / cliente" spellcheck="false">
+                <button id="addClientBtn">➕ Añadir cliente</button>
+                <button id="clearClientsBtn" class="danger-btn">🗑️ Borrar todos</button>
+            </div>
+
+            <div id="clientsList" class="client-list">
+                <p style="color: #94a3b8; text-align: center; padding: 40px;">Cargando clientes...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        // 🔧 CONFIGURACIÓN - CAMBIA ESTA DIRECCIÓN POR LA DE TU CONTRATO FREE EN AMOY
+        const CONTRACT_FREE_ADDRESS = "0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8"; // 👈 PON AQUÍ LA DIRECCIÓN DE TU CONTRATO FREE
+
+        const CONTRACT_ABI = [
+            "function consultasRestantes(address proyecto) view returns (uint256)",
+            "function consultasRealizadas(address) view returns (uint256)",
+            "function LIMITE_FREE() view returns (uint256)"
+        ];
+
+        let provider;
+        let contract;
+        
+        // Estructura de cliente: { address, name, notes, addedAt }
+        let clients = [];
+
+        // Cargar clientes guardados
+        function loadClients() {
+            const saved = localStorage.getItem('humanhood_clients');
+            if (saved) {
+                clients = JSON.parse(saved);
+            } else {
+                clients = [];
+            }
+            renderClients();
+        }
+
+        // Guardar clientes
+        function saveClients() {
+            localStorage.setItem('humanhood_clients', JSON.stringify(clients));
+            renderClients();
+        }
+
+        // Eliminar cliente individual
+        function deleteClient(index) {
+            if (confirm(`¿Eliminar al cliente "${clients[index].name || clients[index].address.slice(0, 10)}..."?`)) {
+                clients.splice(index, 1);
+                saveClients();
+            }
+        }
+
+        // Editar nota/nombre de cliente
+        function editClient(index) {
+            const newName = prompt("Nombre de la empresa:", clients[index].name || "");
+            const newNotes = prompt("Notas adicionales (proyecto, contacto, etc.):", clients[index].notes || "");
+            
+            if (newName !== null) clients[index].name = newName;
+            if (newNotes !== null) clients[index].notes = newNotes;
+            saveClients();
+        }
+
+        // Renderizar tabla de clientes
+        async function renderClients() {
+            const container = document.getElementById('clientsList');
+            if (!contract) {
+                container.innerHTML = '<p style="color: #94a3b8; text-align: center; padding: 40px;">Conectando con la blockchain...</p>';
+                return;
+            }
+
+            if (clients.length === 0) {
+                container.innerHTML = '<p style="color: #94a3b8; text-align: center; padding: 40px;">No hay clientes añadidos. Añade uno arriba.</p>';
+                return;
+            }
+
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th>Empresa / Cliente</th>
+                        <th>Dirección wallet</th>
+                        <th>Consultas</th>
+                        <th>Estado</th>
+                        <th>Notas</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            for (let i = 0; i < clients.length; i++) {
+                const client = clients[i];
+                try {
+                    const realizadas = await contract.consultasRealizadas(client.address);
+                    const limite = await contract.LIMITE_FREE();
+                    const restantes = Number(limite) - Number(realizadas);
+                    
+                    let statusClass = '';
+                    let statusText = '';
+                    let badgeClass = '';
+                    
+                    if (Number(realizadas) >= Number(limite)) {
+                        statusClass = 'status-danger';
+                        statusText = 'Bloqueado';
+                        badgeClass = 'badge-blocked';
+                    } else if (restantes < 100) {
+                        statusClass = 'status-warning';
+                        statusText = `${restantes} restantes`;
+                        badgeClass = 'badge-warning';
+                    } else {
+                        statusClass = 'status-ok';
+                        statusText = `${restantes} restantes`;
+                        badgeClass = 'badge-active';
+                    }
+                    
+                    const empresaNombre = client.name ? client.name : '<em style="color:#94a3b8">Sin nombre</em>';
+                    const notasMostrar = client.notes ? (client.notes.length > 50 ? client.notes.slice(0, 50) + '...' : client.notes) : '<em style="color:#94a3b8">-</em>';
+                    
+                    html += `<tr>
+                        <td class="note-cell"><strong>${empresaNombre}</strong></td>
+                        <td style="font-family: monospace; font-size: 0.8rem;">${client.address.slice(0, 8)}...${client.address.slice(-6)}</td>
+                        <td>${realizadas.toString()} / ${limite.toString()}</td>
+                        <td><span class="badge ${badgeClass}">${statusText}</span></td>
+                        <td class="note-cell">${notasMostrar}</td>
+                        <td>
+                            <button class="edit-note" onclick="editClient(${i})">✏️ Editar</button>
+                            <button class="delete-client" onclick="deleteClient(${i})">🗑️ Borrar</button>
+                        </td>
+                    </tr>`;
+                } catch (error) {
+                    console.error(`Error consultando ${client.address}:`, error);
+                    html += `<tr>
+                        <td class="note-cell">${client.name || '<em style="color:#94a3b8">Sin nombre</em>'}</td>
+                        <td style="font-family: monospace; font-size: 0.8rem;">${client.address.slice(0, 8)}...${client.address.slice(-6)}</td>
+                        <td colspan="3" style="color: #f87171;">Error al consultar contrato</td>
+                        <td>
+                            <button class="edit-note" onclick="editClient(${i})">✏️ Editar</button>
+                            <button class="delete-client" onclick="deleteClient(${i})">🗑️ Borrar</button>
+                        </td>
+                    </tr>`;
+                }
+            }
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        // Consultar cliente individual
+        async function checkClient() {
+            const address = document.getElementById('clientAddress').value.trim();
+            if (!address) {
+                alert('Ingresa una dirección');
+                return;
+            }
+            
+            const resultDiv = document.getElementById('clientResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<p>⏳ Consultando blockchain...</p>';
+            
+            try {
+                const realizadas = await contract.consultasRealizadas(address);
+                const limite = await contract.LIMITE_FREE();
+                const restantes = Number(limite) - Number(realizadas);
+                
+                let statusHtml = '';
+                let badgeClass = '';
+                if (Number(realizadas) >= Number(limite)) {
+                    statusHtml = '<span style="color: #f87171;">❌ Cliente bloqueado. Ha superado las 1,000 consultas gratis.</span>';
+                    badgeClass = 'badge-blocked';
+                } else if (restantes < 100) {
+                    statusHtml = `<span style="color: #fbbf24;">⚠️ Cerca del límite. Le quedan ${restantes} consultas gratis.</span>`;
+                    badgeClass = 'badge-warning';
+                } else {
+                    statusHtml = `<span style="color: #4ade80;">✅ Cliente activo. Le quedan ${restantes} consultas gratis.</span>`;
+                    badgeClass = 'badge-active';
+                }
+                
+                resultDiv.innerHTML = `
+                    <p><strong>📌 Dirección:</strong> <code>${address}</code></p>
+                    <p><strong>📊 Consultas realizadas:</strong> ${realizadas} / ${limite}</p>
+                    <p><strong>📈 Consultas restantes:</strong> ${restantes}</p>
+                    <p><strong>🏷️ Estado:</strong> ${statusHtml}</p>
+                    <button onclick="addToClients('${address}')" style="margin-top: 12px; padding: 8px 16px; background: #3b82f6;">➕ Añadir a mis clientes</button>
+                `;
+            } catch (error) {
+                console.error(error);
+                resultDiv.innerHTML = `<p style="color: #f87171;">❌ Error al consultar. ¿La dirección es válida y está en Polygon Amoy?</p>`;
+            }
+        }
+
+        // Añadir cliente desde consulta individual
+        window.addToClients = function(address) {
+            if (!clients.find(c => c.address.toLowerCase() === address.toLowerCase())) {
+                document.getElementById('newClientAddress').value = address;
+                document.getElementById('newClientName').focus();
+                alert('Dirección añadida. Completa el nombre y pulsa "Añadir cliente".');
+            } else {
+                alert('Este cliente ya está en tu lista');
+            }
+        };
+
+        // Añadir nuevo cliente
+        function addNewClient() {
+            const address = document.getElementById('newClientAddress').value.trim();
+            const name = document.getElementById('newClientName').value.trim();
+            
+            if (!address) {
+                alert('Ingresa una dirección de wallet');
+                return;
+            }
+            
+            if (!address.startsWith('0x') || address.length !== 42) {
+                alert('Dirección no válida. Debe ser 0x + 40 caracteres');
+                return;
+            }
+            
+            if (clients.find(c => c.address.toLowerCase() === address.toLowerCase())) {
+                alert('Este cliente ya está en tu lista');
+                return;
+            }
+            
+            clients.push({
+                address: address,
+                name: name || '',
+                notes: '',
+                addedAt: new Date().toISOString()
+            });
+            
+            saveClients();
+            document.getElementById('newClientAddress').value = '';
+            document.getElementById('newClientName').value = '';
+        }
+
+        // Inicializar
+        async function init() {
+            if (typeof ethers === 'undefined') {
+                setTimeout(init, 500);
+                return;
+            }
+            
+            provider = new ethers.providers.JsonRpcProvider('https://rpc-amoy.polygon.technology/');
+            contract = new ethers.Contract(CONTRACT_FREE_ADDRESS, CONTRACT_ABI, provider);
+            
+            document.getElementById('contractAddress').innerHTML = `<code>📍 ${CONTRACT_FREE_ADDRESS}</code>`;
+            
+            document.getElementById('checkClientBtn').onclick = checkClient;
+            document.getElementById('addClientBtn').onclick = addNewClient;
+            document.getElementById('clearClientsBtn').onclick = () => {
+                if (confirm('⚠️ ¿Borrar TODOS los clientes? Esta acción no se puede deshacer.')) {
+                    clients = [];
+                    saveClients();
+                }
+            };
+            
+            loadClients();
+            
+            // Actualizar cada 30 segundos
+            setInterval(() => renderClients(), 30000);
+        }
+        
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humanhood | Blockchain Human Verification</title>
+    <meta name="description" content="Human verification API for Web3 projects. Prevent bots and sybils in your airdrops, DAOs, and games. Free 1,000 test queries.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #1a1a2e;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            z-index: 1000;
+            padding: 16px 0;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-svg {
+            vertical-align: middle;
+        }
+
+        .logo-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* LANGUAGE SELECTOR */
+        .language-selector {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1001;
+            background: white;
+            border-radius: 50px;
+            padding: 6px 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 0.8rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .language-selector select {
+            background: transparent;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+        }
+
+        @media (max-width: 768px) {
+            .language-selector {
+                top: 70px;
+                right: 10px;
+            }
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-outline:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .btn-large {
+            padding: 14px 32px;
+            font-size: 1rem;
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            border-radius: 12px;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+
+        /* HERO */
+        .hero {
+            padding: 140px 0 80px;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(102,126,234,0.1);
+            color: #667eea;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: #4a5568;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 48px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        /* SECCIONES */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(102,126,234,0.1);
+            color: #667eea;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            color: #718096;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* STEPS */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 32px;
+            background: #f7f9fc;
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            margin-bottom: 12px;
+        }
+
+        /* CODE BLOCK */
+        .code-block {
+            background: #1a1a2e;
+            border-radius: 16px;
+            overflow: hidden;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .code-header {
+            background: #16213e;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #cbd5e0;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: #2d3748;
+            border: none;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        pre {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #68d391;
+            line-height: 1.5;
+        }
+
+        /* PRICING */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            padding: 32px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid #667eea;
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .pricing-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #edf2f7;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .pricing-card.featured .pricing-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .price-period {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #718096;
+        }
+
+        .pricing-features ul {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+
+        .pricing-features li {
+            padding: 8px 0;
+            color: #4a5568;
+        }
+
+        /* DEMO ACTIONS - BOTONES ALINEADOS */
+        .demo-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn-switch-inline,
+        .btn-connect-inline {
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-switch-inline {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .btn-switch-inline:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59,130,246,0.3);
+        }
+
+        .btn-connect-inline {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-connect-inline:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
+        }
+
+        @media (max-width: 550px) {
+            .demo-actions {
+                flex-direction: column;
+            }
+            .btn-switch-inline,
+            .btn-connect-inline {
+                width: 100%;
+            }
+        }
+
+        /* DEMO CARD */
+        .demo {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(102,126,234,0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .demo-card {
+            background: white;
+            border-radius: 32px;
+            padding: 48px;
+            max-width: 650px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .demo-header {
+            margin-bottom: 32px;
+        }
+
+        .demo-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 2rem;
+        }
+
+        .demo-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .demo-header p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .wallet-info {
+            margin-top: 16px;
+            padding: 12px;
+            background: #f7f9fc;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .status-badge.verified {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-badge.not-verified {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .status-text {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .status-text.verified {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-text.not-verified {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .loading {
+            margin-top: 16px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .help-message {
+            margin-top: 24px;
+            padding: 16px;
+            background: #f0fdf4;
+            border-radius: 16px;
+            text-align: left;
+            border-left: 4px solid #48bb78;
+        }
+
+        .help-message h4 {
+            color: #22543d;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .help-message ol {
+            margin-left: 20px;
+            color: #4a5568;
+            font-size: 0.8rem;
+        }
+
+        .help-message li {
+            margin: 6px 0;
+        }
+
+        .help-message a {
+            color: #667eea;
+        }
+
+        .faucet-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #d97706;
+            padding: 4px 8px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            margin-left: 8px;
+        }
+
+        /* FAQ */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 32px;
+        }
+
+        .faq-item {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-8px);
+        }
+
+        .faq-item h3 {
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+
+        .faq-item p {
+            color: #718096;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 48px 0 24px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand .logo-svg {
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            margin-top: 8px;
+            color: #a0aec0;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .footer-col h4 {
+            margin-bottom: 16px;
+            font-size: 1rem;
+        }
+
+        .footer-col a {
+            display: block;
+            color: #a0aec0;
+            text-decoration: none;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: #667eea;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid #2d3748;
+            color: #718096;
+            font-size: 0.8rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step, .pricing-card, .faq-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .nav-links, .nav-cta {
+                display: none;
+            }
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .demo-card {
+                padding: 32px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- LANGUAGE SELECTOR -->
+<div class="language-selector">
+    <span>🌐</span>
+    <select id="languageSelect">
+        <option value="es">🇪🇸 Español</option>
+        <option value="en">🇬🇧 English</option>
+    </select>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="container">
+        <div class="nav-logo">
+            <svg class="logo-svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="11" r="5" stroke="url(#grad)" stroke-width="2" fill="none"/>
+                <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad)"/>
+                <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad)"/>
+                <circle cx="10" cy="22" r="2" fill="url(#grad)"/>
+                <circle cx="22" cy="22" r="2" fill="url(#grad)"/>
+                <defs>
+                    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#667eea"/>
+                        <stop offset="100%" style="stop-color:#764ba2"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span class="logo-text">Humanhood</span>
+        </div>
+        <div class="nav-links">
+            <a href="#producto" class="i18n-navProduct">Producto</a>
+            <a href="#precios" class="i18n-navPricing">Precios</a>
+            <a href="#demo" class="i18n-navDemo">Demo</a>
+            <a href="docs.html" class="i18n-navDocs">Docs</a>
+            <a href="#faq" class="i18n-navFaq">FAQ</a>
+        </div>
+        <div class="nav-cta">
+            <a href="#demo" class="btn btn-outline i18n-navTryDemo">Probar demo</a>
+            <a href="#precios" class="btn btn-primary i18n-navIntegrate">Integrar ahora</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+    <div class="container">
+        <div class="hero-badge i18n-heroBadge">🚀 Lanzamiento oficial</div>
+        <h1 class="hero-title">
+            <span class="i18n-heroTitle1">Verificación humana</span><br>
+            <span class="gradient-text i18n-heroTitle2">en la blockchain</span>
+        </h1>
+        <p class="hero-description i18n-heroDesc">
+            Protege tus airdrops, DAOs y juegos de bots y sybils.<br>
+            Una API sencilla que cualquier proyecto Web3 puede integrar.
+        </p>
+        <div class="hero-buttons">
+            <a href="#demo" class="btn btn-large btn-primary i18n-heroBtnDemo">Probar demo gratuita</a>
+            <a href="docs.html" class="btn btn-large btn-outline i18n-heroBtnDocs">📘 Ver documentación</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-number">$0.05</span>
+                <span class="stat-label i18n-stat1Label">por consulta</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">1,000</span>
+                <span class="stat-label i18n-stat2Label">consultas gratis</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">+5.2M</span>
+                <span class="stat-label i18n-stat3Label">wallets protegidas</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- PRODUCTO -->
+<section id="producto" class="producto">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag i18n-productTag">¿Cómo funciona?</span>
+            <h2><span class="i18n-productTitle1">Integración en</span> <span class="gradient-text i18n-productTitle2">3 líneas de código</span></h2>
+            <p class="i18n-productDesc">Tu proyecto puede empezar a filtrar bots en menos de 5 minutos.</p>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3 class="i18n-step1Title">Conecta tu wallet</h3>
+                <p class="i18n-step1Desc">El usuario conecta MetaMask y solicita verificación.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3 class="i18n-step2Title">Verifica su humanidad</h3>
+                <p class="i18n-step2Desc">Un validador humano confirma que no es un bot.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3 class="i18n-step3Title">Consulta el estado</h3>
+                <p class="i18n-step3Desc">Tu contrato llama a <code>checkHuman(wallet)</code> y obtiene true/false.</p>
+            </div>
+        </div>
+        <div class="code-block">
+            <div class="code-header">
+                <span class="i18n-codeTitle">📝 Integración en tu contrato (versión de pago)</span>
+                <button class="copy-btn i18n-copyBtn" onclick="copyCode()">Copiar</button>
+            </div>
+            <pre><code id="codeToCopy">interface IHumanhood {
+    function checkHuman(address user) external view returns (bool);
+}
+// En tu función de claim (versión Mainnet - $0.05/consulta):
+require(
+    IHumanhood(0xC346AB25a0028efefB5AAD78d46b5590b38864b5).checkHuman(msg.sender),
+    "Not verified as human"
+);</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- PRECIOS -->
+<section id="precios" class="precios">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag i18n-pricingTag">Precios transparentes</span>
+            <h2><span class="i18n-pricingTitle1">Planes para</span> <span class="gradient-text i18n-pricingTitle2">todo tipo de proyecto</span></h2>
+            <p class="i18n-pricingDesc">Paga solo por lo que usas. Sin compromisos.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-badge i18n-freeBadge">Freemium</div>
+                <div class="pricing-price">$0<span class="price-period i18n-freePeriod">/mes</span></div>
+                <div class="pricing-features">
+                    <ul>
+                        <li>✅ <span class="i18n-freeFeat1">1,000 consultas gratis (para probar)</span></li>
+                        <li>✅ <span class="i18n-freeFeat2">Polygon Amoy (testnet)</span></li>
+                        <li>✅ <span class="i18n-freeFeat3">Soporte por email</span></li>
+                        <li>✅ <span class="i18n-freeFeat4">Documentación completa</span></li>
+                    </ul>
+                </div>
+                <a href="#demo" class="btn btn-outline i18n-freeBtn">Comenzar gratis</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-badge i18n-paidBadge">Recomendado</div>
+                <div class="pricing-price">$0.05<span class="price-period i18n-paidPeriod">por consulta</span></div>
+                <div class="pricing-features">
+                    <ul>
+                        <li>✅ <span class="i18n-paidFeat1">Pago por uso real ($0.05/consulta)</span></li>
+                        <li>✅ <span class="i18n-paidFeat2">Polygon Mainnet (producción)</span></li>
+                        <li>✅ <span class="i18n-paidFeat3">Soporte prioritario 24/7</span></li>
+                        <li>✅ <span class="i18n-paidFeat4">Dashboard de uso y facturación</span></li>
+                    </ul>
+                </div>
+                <a href="docs.html" class="btn btn-primary i18n-paidBtn">Ver documentación</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-badge i18n-enterpriseBadge">Empresarial</div>
+                <div class="pricing-price">$500<span class="price-period i18n-enterprisePeriod">/mes</span></div>
+                <div class="pricing-features">
+                    <ul>
+                        <li>✅ <span class="i18n-enterpriseFeat1">Hasta 10,000 consultas/mes</span></li>
+                        <li>✅ <span class="i18n-enterpriseFeat2">Soporte 24/7 con SLA</span></li>
+                        <li>✅ <span class="i18n-enterpriseFeat3">Múltiples redes</span></li>
+                        <li>✅ <span class="i18n-enterpriseFeat4">Dashboard personalizado</span></li>
+                    </ul>
+                </div>
+                <a href="mailto:info@humanhood.tech" class="btn btn-outline i18n-enterpriseBtn">Contactar ventas</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DEMO MEJORADA -->
+<section id="demo" class="demo">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag i18n-demoTag">Prueba en vivo · Gratis</span>
+            <h2><span class="i18n-demoTitle1">Verifica que eres</span> <span class="gradient-text i18n-demoTitle2">humano ahora mismo</span></h2>
+            <p class="i18n-demoDesc">Conecta tu wallet en <strong>Polygon Amoy</strong> y demuestra que no eres un bot.</p>
+        </div>
+        <div class="demo-card">
+            <div class="demo-header">
+                <div class="demo-icon">🧪</div>
+                <h3 class="i18n-demoCardTitle">Demo en vivo</h3>
+                <p class="i18n-demoCardDesc">Prueba gratuita · Red Polygon Amoy (testnet)</p>
+            </div>
+
+            <!-- BOTONES EN LA MISMA LÍNEA HORIZONTAL -->
+            <div class="demo-actions">
+                <button id="switchNetworkBtn" class="btn btn-switch-inline">🔄 <span class="i18n-switchBtn">Cambiar a Polygon Amoy</span></button>
+                <button id="connectWallet" class="btn btn-connect-inline">🔌 <span class="i18n-connectBtn">Conectar Wallet</span></button>
+            </div>
+
+            <div id="walletInfo" class="wallet-info hidden">
+                <span>📍 <span class="i18n-walletLabel">Wallet</span>: <span id="walletAddress">-</span></span>
+                <span id="humanStatus" class="status-badge i18n-statusChecking">❓ Verificando...</span>
+            </div>
+
+            <div class="verification-section hidden" id="verificationSection">
+                <div class="status-text" id="statusText">No verificado</div>
+                <button id="verifyButton" class="btn btn-success i18n-verifyBtn">✅ Verificarme como humano</button>
+                <div id="loadingMessage" class="loading hidden i18n-loading">⏳ Procesando transacción...</div>
+            </div>
+
+            <div class="help-message" id="helpMessage">
+                <h4 class="i18n-helpTitle">📌 ¿Cómo probar gratis?</h4>
+                <ol>
+                    <li class="i18n-helpStep1">Conecta MetaMask</li>
+                    <li class="i18n-helpStep2">Cambia a la red <strong>Polygon Amoy</strong> (usa el botón superior)</li>
+                    <li class="i18n-helpStep3"><span class="i18n-helpStep3Text">Si no tienes POL, </span><a href="https://faucet.polygon.technology/" target="_blank" style="color: #667eea;">solicita gratis aquí</a> <span class="faucet-badge">Gratis</span></li>
+                    <li class="i18n-helpStep4">Una vez con POL, haz clic en "Verificarme como humano"</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag i18n-faqTag">Preguntas frecuentes</span>
+            <h2><span class="i18n-faqTitle1">Resolvemos tus</span> <span class="gradient-text i18n-faqTitle2">dudas</span></h2>
+        </div>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h3 class="i18n-faq1Q">¿Cómo integro Humanhood en mi proyecto?</h3>
+                <p class="i18n-faq1A">Añade 3 líneas de código a tu contrato inteligente. La documentación completa está disponible para desarrolladores.</p>
+            </div>
+            <div class="faq-item">
+                <h3 class="i18n-faq2Q">¿La demo cuesta dinero?</h3>
+                <p class="i18n-faq2A"><strong>No.</strong> Usamos Polygon Amoy (testnet). El POL es gratuito y se obtiene del faucet.</p>
+            </div>
+            <div class="faq-item">
+                <h3 class="i18n-faq3Q">¿Cómo cambio mi MetaMask a Amoy?</h3>
+                <p class="i18n-faq3A">Haz clic en el botón <strong>"Cambiar a Polygon Amoy"</strong> dentro de la demo. MetaMask lo añadirá automáticamente.</p>
+            </div>
+            <div class="faq-item">
+                <h3 class="i18n-faq4Q">¿Cuánto cuesta en producción?</h3>
+                <p class="i18n-faq4A"><strong>$0.05 por consulta</strong> en Polygon Mainnet. El gas lo paga el usuario final.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <svg class="logo-svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="16" cy="11" r="5" stroke="url(#gradFooter)" stroke-width="2" fill="none"/>
+                    <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#gradFooter)"/>
+                    <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#gradFooter)"/>
+                    <circle cx="10" cy="22" r="2" fill="url(#gradFooter)"/>
+                    <circle cx="22" cy="22" r="2" fill="url(#gradFooter)"/>
+                    <defs>
+                        <linearGradient id="gradFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea"/>
+                            <stop offset="100%" style="stop-color:#764ba2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text">Humanhood</span>
+                <p class="i18n-footerDesc">Verificación humana descentralizada</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4 class="i18n-footerProduct">Producto</h4>
+                    <a href="#producto" class="i18n-footerHowItWorks">Cómo funciona</a>
+                    <a href="#precios" class="i18n-footerPricing">Precios</a>
+                    <a href="#demo" class="i18n-footerDemo">Demo</a>
+                </div>
+                <div class="footer-col">
+                    <h4 class="i18n-footerResources">Recursos</h4>
+                    <a href="docs.html" class="i18n-footerDocs">Documentación</a>
+                    <a href="#" class="i18n-footerGitHub">GitHub</a>
+                </div>
+                <div class="footer-col">
+                    <h4 class="i18n-footerContact">Contacto</h4>
+                    <a href="mailto:info@humanhood.tech">info@humanhood.tech</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="i18n-footerCopyright">&copy; 2026 Humanhood. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script>
+    // ==================== CONFIGURACIÓN DEL CONTRATO ====================
+    const CONTRACT_ADDRESS = "0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8";
+    
+    const CONTRACT_ABI = [
+        "function checkHuman(address) view returns (bool)",
+        "function verifyMe() external",
+        "event Verified(address indexed user)"
+    ];
+    
+    const AMOY_NETWORK = {
+        chainId: "0x13881",
+        chainName: "Polygon Amoy",
+        nativeCurrency: { name: "POL", symbol: "POL", decimals: 18 },
+        rpcUrls: ["https://rpc-amoy.polygon.technology/"],
+        blockExplorerUrls: ["https://amoy.polygonscan.com/"]
+    };
+    
+    // ==================== IDIOMAS ====================
+    const translations = {
+        es: {
+            navProduct: "Producto", navPricing: "Precios", navDemo: "Demo", navDocs: "Docs", navFaq: "FAQ",
+            navTryDemo: "Probar demo", navIntegrate: "Integrar ahora",
+            heroBadge: "🚀 Lanzamiento oficial",
+            heroTitle1: "Verificación humana", heroTitle2: "en la blockchain",
+            heroDesc: "Protege tus airdrops, DAOs y juegos de bots y sybils.<br>Una API sencilla que cualquier proyecto Web3 puede integrar.",
+            heroBtnDemo: "Probar demo gratuita", heroBtnDocs: "📘 Ver documentación",
+            stat1Label: "por consulta", stat2Label: "consultas gratis", stat3Label: "wallets protegidas",
+            productTag: "¿Cómo funciona?",
+            productTitle1: "Integración en", productTitle2: "3 líneas de código",
+            productDesc: "Tu proyecto puede empezar a filtrar bots en menos de 5 minutos.",
+            step1Title: "Conecta tu wallet", step1Desc: "El usuario conecta MetaMask y solicita verificación.",
+            step2Title: "Verifica su humanidad", step2Desc: "Un validador humano confirma que no es un bot.",
+            step3Title: "Consulta el estado", step3Desc: "Tu contrato llama a checkHuman(wallet) y obtiene true/false.",
+            codeTitle: "📝 Integración en tu contrato (versión de pago)",
+            copyBtn: "Copiar",
+            pricingTag: "Precios transparentes",
+            pricingTitle1: "Planes para", pricingTitle2: "todo tipo de proyecto",
+            pricingDesc: "Paga solo por lo que usas. Sin compromisos.",
+            freeBadge: "Freemium", freePeriod: "/mes",
+            freeFeat1: "1,000 consultas gratis (para probar)", freeFeat2: "Polygon Amoy (testnet)", freeFeat3: "Soporte por email", freeFeat4: "Documentación completa",
+            freeBtn: "Comenzar gratis",
+            paidBadge: "Recomendado", paidPeriod: "por consulta",
+            paidFeat1: "Pago por uso real ($0.05/consulta)", paidFeat2: "Polygon Mainnet (producción)", paidFeat3: "Soporte prioritario 24/7", paidFeat4: "Dashboard de uso y facturación",
+            paidBtn: "Ver documentación",
+            enterpriseBadge: "Empresarial", enterprisePeriod: "/mes",
+            enterpriseFeat1: "Hasta 10,000 consultas/mes", enterpriseFeat2: "Soporte 24/7 con SLA", enterpriseFeat3: "Múltiples redes", enterpriseFeat4: "Dashboard personalizado",
+            enterpriseBtn: "Contactar ventas",
+            demoTag: "Prueba en vivo · Gratis",
+            demoTitle1: "Verifica que eres", demoTitle2: "humano ahora mismo",
+            demoDesc: "Conecta tu wallet en Polygon Amoy y demuestra que no eres un bot.",
+            demoCardTitle: "Demo en vivo", demoCardDesc: "Prueba gratuita · Red Polygon Amoy (testnet)",
+            switchBtn: "Cambiar a Polygon Amoy",
+            connectBtn: "Conectar Wallet",
+            walletLabel: "Wallet",
+            statusChecking: "❓ Verificando...",
+            verifyBtn: "Verificarme como humano",
+            loading: "⏳ Procesando transacción...",
+            helpTitle: "📌 ¿Cómo probar gratis?",
+            helpStep1: "Conecta MetaMask",
+            helpStep2: "Cambia a la red Polygon Amoy (usa el botón superior)",
+            helpStep3Text: "Si no tienes POL, ",
+            helpStep4: "Una vez con POL, haz clic en 'Verificarme como humano'",
+            faqTag: "Preguntas frecuentes",
+            faqTitle1: "Resolvemos tus", faqTitle2: "dudas",
+            faq1Q: "¿Cómo integro Humanhood en mi proyecto?",
+            faq1A: "Añade 3 líneas de código a tu contrato inteligente. La documentación completa está disponible para desarrolladores.",
+            faq2Q: "¿La demo cuesta dinero?",
+            faq2A: "No. Usamos Polygon Amoy (testnet). El POL es gratuito y se obtiene del faucet.",
+            faq3Q: "¿Cómo cambio mi MetaMask a Amoy?",
+            faq3A: "Haz clic en el botón 'Cambiar a Polygon Amoy' dentro de la demo. MetaMask lo añadirá automáticamente.",
+            faq4Q: "¿Cuánto cuesta en producción?",
+            faq4A: "$0.05 por consulta en Polygon Mainnet. El gas lo paga el usuario final.",
+            footerDesc: "Verificación humana descentralizada",
+            footerProduct: "Producto",
+            footerHowItWorks: "Cómo funciona",
+            footerPricing: "Precios",
+            footerDemo: "Demo",
+            footerResources: "Recursos",
+            footerDocs: "Documentación",
+            footerGitHub: "GitHub",
+            footerContact: "Contacto",
+            footerCopyright: "© 2026 Humanhood. Todos los derechos reservados."
+        },
+        en: {
+            navProduct: "Product", navPricing: "Pricing", navDemo: "Demo", navDocs: "Docs", navFaq: "FAQ",
+            navTryDemo: "Try demo", navIntegrate: "Integrate now",
+            heroBadge: "🚀 Official Launch",
+            heroTitle1: "Human verification", heroTitle2: "on the blockchain",
+            heroDesc: "Protect your airdrops, DAOs, and games from bots and sybils.<br>A simple API that any Web3 project can integrate.",
+            heroBtnDemo: "Try free demo", heroBtnDocs: "📘 View docs",
+            stat1Label: "per query", stat2Label: "free queries", stat3Label: "wallets protected",
+            productTag: "How it works?",
+            productTitle1: "Integration in", productTitle2: "3 lines of code",
+            productDesc: "Your project can start filtering bots in less than 5 minutes.",
+            step1Title: "Connect your wallet", step1Desc: "User connects MetaMask and requests verification.",
+            step2Title: "Verify humanity", step2Desc: "A human validator confirms they are not a bot.",
+            step3Title: "Check status", step3Desc: "Your contract calls checkHuman(wallet) and gets true/false.",
+            codeTitle: "📝 Integration in your contract (paid version)",
+            copyBtn: "Copy",
+            pricingTag: "Transparent pricing",
+            pricingTitle1: "Plans for", pricingTitle2: "every project",
+            pricingDesc: "Pay only for what you use. No commitments.",
+            freeBadge: "Freemium", freePeriod: "/month",
+            freeFeat1: "1,000 free queries (to test)", freeFeat2: "Polygon Amoy (testnet)", freeFeat3: "Email support", freeFeat4: "Full documentation",
+            freeBtn: "Start free",
+            paidBadge: "Recommended", paidPeriod: "per query",
+            paidFeat1: "Pay-per-use ($0.05/query)", paidFeat2: "Polygon Mainnet (production)", paidFeat3: "24/7 priority support", paidFeat4: "Usage dashboard and billing",
+            paidBtn: "View documentation",
+            enterpriseBadge: "Enterprise", enterprisePeriod: "/month",
+            enterpriseFeat1: "Up to 10,000 queries/month", enterpriseFeat2: "24/7 support with SLA", enterpriseFeat3: "Multiple networks", enterpriseFeat4: "Custom dashboard",
+            enterpriseBtn: "Contact sales",
+            demoTag: "Live Demo · Free",
+            demoTitle1: "Verify that you are", demoTitle2: "human right now",
+            demoDesc: "Connect your wallet on Polygon Amoy and prove you're not a bot.",
+            demoCardTitle: "Live Demo", demoCardDesc: "Free trial · Polygon Amoy Testnet",
+            switchBtn: "Switch to Polygon Amoy",
+            connectBtn: "Connect Wallet",
+            walletLabel: "Wallet",
+            statusChecking: "❓ Checking...",
+            verifyBtn: "Verify me as human",
+            loading: "⏳ Processing transaction...",
+            helpTitle: "📌 How to try for free?",
+            helpStep1: "Connect MetaMask",
+            helpStep2: "Switch to Polygon Amoy network (use the blue button above)",
+            helpStep3Text: "If you have no POL, ",
+            helpStep4: "Once you have POL, click 'Verify me as human'",
+            faqTag: "Frequently Asked Questions",
+            faqTitle1: "Get your", faqTitle2: "questions answered",
+            faq1Q: "How do I integrate Humanhood into my project?",
+            faq1A: "Add 3 lines of code to your smart contract. Full documentation is available for developers.",
+            faq2Q: "Does the demo cost money?",
+            faq2A: "No. We use Polygon Amoy (testnet). POL is free from the faucet.",
+            faq3Q: "How do I switch MetaMask to Amoy?",
+            faq3A: "Click the 'Switch to Polygon Amoy' button inside the demo. MetaMask will add it automatically.",
+            faq4Q: "How much does production cost?",
+            faq4A: "$0.05 per query on Polygon Mainnet. Gas is paid by the end user.",
+            footerDesc: "Decentralized human verification",
+            footerProduct: "Product",
+            footerHowItWorks: "How it works",
+            footerPricing: "Pricing",
+            footerDemo: "Demo",
+            footerResources: "Resources",
+            footerDocs: "Documentation",
+            footerGitHub: "GitHub",
+            footerContact: "Contact",
+            footerCopyright: "© 2026 Humanhood. All rights reserved."
+        }
+    };
+    
+    let currentLang = "es";
+    
+    function applyLanguage(lang) {
+        currentLang = lang;
+        document.querySelectorAll("[class^='i18n-']").forEach(el => {
+            const key = el.className.split(' ').find(c => c.startsWith('i18n-'));
+            if (key) {
+                const textKey = key.replace('i18n-', '');
+                if (translations[lang][textKey] !== undefined) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translations[lang][textKey];
+                    } else {
+                        el.innerHTML = translations[lang][textKey];
+                    }
+                }
+            }
+        });
+        document.documentElement.lang = lang;
+        localStorage.setItem('humanhood_lang', lang);
+    }
+    
+    const langSelect = document.getElementById('languageSelect');
+    langSelect.addEventListener('change', (e) => applyLanguage(e.target.value));
+    
+    const savedLang = localStorage.getItem('humanhood_lang') || 
+                      (navigator.language.startsWith('es') ? 'es' : 'en');
+    langSelect.value = savedLang;
+    applyLanguage(savedLang);
+    
+    // ==================== FUNCIONALIDAD DE LA DEMO ====================
+    let provider, signer, contract, userAddress = null;
+    
+    const connectBtn = document.getElementById("connectWallet");
+    const walletInfo = document.getElementById("walletInfo");
+    const walletAddressSpan = document.getElementById("walletAddress");
+    const humanStatusSpan = document.getElementById("humanStatus");
+    const verificationSection = document.getElementById("verificationSection");
+    const verifyBtn = document.getElementById("verifyButton");
+    const statusText = document.getElementById("statusText");
+    const loadingMsg = document.getElementById("loadingMessage");
+    const switchNetworkBtn = document.getElementById("switchNetworkBtn");
+    const helpMessage = document.getElementById("helpMessage");
+    
+    if (switchNetworkBtn) {
+        switchNetworkBtn.onclick = async () => {
+            if (!window.ethereum) { alert(currentLang === 'es' ? "Instala MetaMask primero" : "Install MetaMask first"); return; }
+            try {
+                await window.ethereum.request({ method: "wallet_addEthereumChain", params: [AMOY_NETWORK] });
+                alert(currentLang === 'es' ? "✅ Red Polygon Amoy añadida. Por favor, cámbiate a ella en MetaMask." : "✅ Polygon Amoy network added. Please switch to it in MetaMask.");
+            } catch (error) { console.error(error); alert(currentLang === 'es' ? "Error al cambiar de red" : "Error switching network"); }
+        };
+    }
+    
+    connectBtn.onclick = async () => {
+        if (!window.ethereum) {
+            alert(currentLang === 'es' ? "Por favor, instala MetaMask" : "Please install MetaMask");
+            window.open("https://metamask.io/download/", "_blank");
+            return;
+        }
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            userAddress = accounts[0];
+            walletAddressSpan.textContent = userAddress.slice(0,6)+"..."+userAddress.slice(-4);
+            walletInfo.classList.remove("hidden");
+            connectBtn.textContent = "✅ " + (currentLang === 'es' ? "Conectado" : "Connected");
+            connectBtn.disabled = true;
+            
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            signer = provider.getSigner();
+            contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+            
+            const network = await provider.getNetwork();
+            if (network.chainId !== 80002) {
+                if (helpMessage) {
+                    helpMessage.style.background = "#fef3c7";
+                    helpMessage.style.borderLeftColor = "#f59e0b";
+                    const titleEl = helpMessage.querySelector('h4');
+                    if (titleEl) titleEl.innerHTML = currentLang === 'es' ? "⚠️ Red incorrecta" : "⚠️ Wrong network";
+                }
+                verificationSection.classList.add("hidden");
+                return;
+            }
+            
+            if (helpMessage) {
+                helpMessage.style.background = "#f0fdf4";
+                helpMessage.style.borderLeftColor = "#48bb78";
+                const titleEl = helpMessage.querySelector('h4');
+                if (titleEl) titleEl.innerHTML = currentLang === 'es' ? "📌 ¿Cómo probar gratis?" : "📌 How to try for free?";
+            }
+            
+            await checkHumanStatus();
+            verificationSection.classList.remove("hidden");
+        } catch (error) {
+            console.error(error);
+            alert(currentLang === 'es' ? "Error al conectar la wallet" : "Error connecting wallet");
+        }
+    };
+    
+    async function checkHumanStatus() {
+        if (!contract || !userAddress) return;
+        try {
+            const isHuman = await contract.checkHuman(userAddress);
+            if (isHuman) {
+                humanStatusSpan.textContent = "✅ " + (currentLang === 'es' ? "Verificado" : "Verified");
+                humanStatusSpan.className = "status-badge verified";
+                statusText.textContent = "✅ " + (currentLang === 'es' ? "Eres humano verificado" : "You are verified as human");
+                statusText.className = "status-text verified";
+                verifyBtn.disabled = true;
+                verifyBtn.textContent = "✓ " + (currentLang === 'es' ? "Ya verificado" : "Already verified");
+            } else {
+                humanStatusSpan.textContent = "❌ " + (currentLang === 'es' ? "No verificado" : "Not verified");
+                humanStatusSpan.className = "status-badge not-verified";
+                statusText.textContent = "❌ " + (currentLang === 'es' ? "No verificado" : "Not verified");
+                statusText.className = "status-text not-verified";
+                verifyBtn.disabled = false;
+                verifyBtn.textContent = "✅ " + (currentLang === 'es' ? "Verificarme como humano" : "Verify me as human");
+            }
+        } catch (error) {
+            console.error(error);
+            humanStatusSpan.textContent = "⚠️ Error";
+            statusText.textContent = currentLang === 'es' ? "Error al conectar con el contrato" : "Error connecting to contract";
+        }
+    }
+    
+    verifyBtn.onclick = async () => {
+        if (!contract || !userAddress) return;
+        try {
+            loadingMsg.classList.remove("hidden");
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = "⏳ " + (currentLang === 'es' ? "Procesando..." : "Processing...");
+            const tx = await contract.verifyMe();
+            await tx.wait();
+            await checkHumanStatus();
+            alert(currentLang === 'es' ? "✅ ¡Verificación exitosa!" : "✅ Verification successful!");
+        } catch (error) {
+            console.error(error);
+            alert((currentLang === 'es' ? "Error al verificar: " : "Error verifying: ") + (error.message || "Intenta de nuevo"));
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = "✅ " + (currentLang === 'es' ? "Verificarme como humano" : "Verify me as human");
+        } finally {
+            loadingMsg.classList.add("hidden");
+        }
+    };
+    
+    if (window.ethereum) {
+        window.ethereum.on('chainChanged', () => window.location.reload());
+        window.ethereum.on('accountsChanged', (accounts) => {
+            if (accounts.length === 0) location.reload();
+            else { userAddress = accounts[0]; walletAddressSpan.textContent = userAddress.slice(0,6)+"..."+userAddress.slice(-4); checkHumanStatus(); }
+        });
+    }
+    
+    function copyCode() {
+        const code = document.getElementById('codeToCopy').innerText;
+        navigator.clipboard.writeText(code);
+        alert(currentLang === 'es' ? "Código copiado" : "Code copied");
+    }
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.step, .pricing-card, .faq-item').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

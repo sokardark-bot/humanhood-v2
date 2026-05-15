@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Humanhood | Panel de control</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f1f5f9; padding: 40px 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .login-card { max-width: 500px; margin: 100px auto; background: #1e293b; border-radius: 16px; padding: 40px; text-align: center; }
+        .btn { padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; margin-top: 16px; }
+        .card { background: #1e293b; border-radius: 16px; padding: 24px; margin-bottom: 24px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #334155; }
+        .status-ok { color: #4ade80; }
+        .status-warning { color: #fbbf24; }
+        .status-danger { color: #f87171; }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; }
+        .badge-active { background: #22c55e20; color: #4ade80; }
+        .badge-warning { background: #f59e0b20; color: #fbbf24; }
+        .badge-blocked { background: #ef444420; color: #f87171; }
+        .badge-paid { background: #3b82f620; color: #60a5fa; }
+        .hidden { display: none; }
+        .logout-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 16px; background: #1e293b; border-radius: 12px; }
+        .section-title { margin: 24px 0 16px 0; color: #667eea; border-left: 3px solid #667eea; padding-left: 12px; }
+    </style>
+</head>
+<body>
+    <div id="loginContainer" class="container">
+        <div class="login-card">
+            <svg width="60" height="60" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 20px;">
+                <circle cx="16" cy="11" r="5" stroke="url(#grad)" stroke-width="2" fill="none"/>
+                <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad)"/>
+                <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad)"/>
+                <circle cx="10" cy="22" r="2" fill="url(#grad)"/>
+                <circle cx="22" cy="22" r="2" fill="url(#grad)"/>
+                <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
+            </svg>
+            <h2>🔐 Panel de Administración</h2>
+            <p style="color: #94a3b8; margin: 16px 0;">Acceso exclusivo para el equipo de Humanhood</p>
+            <button id="connectAdminBtn" class="btn">🔌 Conectar con MetaMask</button>
+            <div id="authStatus" style="margin-top: 16px; color: #94a3b8;"></div>
+        </div>
+    </div>
+
+    <div id="adminContainer" class="container hidden">
+        <div class="logout-bar">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="16" cy="11" r="5" stroke="url(#grad2)" stroke-width="2" fill="none"/>
+                    <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad2)"/>
+                    <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad2)"/>
+                    <circle cx="10" cy="22" r="2" fill="url(#grad2)"/>
+                    <circle cx="22" cy="22" r="2" fill="url(#grad2)"/>
+                    <defs><linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
+                </svg>
+                <h2>Panel de Administración</h2>
+            </div>
+            <div>
+                <span id="walletDisplay" style="background: #0f172a; padding: 8px 16px; border-radius: 50px; font-family: monospace; font-size: 0.8rem;"></span>
+                <button id="logoutBtn" style="margin-left: 12px; background: #ef4444; border: none; padding: 8px 16px; border-radius: 8px; color: white; cursor: pointer;">Cerrar sesión</button>
+            </div>
+        </div>
+
+        <!-- Clientes en Prueba (Free) -->
+        <div class="card">
+            <h2>📋 Clientes en Prueba (Polygon Amoy - 1,000 consultas gratis)</h2>
+            <div id="clientsFreeList">Cargando...</div>
+            <button id="refreshFreeBtn" style="margin-top: 16px; background: #334155; padding: 8px 16px; border-radius: 8px; border: none; color: white; cursor: pointer;">🔄 Refrescar</button>
+        </div>
+
+        <!-- Clientes de Pago (Paid) -->
+        <div class="card">
+            <h2>💰 Clientes de Pago (Polygon Mainnet / BNB Chain - $0.05/consulta)</h2>
+            <div id="clientsPaidList">Cargando...</div>
+            <button id="refreshPaidBtn" style="margin-top: 16px; background: #334155; padding: 8px 16px; border-radius: 8px; border: none; color: white; cursor: pointer;">🔄 Refrescar</button>
+        </div>
+
+        <!-- Ingresos Totales -->
+        <div class="card">
+            <h2>💵 Ingresos Acumulados</h2>
+            <div id="paidStats">Cargando...</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        // CONFIGURACIÓN
+        const FREE_ADDRESS = "0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8";
+        const PAID_ADDRESS = "0xC346AB25a0028efefB5AAD78d46b5590b38864b5";
+        const OWNER_WALLET = "0xED022975870410189Ba6d72183A989463E563bBE".toLowerCase();
+        
+        const FREE_ABI = [
+            "function consultasRealizadas(address) view returns (uint256)",
+            "function LIMITE_FREE() view returns (uint256)"
+        ];
+        
+        const PAID_ABI = [
+            "function balanceOf(address) view returns (uint256)",
+            "function PRECIO_POR_CONSULTA() view returns (uint256)"
+        ];
+        
+        let providerFree, providerPaid, contractFree, contractPaid;
+        let isAuthorized = false;
+        
+        // Lista de clientes (se guarda en localStorage)
+        let clientsFree = [];
+        let clientsPaid = [];
+        
+        function loadClients() {
+            const savedFree = localStorage.getItem('humanhood_admin_clients_free');
+            const savedPaid = localStorage.getItem('humanhood_admin_clients_paid');
+            if (savedFree) clientsFree = JSON.parse(savedFree);
+            if (savedPaid) clientsPaid = JSON.parse(savedPaid);
+            renderClientsFree();
+            renderClientsPaid();
+        }
+        
+        function saveClientsFree() {
+            localStorage.setItem('humanhood_admin_clients_free', JSON.stringify(clientsFree));
+            renderClientsFree();
+        }
+        
+        function saveClientsPaid() {
+            localStorage.setItem('humanhood_admin_clients_paid', JSON.stringify(clientsPaid));
+            renderClientsPaid();
+        }
+        
+        function deleteClientFree(index) {
+            if (confirm(`¿Eliminar al cliente "${clientsFree[index].name || clientsFree[index].address.slice(0,10)}..."?`)) {
+                clientsFree.splice(index, 1);
+                saveClientsFree();
+            }
+        }
+        
+        function deleteClientPaid(index) {
+            if (confirm(`¿Eliminar al cliente "${clientsPaid[index].name || clientsPaid[index].address.slice(0,10)}..."?`)) {
+                clientsPaid.splice(index, 1);
+                saveClientsPaid();
+            }
+        }
+        
+        function editClientFree(index) {
+            const newName = prompt("Nombre de la empresa:", clientsFree[index].name || "");
+            const newNotes = prompt("Notas (contacto, proyecto, etc.):", clientsFree[index].notes || "");
+            if (newName !== null) clientsFree[index].name = newName;
+            if (newNotes !== null) clientsFree[index].notes = newNotes;
+            saveClientsFree();
+        }
+        
+        function editClientPaid(index) {
+            const newName = prompt("Nombre de la empresa:", clientsPaid[index].name || "");
+            const newNotes = prompt("Notas (contacto, proyecto, etc.):", clientsPaid[index].notes || "");
+            if (newName !== null) clientsPaid[index].name = newName;
+            if (newNotes !== null) clientsPaid[index].notes = newNotes;
+            saveClientsPaid();
+        }
+        
+        async function renderClientsFree() {
+            const container = document.getElementById('clientsFreeList');
+            if (!contractFree) { container.innerHTML = '<p>Conectando a blockchain...</p>'; return; }
+            if (clientsFree.length === 0) {
+                container.innerHTML = '<p>No hay clientes en prueba añadidos. Usa el botón "Añadir" en la consulta individual o edita el código.</p>';
+                return;
+            }
+            
+            let html = `<table><thead><tr><th>Empresa</th><th>Dirección</th><th>Consultas</th><th>Estado</th><th>Notas</th><th>Acciones</th></tr></thead><tbody>`;
+            for (let i = 0; i < clientsFree.length; i++) {
+                const client = clientsFree[i];
+                try {
+                    const realizadas = await contractFree.consultasRealizadas(client.address);
+                    const limite = await contractFree.LIMITE_FREE();
+                    const restantes = Number(limite) - Number(realizadas);
+                    let badgeClass = 'badge-active', statusText = `${restantes} restantes`;
+                    if (realizadas >= limite) { badgeClass = 'badge-blocked'; statusText = 'Bloqueado (pasar a paid)'; }
+                    else if (restantes < 100) { badgeClass = 'badge-warning'; statusText = `⚠️ ${restantes} restantes`; }
+                    html += `<tr>
+                        <td><strong>${client.name || '-'}</strong></td>
+                        <td style="font-family:monospace">${client.address.slice(0,8)}...${client.address.slice(-6)}</td>
+                        <td>${realizadas}/${limite}</td>
+                        <td><span class="badge ${badgeClass}">${statusText}</span></td>
+                        <td>${client.notes || '-'}</td>
+                        <td><button onclick="editClientFree(${i})" style="background:#3b82f6; border:none; color:white; padding:4px 8px; border-radius:4px; cursor:pointer; margin-right:4px;">✏️</button><button onclick="deleteClientFree(${i})" style="background:#ef4444; border:none; color:white; padding:4px 8px; border-radius:4px; cursor:pointer;">🗑️</button></td>
+                    </tr>`;
+                } catch(e) { html += `<tr><td>${client.name || '-'}</td><td colspan="5">Error al consultar</td></tr>`; }
+            }
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+        
+        async function renderClientsPaid() {
+            const container = document.getElementById('clientsPaidList');
+            if (!contractPaid) { container.innerHTML = '<p>Conectando a blockchain...</p>'; return; }
+            if (clientsPaid.length === 0) {
+                container.innerHTML = '<p>No hay clientes de pago añadidos. Usa el botón "Añadir" en la consulta individual o edita el código.</p>';
+                return;
+            }
+            
+            let totalDepositado = 0;
+            const precio = await contractPaid.PRECIO_POR_CONSULTA();
+            const precioUSDC = Number(precio) / 1e18;
+            
+            let html = `<table><thead><tr><th>Empresa</th><th>Dirección</th><th>Saldo depositado</th><th>Consultas pagadas</th><th>Estado</th><th>Notas</th><th>Acciones</th></table></thead><tbody>`;
+            for (let i = 0; i < clientsPaid.length; i++) {
+                const client = clientsPaid[i];
+                try {
+                    let balance = client.balanceUSDC || 0;
+                    try {
+                        const bal = await contractPaid.balanceOf(client.address);
+                        balance = Number(bal) / 1e18;
+                        client.balanceUSDC = balance;
+                    } catch(e) {}
+                    const consultasEstimadas = Math.floor(balance / precioUSDC);
+                    totalDepositado += balance;
+                    let badgeClass = 'badge-active', statusText = 'Activo';
+                    if (balance === 0) { badgeClass = 'badge-blocked'; statusText = 'Sin saldo'; }
+                    else if (balance < 10) { badgeClass = 'badge-warning'; statusText = 'Saldo bajo'; }
+                    html += `<tr>
+                        <td><strong>${client.name || '-'}</strong></td>
+                        <td style="font-family:monospace">${client.address.slice(0,8)}...${client.address.slice(-6)}</td>
+                        <td>${balance.toFixed(2)} USDC</td>
+                        <td>${consultasEstimadas.toLocaleString()}</td>
+                        <td><span class="badge ${badgeClass}">${statusText}</span></td>
+                        <td>${client.notes || '-'}</td>
+                        <td><button onclick="editClientPaid(${i})" style="background:#3b82f6; border:none; color:white; padding:4px 8px; border-radius:4px; cursor:pointer; margin-right:4px;">✏️</button><button onclick="deleteClientPaid(${i})" style="background:#ef4444; border:none; color:white; padding:4px 8px; border-radius:4px; cursor:pointer;">🗑️</button></td>
+                    </tr>`;
+                } catch(e) { html += `<tr><td>${client.name || '-'}</td><td colspan="6">Error al consultar</td></tr>`; }
+            }
+            html += `<tr style="background:#0f172a; font-weight:bold;"><td colspan="2">TOTAL</td><td>${totalDepositado.toFixed(2)} USDC</td><td colspan="4"></td></tr></tbody></table>`;
+            container.innerHTML = html;
+        }
+        
+        async function loadPaidStats() {
+            if (!contractPaid) return;
+            try {
+                const balance = await contractPaid.balanceOf(OWNER_WALLET);
+                const precio = await contractPaid.PRECIO_POR_CONSULTA();
+                const consultas = Math.floor(Number(balance) / Number(precio));
+                document.getElementById('paidStats').innerHTML = `
+                    <p><strong>💰 USDC acumulado en tu wallet:</strong> ${(Number(balance) / 1e18).toFixed(2)} USDC</p>
+                    <p><strong>📊 Consultas pagadas totales:</strong> ${consultas.toLocaleString()}</p>
+                    <p><strong>💵 Ingresos totales:</strong> ${(Number(balance) / 1e18).toFixed(2)} USDC</p>
+                `;
+            } catch(e) { document.getElementById('paidStats').innerHTML = '<p>Error al cargar estadísticas</p>'; }
+        }
+        
+        // AÑADIR CLIENTES MANUALMENTE (edita estas líneas)
+        // clientsFree.push({ address: "0x...", name: "Cliente prueba", notes: "En fase de testing" });
+        // clientsPaid.push({ address: "0x...", name: "Cliente pago", notes: "Contacto: email@cliente.com" });
+        // saveClientsFree(); saveClientsPaid();
+        
+        async function login() {
+            if (!window.ethereum) { document.getElementById('authStatus').innerHTML = '❌ Instala MetaMask'; return; }
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const wallet = accounts[0].toLowerCase();
+                if (wallet !== OWNER_WALLET) { document.getElementById('authStatus').innerHTML = '❌ Acceso denegado. No eres el administrador.'; return; }
+                
+                isAuthorized = true;
+                document.getElementById('loginContainer').classList.add('hidden');
+                document.getElementById('adminContainer').classList.remove('hidden');
+                document.getElementById('walletDisplay').innerHTML = `👑 ${wallet.slice(0,8)}...${wallet.slice(-6)}`;
+                
+                providerFree = new ethers.providers.JsonRpcProvider('https://rpc-amoy.polygon.technology/');
+                providerPaid = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
+                contractFree = new ethers.Contract(FREE_ADDRESS, FREE_ABI, providerFree);
+                contractPaid = new ethers.Contract(PAID_ADDRESS, PAID_ABI, providerPaid);
+                
+                loadClients();
+                await loadPaidStats();
+            } catch(e) { document.getElementById('authStatus').innerHTML = '❌ Error al conectar'; }
+        }
+        
+        document.getElementById('connectAdminBtn').onclick = login;
+        document.getElementById('logoutBtn').onclick = () => { location.reload(); };
+        document.getElementById('refreshFreeBtn').onclick = () => renderClientsFree();
+        document.getElementById('refreshPaidBtn').onclick = () => { renderClientsPaid(); loadPaidStats(); };
+        
+        window.editClientFree = editClientFree;
+        window.deleteClientFree = deleteClientFree;
+        window.editClientPaid = editClientPaid;
+        window.deleteClientPaid = deleteClientPaid;
+    </script>
+</body>
+</html>

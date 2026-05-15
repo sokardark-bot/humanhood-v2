@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humanhood | Deposit USDC</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f1f5f9; padding: 40px 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: #1e293b; border-radius: 24px; padding: 40px; max-width: 550px; width: 100%; }
+        .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 12px 20px; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; width: 100%; margin-top: 12px; }
+        .btn-outline { background: transparent; border: 1px solid #667eea; color: #667eea; }
+        .input-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.8rem; }
+        input, select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 12px; color: white; font-size: 1rem; }
+        .balance-box { background: #0f172a; padding: 16px; border-radius: 16px; margin: 20px 0; text-align: center; }
+        .balance-box .amount { font-size: 2rem; font-weight: 700; color: #4ade80; }
+        .status { margin-top: 16px; padding: 12px; border-radius: 12px; font-size: 0.8rem; }
+        .success { background: #22c55e20; color: #4ade80; }
+        .error { background: #ef444420; color: #f87171; }
+        .info { background: #3b82f620; color: #60a5fa; }
+        .hidden { display: none; }
+        .network-selector { display: flex; gap: 12px; margin-bottom: 20px; }
+        .network-option { flex: 1; text-align: center; padding: 10px; background: #0f172a; border-radius: 12px; cursor: pointer; border: 1px solid #334155; transition: all 0.3s; }
+        .network-option.selected { border-color: #667eea; background: #667eea10; }
+        .network-option.polygon.selected { border-color: #a855f7; background: #a855f710; }
+        .network-option.bnb.selected { border-color: #f0b90b; background: #f0b90b10; }
+        .language-selector { position: absolute; top: 20px; right: 20px; background: #1e293b; border-radius: 50px; padding: 6px 12px; font-size: 0.8rem; border: 1px solid #334155; }
+        .language-selector select { background: transparent; border: none; color: #667eea; font-weight: 500; cursor: pointer; outline: none; width: auto; padding: 0; }
+    </style>
+</head>
+<body>
+    <!-- LANGUAGE SELECTOR -->
+    <div class="language-selector">
+        <span>🌐</span>
+        <select id="languageSelect">
+            <option value="es">🇪🇸 Español</option>
+            <option value="en">🇬🇧 English</option>
+        </select>
+    </div>
+
+    <div class="card">
+        <h1 id="title">💰 Depositar USDC</h1>
+        <p id="subtitle" style="color: #94a3b8; margin: 8px 0 20px;">Deposita saldo en tu cuenta de Humanhood</p>
+
+        <div class="network-selector">
+            <div class="network-option polygon" data-network="polygon">🟣 Polygon</div>
+            <div class="network-option bnb" data-network="bnb">🟡 BNB Chain</div>
+        </div>
+
+        <div class="balance-box">
+            <div id="balanceLabel">💰 Tu USDC depositado</div>
+            <div class="amount" id="depositBalance">0.00</div>
+            <div style="font-size: 0.7rem;" id="walletAddress">No conectado</div>
+        </div>
+
+        <div class="input-group">
+            <label id="amountLabel">📥 Cantidad a depositar (USDC)</label>
+            <input type="number" id="depositAmount" placeholder="Ej: 100" step="10" min="10">
+        </div>
+
+        <button id="depositBtn" class="btn">📥 Depositar USDC</button>
+        <button id="connectBtn" class="btn btn-outline">🔌 Conectar Wallet</button>
+
+        <div id="status" class="status hidden"></div>
+        <div id="info" class="status info hidden" style="margin-top: 20px;"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        // ==================== CONFIGURACIÓN ====================
+        const NETWORKS = {
+            polygon: {
+                name: "Polygon Mainnet",
+                chainId: 137,
+                contract: "0x2A7396876a13812fEFc5773094f217d5380FEeB9",
+                usdc: "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+                rpc: "https://polygon-rpc.com"
+            },
+            bnb: {
+                name: "BNB Chain",
+                chainId: 56,
+                contract: "0xeCB6D54ac87D99b104535f95d5c38Bf48F2CCf4b",
+                usdc: "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
+                rpc: "https://bsc-dataseed.binance.org/"
+            }
+        };
+
+        const CONTRACT_ABI = [
+            "function balanceOf(address) view returns (uint256)",
+            "function depositUSDC(uint256) external"
+        ];
+        const USDC_ABI = [
+            "function balanceOf(address) view returns (uint256)",
+            "function approve(address, uint256) returns (bool)",
+            "function decimals() view returns (uint8)"
+        ];
+
+        // ==================== IDIOMAS ====================
+        const translations = {
+            es: {
+                title: "💰 Depositar USDC",
+                subtitle: "Deposita saldo en tu cuenta de Humanhood",
+                balanceLabel: "💰 Tu USDC depositado",
+                amountLabel: "📥 Cantidad a depositar (USDC)",
+                depositBtn: "📥 Depositar USDC",
+                connectBtn: "🔌 Conectar Wallet",
+                infoText: "💡 Al depositar, se te pedirá aprobar primero el gasto y luego confirmar el depósito.",
+                minError: "El depósito mínimo es de 10 USDC",
+                success: "✅ Depositado {amount} USDC correctamente",
+                wrongNetwork: "⚠️ Cambia tu red a {network} en MetaMask",
+                connected: "✅ Conectado a {network}"
+            },
+            en: {
+                title: "💰 Deposit USDC",
+                subtitle: "Deposit balance into your Humanhood account",
+                balanceLabel: "💰 Your deposited USDC",
+                amountLabel: "📥 Amount to deposit (USDC)",
+                depositBtn: "📥 Deposit USDC",
+                connectBtn: "🔌 Connect Wallet",
+                infoText: "💡 You will be asked to approve the spending first, then confirm the deposit.",
+                minError: "Minimum deposit is 10 USDC",
+                success: "✅ Successfully deposited {amount} USDC",
+                wrongNetwork: "⚠️ Switch your network to {network} in MetaMask",
+                connected: "✅ Connected to {network}"
+            }
+        };
+
+        let currentLang = "es";
+        let currentNetwork = "polygon";
+        let provider, signer, userAddress;
+        let usdcContract, humanhoodContract;
+
+        // Elementos DOM
+        const networkOptions = document.querySelectorAll(".network-option");
+        const depositBalanceSpan = document.getElementById("depositBalance");
+        const walletAddressSpan = document.getElementById("walletAddress");
+        const depositAmountInput = document.getElementById("depositAmount");
+        const depositBtn = document.getElementById("depositBtn");
+        const connectBtn = document.getElementById("connectBtn");
+        const statusDiv = document.getElementById("status");
+        const infoDiv = document.getElementById("info");
+
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.classList.remove("hidden");
+            setTimeout(() => statusDiv.classList.add("hidden"), 8000);
+        }
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            document.getElementById("title").innerText = translations[lang].title;
+            document.getElementById("subtitle").innerText = translations[lang].subtitle;
+            document.getElementById("balanceLabel").innerText = translations[lang].balanceLabel;
+            document.getElementById("amountLabel").innerText = translations[lang].amountLabel;
+            depositBtn.innerText = translations[lang].depositBtn;
+            connectBtn.innerText = translations[lang].connectBtn;
+            infoDiv.innerHTML = translations[lang].infoText;
+            infoDiv.classList.remove("hidden");
+        }
+
+        document.getElementById('languageSelect').addEventListener('change', (e) => applyLanguage(e.target.value));
+        applyLanguage('es');
+
+        // Selección de red
+        networkOptions.forEach(opt => {
+            opt.onclick = () => {
+                networkOptions.forEach(o => o.classList.remove("selected"));
+                opt.classList.add("selected");
+                currentNetwork = opt.dataset.network;
+                if (userAddress) updateBalance();
+            };
+        });
+
+        // Conectar wallet
+        connectBtn.onclick = async () => {
+            if (!window.ethereum) { alert("Install MetaMask"); return; }
+            try {
+                const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+                userAddress = accounts[0];
+                walletAddressSpan.textContent = userAddress.slice(0,8)+"..."+userAddress.slice(-6);
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                
+                const network = await provider.getNetwork();
+                const expectedChainId = NETWORKS[currentNetwork].chainId;
+                if (network.chainId !== expectedChainId) {
+                    showStatus(translations[currentLang].wrongNetwork.replace("{network}", NETWORKS[currentNetwork].name), "error");
+                    return;
+                }
+                
+                usdcContract = new ethers.Contract(NETWORKS[currentNetwork].usdc, USDC_ABI, signer);
+                humanhoodContract = new ethers.Contract(NETWORKS[currentNetwork].contract, CONTRACT_ABI, signer);
+                
+                await updateBalance();
+                connectBtn.classList.add("hidden");
+                depositBtn.classList.remove("hidden");
+                showStatus(translations[currentLang].connected.replace("{network}", NETWORKS[currentNetwork].name), "success");
+            } catch(e) { showStatus("Error: " + e.message, "error"); }
+        };
+
+        // Actualizar saldo
+        async function updateBalance() {
+            if (!userAddress || !humanhoodContract) return;
+            try {
+                const decimals = await usdcContract.decimals();
+                const balance = await humanhoodContract.balanceOf(userAddress);
+                depositBalanceSpan.textContent = (Number(balance) / 10**decimals).toFixed(2);
+            } catch(e) { console.error(e); }
+        }
+
+        // Depositar
+        depositBtn.onclick = async () => {
+            const amount = parseFloat(depositAmountInput.value);
+            if (isNaN(amount) || amount <= 0) return showStatus(translations[currentLang].minError, "error");
+            if (amount < 10) return showStatus(translations[currentLang].minError, "error");
+            
+            try {
+                const decimals = await usdcContract.decimals();
+                const amountWei = ethers.utils.parseUnits(amount.toString(), decimals);
+                
+                showStatus("📝 Approving...", "info");
+                const approveTx = await usdcContract.approve(NETWORKS[currentNetwork].contract, amountWei);
+                await approveTx.wait();
+                showStatus("✅ Approved", "success");
+                
+                showStatus("💰 Depositing...", "info");
+                const depositTx = await humanhoodContract.depositUSDC(amountWei);
+                await depositTx.wait();
+                
+                showStatus(translations[currentLang].success.replace("{amount}", amount), "success");
+                await updateBalance();
+                depositAmountInput.value = "";
+            } catch(e) { showStatus("Error: " + e.message, "error"); }
+        };
+
+        if (window.ethereum) {
+            window.ethereum.on('chainChanged', () => window.location.reload());
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (accounts.length === 0) location.reload();
+                else { userAddress = accounts[0]; walletAddressSpan.textContent = userAddress.slice(0,8)+"..."+userAddress.slice(-6); updateBalance(); }
+            });
+        }
+    </script>
+</body>
+</html>

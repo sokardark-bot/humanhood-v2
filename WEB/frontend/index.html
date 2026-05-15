@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humanhood | Blockchain Human Verification</title>
+    <meta name="description" content="Human verification API for Web3 projects. Prevent bots and sybils in your airdrops, DAOs, and games. Free 1,000 test queries.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
+</head>
+<body>
+
+<!-- LANGUAGE SELECTOR -->
+<div class="language-selector">
+    <span>🌐</span>
+    <select id="languageSelect">
+        <option value="es">🇪🇸 Español</option>
+        <option value="en">🇬🇧 English</option>
+    </select>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="container">
+        <div class="nav-logo">
+            <svg class="logo-svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="11" r="5" stroke="url(#grad)" stroke-width="2" fill="none"/>
+                <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad)"/>
+                <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad)"/>
+                <circle cx="10" cy="22" r="2" fill="url(#grad)"/>
+                <circle cx="22" cy="22" r="2" fill="url(#grad)"/>
+                <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
+            </svg>
+            <span class="logo-text">Humanhood</span>
+        </div>
+        <div class="nav-links">
+            <a href="#producto" class="i18n-navProduct">Producto</a>
+            <a href="#precios" class="i18n-navPricing">Precios</a>
+            <a href="#verificar" class="i18n-navVerify">Verificar</a>
+            <a href="docs.html" class="i18n-navDocs">Docs</a>
+            <a href="contact.html" class="i18n-navContact">Contacto</a>
+            <a href="#faq" class="i18n-navFaq">FAQ</a>
+        </div>
+        <div class="nav-cta">
+            <a href="#verificar" class="btn btn-outline i18n-navVerifyBtn">Verificar</a>
+            <a href="#precios" class="btn btn-primary i18n-navIntegrateBtn">Integrar</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+    <div class="container">
+        <div class="hero-badge i18n-heroBadge">🚀 Lanzamiento oficial</div>
+        <h1 class="hero-title"><span class="i18n-heroTitle1">Verificación humana</span><br><span class="gradient-text i18n-heroTitle2">en la blockchain</span></h1>
+        <p class="hero-description i18n-heroDesc">Protege tus airdrops, DAOs y juegos de bots y sybils.<br>Una API sencilla que cualquier proyecto Web3 puede integrar.</p>
+        <div class="hero-buttons"><a href="#verificar" class="btn btn-large btn-primary i18n-heroBtnVerify">Verificarme ahora</a><a href="#precios" class="btn btn-large btn-outline i18n-heroBtnPricing">Ver precios</a></div>
+        <div class="hero-stats"><div class="stat"><span class="stat-number">$0.05</span><span class="stat-label i18n-stat1Label">por consulta</span></div><div class="stat"><span class="stat-number">1,000</span><span class="stat-label i18n-stat2Label">consultas gratis</span></div><div class="stat"><span class="stat-number">+5.2M</span><span class="stat-label i18n-stat3Label">wallets protegidas</span></div></div>
+    </div>
+</header>
+
+<!-- CÓMO FUNCIONA -->
+<section id="producto" class="producto">
+    <div class="container">
+        <div class="section-header"><span class="section-tag i18n-productTag">¿Cómo funciona?</span><h2><span class="i18n-productTitle1">Integración en</span> <span class="gradient-text i18n-productTitle2">3 líneas de código</span></h2><p class="i18n-productDesc">Tu proyecto puede empezar a filtrar bots en menos de 5 minutos.</p></div>
+        <div class="steps">
+            <div class="step"><div class="step-number">1</div><h3 class="i18n-step1Title">Conecta tu wallet</h3><p class="i18n-step1Desc">El usuario conecta MetaMask y solicita verificación.</p></div>
+            <div class="step"><div class="step-number">2</div><h3 class="i18n-step2Title">Verifica su humanidad</h3><p class="i18n-step2Desc">Validación automática con Cloudflare + blockchain.</p></div>
+            <div class="step"><div class="step-number">3</div><h3 class="i18n-step3Title">Consulta el estado</h3><p class="i18n-step3Desc">Tu contrato llama a <code>checkHuman(wallet)</code> y obtiene true/false.</p></div>
+        </div>
+        <div class="code-block"><div class="code-header"><span class="i18n-codeTitle">📝 Integración en tu contrato (versión de pago)</span><button class="copy-btn i18n-copyBtn" onclick="copyCode()">Copiar</button></div><pre><code id="codeToCopy">interface IHumanhood {
+    function checkHuman(address user) external view returns (bool);
+}
+// Direcciones del contrato por red:
+// Polygon Mainnet: 0x2A7396876a13812fEFc5773094f217d5380FEeB9
+// BNB Chain:      0xeCB6D54ac87D99b104535f95d5c38Bf48F2CCf4b
+
+require(
+    IHumanhood(0x2A7396876a13812fEFc5773094f217d5380FEeB9).checkHuman(msg.sender),
+    "Not verified as human"
+);</code></pre></div>
+    </div>
+</section>
+
+<!-- PRECIOS -->
+<section id="precios" class="precios">
+    <div class="container"><div class="section-header"><span class="section-tag i18n-pricingTag">Precios transparentes</span><h2><span class="i18n-pricingTitle1">Planes para</span> <span class="gradient-text i18n-pricingTitle2">todo tipo de proyecto</span></h2><p class="i18n-pricingDesc">Paga solo por lo que usas. Sin compromisos.</p></div>
+    <div class="pricing-grid">
+        <div class="pricing-card"><div class="pricing-badge i18n-freeBadge">Freemium</div><div class="pricing-price">$0<span class="price-period i18n-freePeriod">/mes</span></div><div class="pricing-features"><ul><li>✅ <span class="i18n-freeFeat1">1,000 consultas gratis</span></li><li>✅ <span class="i18n-freeFeat2">Polygon Amoy (testnet)</span></li><li>✅ <span class="i18n-freeFeat3">Soporte por email</span></li><li>✅ <span class="i18n-freeFeat4">Documentación completa</span></li><li>🔁 <span class="i18n-freeFeat5">Pasa a pago cuando quieras</span></li></ul></div><a href="#verificar" class="btn btn-outline i18n-freeBtn">Comenzar gratis</a></div>
+        <div class="pricing-card featured"><div class="pricing-badge i18n-polygonBadge">⭐ RECOMENDADO</div><div class="pricing-price">$0.05<span class="price-period i18n-polygonPeriod">por consulta</span></div><div class="pricing-features"><ul><li>✅ <span class="i18n-polygonFeat1">Pago por uso real ($0.05/consulta)</span></li><li>✅ <span class="i18n-polygonFeat2">🟣 Polygon Mainnet | 🟡 BNB Chain</span></li><li>✅ <span class="i18n-polygonFeat3">Gas muy bajo para tus usuarios</span></li><li>✅ <span class="i18n-polygonFeat4">Soporte prioritario 24/7</span></li><li>✅ <span class="i18n-polygonFeat5">Dashboard de uso y facturación</span></li></ul></div><a href="docs.html" class="btn btn-primary i18n-polygonBtn">Ver documentación</a></div>
+        <div class="pricing-card"><div class="pricing-badge i18n-ethBadge">⚪ ETHEREUM</div><div class="pricing-price">$0.10<span class="price-period i18n-ethPeriod">por consulta</span></div><div class="pricing-features"><ul><li>✅ <span class="i18n-ethFeat1">Pago por uso real ($0.10/consulta)</span></li><li>✅ <span class="i18n-ethFeat2">⚪ Ethereum Mainnet</span></li><li>✅ <span class="i18n-ethFeat3">Máxima seguridad y descentralización</span></li><li>✅ <span class="i18n-ethFeat4">Ideal para proyectos institucionales</span></li><li>✅ <span class="i18n-ethFeat5">Soporte prioritario 24/7</span></li></ul></div><a href="docs.html" class="btn btn-outline i18n-ethBtn">Ver documentación</a></div>
+        <div class="pricing-card"><div class="pricing-badge i18n-enterpriseBadge">🏢 EMPRESARIAL</div><div class="pricing-price">$500<span class="price-period i18n-enterprisePeriod">/mes</span></div><div class="pricing-features"><ul><li>✅ <span class="i18n-enterpriseFeat1">Hasta 10,000 consultas/mes</span></li><li>✅ <span class="i18n-enterpriseFeat2">Soporte 24/7 con SLA</span></li><li>✅ <span class="i18n-enterpriseFeat3">Múltiples redes (Polygon, BNB, Ethereum)</span></li><li>✅ <span class="i18n-enterpriseFeat4">Dashboard personalizado</span></li><li>✅ <span class="i18n-enterpriseFeat5">Volúmenes superiores: consúltanos</span></li></ul></div><a href="mailto:info@humanhood.tech" class="btn btn-outline i18n-enterpriseBtn">Contactar ventas</a></div>
+    </div></div>
+</section>
+
+<!-- VERIFICACIÓN HUMANA REAL -->
+<section id="verificar" class="verificar">
+    <div class="container">
+        <div class="section-header"><span class="section-tag i18n-verifyTag">🧠 Verificación humana real</span><h2><span class="i18n-verifyTitle1">Demuestra que eres</span> <span class="gradient-text i18n-verifyTitle2">humano ahora mismo</span></h2><p class="i18n-verifyDesc">Verificación automática con Cloudflare + Blockchain. Sin CAPTCHAs molestos.</p></div>
+        <div class="demo-card">
+            <div class="demo-icon">🔐</div><h3 class="i18n-verifyCardTitle">Verificación automática</h3><p class="verificar-desc i18n-verifyCardDesc">Tu wallet quedará marcada como humana en la blockchain para siempre.</p>
+            <div class="wallet-section">
+                <button id="verifyConnectBtn" class="btn btn-primary i18n-connectBtn">🔌 Conectar Wallet</button>
+                <div id="verifyWalletInfo" class="wallet-info hidden"><span>📍 <span class="i18n-walletLabel">Wallet</span>: <span id="verifyWalletAddress">-</span></span><span id="verifyHumanStatus" class="status-badge i18n-statusChecking">❓ Verificando...</span></div>
+            </div>
+            <div id="verifyTurnstileContainer" class="turnstile-container hidden"></div>
+            <div id="verifyChecklist" class="checklist hidden"><div class="checklist-item" id="verifyCheckWallet">🔌 <span class="i18n-checkWallet">Conectar wallet</span></div><div class="checklist-item" id="verifyCheckTurnstile">🛡️ <span class="i18n-checkTurnstile">Verificación anti-bot (Cloudflare)</span></div><div class="checklist-item" id="verifyCheckPassport">🌍 <span class="i18n-checkPassport">Verificar actividad (Gitcoin Passport)</span></div><div class="checklist-item" id="verifyCheckBlockchain">⛓️ <span class="i18n-checkBlockchain">Registrar en blockchain</span></div></div>
+            <div id="verifyStatus" class="status hidden"></div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq"><div class="container"><div class="section-header"><span class="section-tag i18n-faqTag">Preguntas frecuentes</span><h2><span class="i18n-faqTitle1">Resolvemos tus</span> <span class="gradient-text i18n-faqTitle2">dudas</span></h2></div>
+<div class="faq-grid"><div class="faq-item"><h3 class="i18n-faq1Q">¿Cómo integro Humanhood en mi proyecto?</h3><p class="i18n-faq1A">Añade 3 líneas de código a tu contrato inteligente. La <a href="docs.html">documentación completa</a> está disponible.</p></div><div class="faq-item"><h3 class="i18n-faq2Q">¿La verificación cuesta dinero?</h3><p class="i18n-faq2A">No. La verificación inicial solo paga el gas (muy bajo). El proyecto paga $0.05 por consulta.</p></div><div class="faq-item"><h3 class="i18n-faq3Q">¿Cómo cambio mi MetaMask a Amoy?</h3><p class="i18n-faq3A">Haz clic en el botón dentro de la demo. MetaMask lo añadirá automáticamente.</p></div><div class="faq-item"><h3 class="i18n-faq4Q">¿Cuánto cuesta en producción?</h3><p class="i18n-faq4A">$0.05 por consulta en Polygon Mainnet o BNB Chain. $0.10 en Ethereum Mainnet.</p></div></div></div></section>
+
+<!-- FOOTER -->
+<footer class="footer"><div class="container"><div class="footer-content"><div class="footer-brand"><svg class="logo-svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="11" r="5" stroke="url(#gradFooter)" stroke-width="2" fill="none"/><path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#gradFooter)"/><path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#gradFooter)"/><circle cx="10" cy="22" r="2" fill="url(#gradFooter)"/><circle cx="22" cy="22" r="2" fill="url(#gradFooter)"/><defs><linearGradient id="gradFooter" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs></svg><span class="logo-text">Humanhood</span><p class="i18n-footerDesc">Verificación humana descentralizada</p></div><div class="footer-links"><div class="footer-col"><h4 class="i18n-footerProduct">Producto</h4><a href="#producto" class="i18n-footerHowItWorks">Cómo funciona</a><a href="#precios" class="i18n-footerPricing">Precios</a><a href="#verificar" class="i18n-footerVerify">Verificar</a></div><div class="footer-col"><h4 class="i18n-footerResources">Recursos</h4><a href="docs.html" class="i18n-footerDocs">Documentación</a><a href="#" class="i18n-footerGitHub">GitHub</a></div><div class="footer-col"><h4 class="i18n-footerContact">Contacto</h4><a href="mailto:info@humanhood.tech">info@humanhood.tech</a><a href="contact.html">Formulario</a></div></div></div><div class="footer-bottom"><p class="i18n-footerCopyright">&copy; 2026 Humanhood. Todos los derechos reservados.</p></div></div></footer>
+
+<script src="app.js"></script>
+</body>
+</html>
