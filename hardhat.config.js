@@ -1,4 +1,0 @@
-// hardhat.config.js
-export default {
-  solidity: "0.8.28",
-};
