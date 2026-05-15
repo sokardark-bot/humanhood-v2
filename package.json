@@ -1,20 +1,8 @@
 {
-  "name": "humanhood",
+  "name": "humanhood-netlify-functions",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^7.0.0",
-    "hardhat": "^3.4.2"
-  },
+  "description": "Netlify functions for Humanhood",
   "dependencies": {
     "node-fetch": "^2.7.0"
-  },
-  "type": "module",
-  "description": ""
+  }
 }
