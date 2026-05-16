@@ -310,3 +310,36 @@ async function registerHumanOnChain() {
         updateVerifyChecklist('blockchain', 'active');
     }
 }
+
+// ==================== MENÚ HAMBURGUESA (MÓVIL) ====================
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const closeMenuBtn = document.getElementById('closeMenuBtn');
+
+if (hamburgerBtn) {
+    hamburgerBtn.addEventListener('click', () => {
+        mobileMenu.classList.add('open');
+    });
+}
+
+if (closeMenuBtn) {
+    closeMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+    });
+}
+
+// Cerrar menú al hacer clic en un enlace
+document.querySelectorAll('.mobile-menu-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+    });
+});
+
+// Cerrar menú al hacer clic fuera
+document.addEventListener('click', (e) => {
+    if (mobileMenu && mobileMenu.classList.contains('open')) {
+        if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+            mobileMenu.classList.remove('open');
+        }
+    }
+});
