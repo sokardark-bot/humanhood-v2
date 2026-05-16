@@ -18,11 +18,12 @@ exports.handler = async (event) => {
         return { statusCode: 500, body: 'Server configuration error' };
     }
 
-    const url = `https://api.scorer.gitcoin.co/registry/score/${SCORER_ID}/${walletAddress}`;
+    // ✅ URL CORREGIDA según la documentación oficial
+    const url = `https://api.passport.xyz/v2/stamps/${SCORER_ID}/score/${walletAddress}`;
     
     try {
         const response = await fetch(url, {
-            headers: { 'X-API-Key': API_KEY }
+            headers: { 'X-API-KEY': API_KEY }  // ← Nota: el header es 'X-API-KEY', no 'X-API-Key'
         });
         
         if (!response.ok) {
@@ -30,13 +31,19 @@ exports.handler = async (event) => {
         }
 
         const data = await response.json();
+        
+        // La respuesta incluye el score, el umbral, etc.
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ score: data.score })
+            body: JSON.stringify({ 
+                score: data.score || 0,
+                passing_score: data.passing_score,
+                threshold: data.threshold
+            })
         };
     } catch (error) {
-        console.error("Error fetching from Gitcoin:", error);
+        console.error("Error fetching from Gitcoin Passport:", error);
         return { statusCode: 500, body: 'Internal Server Error' };
     }
 };
