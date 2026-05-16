@@ -1,5 +1,15 @@
 [build]
-  publish = "frontend"
+  publish = "."
 
 [functions]
   directory = "netlify/functions"
+
+# Para que Netlify Forms funcione correctamente
+[build.processing]
+  skip_processing = false
+
+# Redirección para la función de Passport
+[[redirects]]
+  from = "/.netlify/functions/get-passport-score"
+  to = "/.netlify/functions/get-passport-score"
+  status = 200
