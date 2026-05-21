@@ -6,12 +6,9 @@
     <title>Humanhood | Contacto</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Tus estilos existentes (los mantienes igual) */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #ffffff; color: #1a1a2e; line-height: 1.5; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-        
-        /* NAVBAR (igual que lo tienes) */
         .navbar { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; z-index: 1000; padding: 16px 0; }
         .navbar .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
         .nav-logo { display: flex; align-items: center; gap: 8px; font-size: 1.5rem; font-weight: 700; }
@@ -29,15 +26,12 @@
         .mobile-menu-links { display: flex; flex-direction: column; padding: 20px; gap: 20px; }
         .mobile-menu-links a { text-decoration: none; color: #4a5568; font-size: 1.1rem; font-weight: 500; padding: 10px 0; border-bottom: 1px solid #e2e8f0; }
         .mobile-menu-cta { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        
         .language-selector { position: fixed; top: 80px; right: 20px; z-index: 1001; background: white; border-radius: 50px; padding: 6px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 0.8rem; border: 1px solid #e2e8f0; }
         .language-selector select { background: transparent; border: none; font-weight: 500; cursor: pointer; outline: none; }
-        
         .btn { display: inline-block; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; cursor: pointer; border: none; font-size: 0.9rem; }
         .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102,126,234,0.3); }
         .btn-outline { background: transparent; border: 2px solid #e2e8f0; color: #4a5568; }
-        
         .contact-section { padding: 140px 0 80px; background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%); }
         .contact-card { background: white; border-radius: 32px; padding: 48px; max-width: 650px; margin: 0 auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
         .contact-card h1 { font-size: 2rem; margin-bottom: 8px; }
@@ -47,12 +41,10 @@
         .form-group input, .form-group textarea { width: 100%; padding: 12px 16px; background: #f7f9fc; border: 1px solid #e2e8f0; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 1rem; }
         .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
         .btn-submit { width: 100%; padding: 14px; font-size: 1rem; margin-top: 16px; }
-        
         .toast-message { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a1a2e; color: white; padding: 12px 24px; border-radius: 50px; font-size: 0.9rem; z-index: 2000; animation: fadeInOut 3s ease; }
         .toast-message.success { background: #22c55e; }
         .toast-message.error { background: #ef4444; }
         @keyframes fadeInOut { 0% { opacity: 0; transform: translateX(-50%) translateY(20px); } 15% { opacity: 1; transform: translateX(-50%) translateY(0); } 85% { opacity: 1; } 100% { opacity: 0; transform: translateX(-50%) translateY(20px); } }
-        
         .footer { background: #1a1a2e; color: white; padding: 48px 0 24px; }
         .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 48px; margin-bottom: 48px; }
         .footer-brand p { margin-top: 8px; color: #a0aec0; }
@@ -61,7 +53,6 @@
         .footer-col a { display: block; color: #a0aec0; text-decoration: none; margin-bottom: 12px; font-size: 0.9rem; transition: color 0.3s; }
         .footer-col a:hover { color: #667eea; }
         .footer-bottom { text-align: center; padding-top: 24px; border-top: 1px solid #2d3748; color: #718096; font-size: 0.8rem; }
-        
         @media (max-width: 768px) { .nav-links, .nav-cta { display: none; } .hamburger { display: flex; } .contact-card { padding: 32px 20px; } .language-selector { top: 70px; right: 10px; } }
     </style>
 </head>
@@ -95,8 +86,8 @@
         </div>
         <button class="hamburger" id="hamburgerBtn">☰</button>
         <div class="nav-cta">
-            <a href="https://humanhood.tech/#verificar" class="btn btn-outline">Verificar</a>
-            <a href="https://humanhood.tech/#precios" class="btn btn-primary">Integrar</a>
+            <a href="/#verificar" class="btn btn-outline">Verificar</a>
+            <a href="/#precios" class="btn btn-primary">Integrar</a>
         </div>
     </div>
 </nav>
@@ -111,8 +102,8 @@
         <a href="docs.html">Documentación</a>
         <a href="contact.html">Contacto</a>
         <div class="mobile-menu-cta">
-            <a href="https://humanhood.tech/#verificar" class="btn btn-outline">Verificar</a>
-            <a href="https://humanhood.tech/#precios" class="btn btn-primary">Integrar</a>
+            <a href="/#verificar" class="btn btn-outline">Verificar</a>
+            <a href="/#precios" class="btn btn-primary">Integrar</a>
         </div>
     </div>
 </div>
@@ -123,7 +114,7 @@
             <h1 id="contactTitle">📬 Contacta con nosotros</h1>
             <p class="subtitle" id="contactSubtitle">¿Tienes dudas sobre la integración? ¿Quieres ser socio? Escríbenos.</p>
             
-            <!-- FORMULARIO - Este es el IMPORTANTE -->
+            <!-- FORMULARIO CORRECTO - Netlify Function + Resend -->
             <form id="contactForm">
                 <div class="form-group">
                     <label id="nameLabel">Nombre completo</label>
@@ -169,7 +160,7 @@
                 <p id="footerDesc">Verificación humana descentralizada</p>
             </div>
             <div class="footer-links">
-                <div class="footer-col"><h4 id="footerProduct">Producto</h4><a href="index.html#producto" id="footerHowItWorks">Cómo funciona</a><a href="index.html#precios" id="footerPricing">Precios</a><a href="https://humanhood.tech/#verificar" id="footerVerify">Verificar</a></div>
+                <div class="footer-col"><h4 id="footerProduct">Producto</h4><a href="index.html#producto" id="footerHowItWorks">Cómo funciona</a><a href="index.html#precios" id="footerPricing">Precios</a><a href="/#verificar" id="footerVerify">Verificar</a></div>
                 <div class="footer-col"><h4 id="footerResources">Recursos</h4><a href="docs.html" id="footerDocs">Documentación</a><a href="#" id="footerGitHub">GitHub</a></div>
                 <div class="footer-col"><h4 id="footerContact">Contacto</h4><a href="mailto:info@humanhood.tech">info@humanhood.tech</a><a href="contact.html">Formulario</a></div>
             </div>
@@ -242,12 +233,12 @@
         document.getElementById('footerNote').innerText = translations[lang].footerNote;
         document.getElementById('footerDesc').innerText = translations[lang].footerDesc;
         document.getElementById('footerProduct').innerText = translations[lang].footerProduct;
-        document.getElementById('footerHowItWorks').innerText = translations[lang].footerHowItWorks;
-        document.getElementById('footerPricing').innerText = translations[lang].footerPricing;
-        document.getElementById('footerVerify').innerText = translations[lang].footerVerify;
+        document.getElementById('footerHowItWorks').innerHTML = translations[lang].footerHowItWorks;
+        document.getElementById('footerPricing').innerHTML = translations[lang].footerPricing;
+        document.getElementById('footerVerify').innerHTML = translations[lang].footerVerify;
         document.getElementById('footerResources').innerText = translations[lang].footerResources;
-        document.getElementById('footerDocs').innerText = translations[lang].footerDocs;
-        document.getElementById('footerGitHub').innerText = translations[lang].footerGitHub;
+        document.getElementById('footerDocs').innerHTML = translations[lang].footerDocs;
+        document.getElementById('footerGitHub').innerHTML = translations[lang].footerGitHub;
         document.getElementById('footerContact').innerText = translations[lang].footerContact;
         document.getElementById('footerCopyright').innerText = translations[lang].footerCopyright;
     }
@@ -293,7 +284,7 @@
             
             const submitBtn = document.getElementById('submitBtn');
             const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = currentLang === 'es' ? 'Enviando...' : 'Sending...';
+            submitBtn.innerHTML = currentLang === 'es' ? '⏳ Enviando...' : '⏳ Sending...';
             submitBtn.disabled = true;
             
             // Recoger datos del formulario
