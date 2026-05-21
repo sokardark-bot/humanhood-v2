@@ -39,7 +39,7 @@ exports.handler = async (event) => {
         // Email para el administrador (info@humanhood.tech)
         const emailToAdmin = {
             from: `Humanhood <info@humanhood.tech>`,
-            to: ['davidcalladocazalilla@gmail.com'],
+            to: ['info@humanhood.tech'],
             subject: `📬 Nuevo contacto de ${nombre}`,
             reply_to: email,
             html: `
