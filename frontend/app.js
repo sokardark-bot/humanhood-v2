@@ -248,20 +248,36 @@ const translations = {
     }
 };
 
+// ==================== FUNCIÓN APPLYLANGUAGE CORREGIDA ====================
 function applyLanguage(lang) {
     currentLang = lang;
     document.documentElement.lang = lang;
     localStorage.setItem('humanhood_lang', lang);
     
-    document.querySelectorAll("[class^='i18n-']").forEach(el => {
-        const key = el.className.split(' ').find(c => c.startsWith('i18n-'));
-        if (key && translations[lang][key.replace('i18n-', '')]) {
-            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                el.placeholder = translations[lang][key.replace('i18n-', '')];
-            } else if (el.tagName === 'BUTTON') {
-                el.innerHTML = translations[lang][key.replace('i18n-', '')];
-            } else {
-                el.innerHTML = translations[lang][key.replace('i18n-', '')];
+    // Selecciona TODOS los elementos que tengan CUALQUIER clase que contenga 'i18n-'
+    const allElements = document.querySelectorAll('[class*="i18n-"]');
+    
+    allElements.forEach(el => {
+        // Obtiene todas las clases del elemento
+        const classes = el.className.split(' ');
+        // Busca la primera clase que empiece con 'i18n-'
+        const i18nClass = classes.find(c => c.startsWith('i18n-'));
+        
+        if (i18nClass) {
+            const key = i18nClass.replace('i18n-', '');
+            if (translations[lang] && translations[lang][key] !== undefined) {
+                // Para inputs y textareas, actualiza el placeholder
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = translations[lang][key];
+                } 
+                // Para botones, actualiza el innerHTML
+                else if (el.tagName === 'BUTTON') {
+                    el.innerHTML = translations[lang][key];
+                }
+                // Para el resto (span, div, p, h1, h2, h3, a, etc.)
+                else {
+                    el.innerHTML = translations[lang][key];
+                }
             }
         }
     });
@@ -297,6 +313,7 @@ require(
     }
 }
 
+// ==================== INICIALIZACIÓN ====================
 const savedLang = localStorage.getItem('humanhood_lang') || (navigator.language.startsWith('es') ? 'es' : 'en');
 if(document.getElementById('languageSelect')) {
     document.getElementById('languageSelect').value = savedLang;
