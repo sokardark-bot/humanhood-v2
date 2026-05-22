@@ -44,7 +44,6 @@
             <a href="#faq" class="i18n-navFaq">FAQ</a>
         </div>
         
-        <!-- Botón hamburguesa (solo visible en móvil) -->
         <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
             <span></span>
             <span></span>
@@ -58,7 +57,7 @@
     </div>
 </nav>
 
-<!-- Menú móvil (desplegable) -->
+<!-- Menú móvil -->
 <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-header">
         <span class="logo-text">Humanhood</span>
@@ -98,7 +97,12 @@
             <div class="step"><div class="step-number">2</div><h3 class="i18n-step2Title">Verifica su humanidad</h3><p class="i18n-step2Desc">Validación automática con Cloudflare + blockchain.</p></div>
             <div class="step"><div class="step-number">3</div><h3 class="i18n-step3Title">Consulta el estado</h3><p class="i18n-step3Desc">Tu contrato llama a <code>checkHuman(wallet)</code> y obtiene true/false.</p></div>
         </div>
-        <div class="code-block"><div class="code-header"><span class="i18n-codeTitle">📝 Integración en tu contrato (versión de pago)</span><button class="copy-btn i18n-copyBtn" onclick="copyCode()">Copiar</button></div><pre><code id="codeToCopy">interface IHumanhood {
+        <div class="code-block">
+            <div class="code-header">
+                <span class="i18n-codeTitle">📝 Integración en tu contrato (versión de pago)</span>
+                <button class="copy-btn i18n-copyBtn" onclick="copyCode()">Copiar</button>
+            </div>
+            <pre><code id="codeToCopy">interface IHumanhood {
     function checkHuman(address user) external view returns (bool);
 }
 // Direcciones del contrato por red:
@@ -108,7 +112,8 @@
 require(
     IHumanhood(0x2A7396876a13812fEFc5773094f217d5380FEeB9).checkHuman(msg.sender),
     "Not verified as human"
-);</code></pre></div>
+);</code></pre>
+        </div>
     </div>
 </section>
 

@@ -1,18 +1,6 @@
 // ==================== IDIOMAS ====================
 let currentLang = "es";
-function applyLanguage(lang) {
-    currentLang = lang;
-    document.documentElement.lang = lang;
-    localStorage.setItem('humanhood_lang', lang);
-    document.querySelectorAll("[class^='i18n-']").forEach(el => {
-        const key = el.className.split(' ').find(c => c.startsWith('i18n-'));
-        if (key && translations[lang] && translations[lang][key.replace('i18n-', '')]) {
-            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = translations[lang][key.replace('i18n-', '')];
-            else if (el.tagName === 'BUTTON') el.innerHTML = translations[lang][key.replace('i18n-', '')];
-            else el.innerHTML = translations[lang][key.replace('i18n-', '')];
-        }
-    });
-}
+
 const translations = {
     es: {
         navProduct: "Producto", navPricing: "Precios", navVerify: "Verificar", navDocs: "Docs", navContact: "Contacto", navFaq: "FAQ",
@@ -53,7 +41,9 @@ const translations = {
         faq1Q: "¿Cómo integro Humanhood en mi proyecto?", faq1A: "Añade 3 líneas de código a tu contrato inteligente. La documentación completa está disponible.",
         faq2Q: "¿La verificación cuesta dinero?", faq2A: "No. La verificación inicial solo paga el gas (muy bajo). El proyecto paga $0.05 por consulta.",
         faq3Q: "¿Cómo cambio mi MetaMask a Amoy?", faq3A: "Haz clic en el botón dentro de la demo. MetaMask lo añadirá automáticamente.",
-        faq4Q: "¿Cuánto cuesta en producción?", faq4A: "$0.05 por consulta en Polygon Mainnet o BNB Chain. $0.10 en Ethereum Mainnet."
+        faq4Q: "¿Cuánto cuesta en producción?", faq4A: "$0.05 por consulta en Polygon Mainnet o BNB Chain. $0.10 en Ethereum Mainnet.",
+        successMsg: "✅ Mensaje enviado correctamente. Te responderemos pronto.",
+        errorMsg: "❌ Error al enviar. Inténtalo de nuevo."
     },
     en: {
         navProduct: "Product", navPricing: "Pricing", navVerify: "Verify", navDocs: "Docs", navContact: "Contact", navFaq: "FAQ",
@@ -94,9 +84,60 @@ const translations = {
         faq1Q: "How do I integrate Humanhood into my project?", faq1A: "Add 3 lines of code to your smart contract. Full documentation is available.",
         faq2Q: "Does verification cost money?", faq2A: "No. Initial verification only pays gas (very low). The project pays $0.05 per query.",
         faq3Q: "How do I switch MetaMask to Amoy?", faq3A: "Click the 'Switch to Polygon Amoy' button inside the demo. MetaMask will add it automatically.",
-        faq4Q: "How much does production cost?", faq4A: "$0.05 per query on Polygon Mainnet or BNB Chain. $0.10 on Ethereum Mainnet."
+        faq4Q: "How much does production cost?", faq4A: "$0.05 per query on Polygon Mainnet or BNB Chain. $0.10 on Ethereum Mainnet.",
+        successMsg: "✅ Message sent successfully. We will reply soon.",
+        errorMsg: "❌ Error sending message. Please try again."
     }
 };
+
+function applyLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    localStorage.setItem('humanhood_lang', lang);
+    
+    document.querySelectorAll("[class^='i18n-']").forEach(el => {
+        const key = el.className.split(' ').find(c => c.startsWith('i18n-'));
+        if (key && translations[lang][key.replace('i18n-', '')]) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = translations[lang][key.replace('i18n-', '')];
+            } else if (el.tagName === 'BUTTON') {
+                el.innerHTML = translations[lang][key.replace('i18n-', '')];
+            } else {
+                el.innerHTML = translations[lang][key.replace('i18n-', '')];
+            }
+        }
+    });
+    
+    // Cambiar el código de ejemplo según el idioma
+    const codeElement = document.getElementById('codeToCopy');
+    if (codeElement) {
+        if (lang === 'es') {
+            codeElement.innerText = `interface IHumanhood {
+    function checkHuman(address user) external view returns (bool);
+}
+// Direcciones del contrato por red:
+// Polygon Mainnet: 0x2A7396876a13812fEFc5773094f217d5380FEeB9
+// BNB Chain:      0xeCB6D54ac87D99b104535f95d5c38Bf48F2CCf4b
+
+require(
+    IHumanhood(0x2A7396876a13812fEFc5773094f217d5380FEeB9).checkHuman(msg.sender),
+    "No verificado como humano"
+);`;
+        } else {
+            codeElement.innerText = `interface IHumanhood {
+    function checkHuman(address user) external view returns (bool);
+}
+// Contract addresses by network:
+// Polygon Mainnet: 0x2A7396876a13812fEFc5773094f217d5380FEeB9
+// BNB Chain:      0xeCB6D54ac87D99b104535f95d5c38Bf48F2CCf4b
+
+require(
+    IHumanhood(0x2A7396876a13812fEFc5773094f217d5380FEeB9).checkHuman(msg.sender),
+    "Not verified as human"
+);`;
+        }
+    }
+}
 
 const savedLang = localStorage.getItem('humanhood_lang') || (navigator.language.startsWith('es') ? 'es' : 'en');
 if(document.getElementById('languageSelect')) {
@@ -106,8 +147,11 @@ if(document.getElementById('languageSelect')) {
 applyLanguage(savedLang);
 
 function copyCode() {
-    navigator.clipboard.writeText(document.getElementById('codeToCopy').innerText);
-    alert(currentLang === 'es' ? "Código copiado" : "Code copied");
+    const codeElement = document.getElementById('codeToCopy');
+    if (codeElement) {
+        navigator.clipboard.writeText(codeElement.innerText);
+        alert(currentLang === 'es' ? "Código copiado" : "Code copied");
+    }
 }
 
 // Animaciones al hacer scroll
@@ -245,12 +289,6 @@ function startVerifyTurnstile() {
     } else { console.log("⚠️ Turnstile no disponible"); updateVerifyChecklist('turnstile', 'done'); checkGitcoinPassportVerify(); }
 }
 
-// =====================================================
-// ⚠️ VERIFICACIÓN DE GITCOIN PASSPORT
-// =====================================================
-// MODO PRODUCCIÓN: Llama a la función de Netlify (sin CORS)
-// =====================================================
-
 async function checkGitcoinPassportVerify() {
     if (!verifyUserAddress) {
         showVerifyStatus(currentLang === 'es' ? "Wallet no conectada" : "Wallet not connected", "error");
@@ -261,7 +299,6 @@ async function checkGitcoinPassportVerify() {
     showVerifyStatus(currentLang === 'es' ? "🌍 Verificando actividad humana en Gitcoin Passport..." : "🌍 Verifying human activity on Gitcoin Passport...", "loading");
 
     try {
-        // Llamada a la función de Netlify (no directamente a Gitcoin)
         const response = await fetch(`/.netlify/functions/get-passport-score?address=${verifyUserAddress}`);
 
         if (!response.ok) {
@@ -311,7 +348,7 @@ async function registerHumanOnChain() {
     }
 }
 
-// ==================== MENÚ HAMBURGUESA (MÓVIL) ====================
+// ==================== MENÚ HAMBURGUESA ====================
 const hamburgerBtn = document.getElementById('hamburgerBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 const closeMenuBtn = document.getElementById('closeMenuBtn');
@@ -328,14 +365,12 @@ if (closeMenuBtn) {
     });
 }
 
-// Cerrar menú al hacer clic en un enlace
 document.querySelectorAll('.mobile-menu-links a').forEach(link => {
     link.addEventListener('click', () => {
         mobileMenu.classList.remove('open');
     });
 });
 
-// Cerrar menú al hacer clic fuera
 document.addEventListener('click', (e) => {
     if (mobileMenu && mobileMenu.classList.contains('open')) {
         if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
