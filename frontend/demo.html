@@ -10,7 +10,6 @@
         body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f1f5f9; line-height: 1.5; }
         .container { max-width: 800px; margin: 0 auto; padding: 120px 20px 40px; }
         
-        /* NAVBAR */
         .navbar { position: fixed; top: 0; left: 0; right: 0; background: rgba(15,23,42,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #334155; z-index: 1000; padding: 16px 0; }
         .navbar .container-nav { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
         .nav-logo { display: flex; align-items: center; gap: 8px; font-size: 1.5rem; font-weight: 700; cursor: pointer; }
@@ -18,6 +17,17 @@
         .nav-links { display: flex; gap: 24px; }
         .nav-links a { text-decoration: none; color: #94a3b8; transition: color 0.3s; }
         .nav-links a:hover { color: #667eea; }
+        
+        .hamburger { display: none; flex-direction: column; justify-content: space-between; width: 30px; height: 21px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 1001; }
+        .hamburger span { width: 100%; height: 3px; background: #94a3b8; border-radius: 3px; transition: all 0.3s ease; }
+        .mobile-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; z-index: 2000; transform: translateX(-100%); transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.5); }
+        .mobile-menu.open { transform: translateX(0); }
+        .mobile-menu-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #334155; }
+        .mobile-menu-header .logo-text { font-size: 1.3rem; font-weight: 700; }
+        .close-menu { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #94a3b8; }
+        .mobile-menu-links { display: flex; flex-direction: column; padding: 20px; gap: 20px; }
+        .mobile-menu-links a { text-decoration: none; color: #94a3b8; font-size: 1.1rem; font-weight: 500; padding: 10px 0; border-bottom: 1px solid #334155; transition: color 0.3s; }
+        .mobile-menu-links a:hover { color: #667eea; }
         
         .language-selector { position: fixed; top: 80px; right: 20px; z-index: 1001; background: #1e293b; border-radius: 50px; padding: 6px 12px; font-size: 0.8rem; border: 1px solid #334155; }
         .language-selector select { background: transparent; border: none; color: #667eea; font-weight: 500; cursor: pointer; outline: none; }
@@ -33,12 +43,11 @@
         .demo-info { margin-top: 24px; padding: 16px; background: #0f172a; border-radius: 16px; text-align: left; }
         code { word-break: break-all; background: #0f172a; padding: 4px 8px; border-radius: 6px; }
         pre { background: #0f172a; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 12px; margin: 8px 0; }
-        @media (max-width: 640px) { .container { padding: 100px 16px 40px; } .card { padding: 32px 24px; } .nav-links { display: none; } .language-selector { top: 70px; right: 10px; } }
+        @media (max-width: 640px) { .container { padding: 100px 16px 40px; } .card { padding: 32px 24px; } .nav-links { display: none; } .hamburger { display: flex; } .language-selector { top: 70px; right: 10px; } }
     </style>
 </head>
 <body>
 
-<!-- LANGUAGE SELECTOR -->
 <div class="language-selector">
     <span>🌐</span>
     <select id="languageSelect">
@@ -61,12 +70,31 @@
             <span class="logo-text">Humanhood</span>
         </div>
         <div class="nav-links">
-            <a href="index.html" class="i18n-web">Web</a>
-            <a href="docs.html" class="i18n-docs">Documentación</a>
-            <a href="contact.html" class="i18n-contact">Contacto</a>
+            <a href="index.html">Web</a>
+            <a href="docs.html">Documentación</a>
+            <a href="contact.html">Contacto</a>
+            <a href="deposit.html">Depósito</a>
+            <a href="early-access.html">Early Access</a>
         </div>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
+            <span></span><span></span><span></span>
+        </button>
     </div>
 </nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <span class="logo-text">Humanhood</span>
+        <button id="closeMenuBtn" class="close-menu">✕</button>
+    </div>
+    <div class="mobile-menu-links">
+        <a href="index.html">Web</a>
+        <a href="docs.html">Documentación</a>
+        <a href="contact.html">Contacto</a>
+        <a href="deposit.html">Depósito</a>
+        <a href="early-access.html">Early Access</a>
+    </div>
+</div>
 
 <div class="container">
     <div class="card">
@@ -99,12 +127,8 @@ function claimReward() external {
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script>
-    // ==================== TRADUCCIONES ====================
     const translationsDemo = {
         es: {
-            web: "Web",
-            docs: "Documentación",
-            contact: "Contacto",
             title: "🧪 Demo en Testnet",
             subtitle: "Prueba Humanhood en <strong>Polygon Amoy (testnet)</strong><br>La verificación es <strong>simulada</strong> (siempre exitosa).",
             connectBtn: "🔌 Conectar Wallet",
@@ -119,9 +143,6 @@ function claimReward() external {
             errorSim: "❌ Error: "
         },
         en: {
-            web: "Web",
-            docs: "Documentation",
-            contact: "Contact",
             title: "🧪 Testnet Demo",
             subtitle: "Test Humanhood on <strong>Polygon Amoy (testnet)</strong><br>Verification is <strong>simulated</strong> (always successful).",
             connectBtn: "🔌 Connect Wallet",
@@ -143,18 +164,14 @@ function claimReward() external {
         currentLangDemo = lang;
         document.documentElement.lang = lang;
         localStorage.setItem('humanhood_lang_demo', lang);
-        
         document.querySelectorAll('[class*="i18n-"]').forEach(el => {
             const classes = el.className.split(' ');
             const i18nClass = classes.find(c => c.startsWith('i18n-'));
             if (i18nClass) {
                 const key = i18nClass.replace('i18n-', '');
                 if (translationsDemo[lang] && translationsDemo[lang][key] !== undefined) {
-                    if (el.tagName === 'BUTTON') {
-                        el.innerHTML = translationsDemo[lang][key];
-                    } else {
-                        el.innerHTML = translationsDemo[lang][key];
-                    }
+                    if (el.tagName === 'BUTTON') el.innerHTML = translationsDemo[lang][key];
+                    else el.innerHTML = translationsDemo[lang][key];
                 }
             }
         });
@@ -167,11 +184,8 @@ function claimReward() external {
     }
     applyLanguageDemo(savedLangDemo);
 
-    // ==================== DEMO LOGIC ====================
     const CONTRACT_ADDRESS = "0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8";
-    const CONTRACT_ABI = [
-        "function checkHuman(address) view returns (bool)"
-    ];
+    const CONTRACT_ABI = ["function checkHuman(address) view returns (bool)"];
     
     let provider, signer, contract;
     let userAddress = null;
@@ -194,29 +208,19 @@ function claimReward() external {
             connectBtn.disabled = true;
             connectBtn.innerHTML = currentLangDemo === 'es' ? "⏳ Conectando..." : "⏳ Connecting...";
             
-            // Cambiar a Polygon Amoy
             try {
-                await window.ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x13881' }]
-                });
+                await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x13881' }] });
             } catch(switchError) {
                 if (switchError.code === 4902) {
                     await window.ethereum.request({
                         method: 'wallet_addEthereumChain',
-                        params: [{
-                            chainId: '0x13881',
-                            chainName: 'Polygon Amoy',
-                            nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 },
-                            rpcUrls: ['https://rpc-amoy.polygon.technology/']
-                        }]
+                        params: [{ chainId: '0x13881', chainName: 'Polygon Amoy', nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 }, rpcUrls: ['https://rpc-amoy.polygon.technology/'] }]
                     });
                 } else throw switchError;
             }
             
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             userAddress = accounts[0];
-            
             provider = new ethers.providers.Web3Provider(window.ethereum);
             signer = provider.getSigner();
             contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
@@ -224,7 +228,6 @@ function claimReward() external {
             showStatus(`${translationsDemo[currentLangDemo].connected} ${userAddress.slice(0,8)}...${userAddress.slice(-6)}`, "success");
             connectBtn.style.display = "none";
             simulateBtn.style.display = "inline-block";
-            
         } catch(e) {
             showStatus(translationsDemo[currentLangDemo].errorConnect + e.message, "error");
             connectBtn.disabled = false;
@@ -238,15 +241,8 @@ function claimReward() external {
             simulateBtn.disabled = true;
             simulateBtn.innerHTML = currentLangDemo === 'es' ? "⏳ Verificando..." : "⏳ Verifying...";
             showStatus(translationsDemo[currentLangDemo].simulating, "loading");
-            
             await new Promise(resolve => setTimeout(resolve, 1000));
-            const isHuman = true;
-            
-            if (isHuman) {
-                showStatus(translationsDemo[currentLangDemo].successSim, "success");
-            } else {
-                showStatus(translationsDemo[currentLangDemo].errorSim, "error");
-            }
+            showStatus(translationsDemo[currentLangDemo].successSim, "success");
         } catch(e) {
             showStatus(translationsDemo[currentLangDemo].errorSim + e.message, "error");
         } finally {
@@ -254,6 +250,18 @@ function claimReward() external {
             simulateBtn.innerHTML = translationsDemo[currentLangDemo].simulateBtn;
         }
     };
+
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    if (hamburgerBtn) hamburgerBtn.onclick = () => mobileMenu.classList.add('open');
+    if (closeMenuBtn) closeMenuBtn.onclick = () => mobileMenu.classList.remove('open');
+    document.querySelectorAll('.mobile-menu-links a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.remove('open')));
+    document.addEventListener('click', (e) => {
+        if (mobileMenu && mobileMenu.classList.contains('open')) {
+            if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) mobileMenu.classList.remove('open');
+        }
+    });
 </script>
 </body>
 </html>

@@ -4,20 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Humanhood | Documentación para desarrolladores</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f1f5f9; line-height: 1.5; }
         .container { max-width: 1000px; margin: 0 auto; padding: 100px 20px 40px; }
         .navbar { position: fixed; top: 0; left: 0; right: 0; background: rgba(15,23,42,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #334155; z-index: 1000; padding: 16px 0; }
         .navbar .container-nav { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
-        .nav-logo { display: flex; align-items: center; gap: 8px; font-size: 1.5rem; font-weight: 700; }
+        .nav-logo { display: flex; align-items: center; gap: 8px; font-size: 1.5rem; font-weight: 700; cursor: pointer; }
         .logo-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .nav-links { display: flex; gap: 24px; }
         .nav-links a { text-decoration: none; color: #94a3b8; transition: color 0.3s; }
         .nav-links a:hover { color: #667eea; }
         .language-selector { position: fixed; top: 80px; right: 20px; z-index: 1001; background: #1e293b; border-radius: 50px; padding: 6px 12px; font-size: 0.8rem; border: 1px solid #334155; }
         .language-selector select { background: transparent; border: none; color: #667eea; font-weight: 500; cursor: pointer; outline: none; }
+        
+        .hamburger { display: none; flex-direction: column; justify-content: space-between; width: 30px; height: 21px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 1001; }
+        .hamburger span { width: 100%; height: 3px; background: #94a3b8; border-radius: 3px; transition: all 0.3s ease; }
+        .mobile-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; z-index: 2000; transform: translateX(-100%); transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.5); }
+        .mobile-menu.open { transform: translateX(0); }
+        .mobile-menu-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #334155; }
+        .mobile-menu-header .logo-text { font-size: 1.3rem; font-weight: 700; }
+        .close-menu { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #94a3b8; }
+        .mobile-menu-links { display: flex; flex-direction: column; padding: 20px; gap: 20px; }
+        .mobile-menu-links a { text-decoration: none; color: #94a3b8; font-size: 1.1rem; font-weight: 500; padding: 10px 0; border-bottom: 1px solid #334155; transition: color 0.3s; }
+        .mobile-menu-links a:hover { color: #667eea; }
+        
         .docs-card { background: #1e293b; border-radius: 16px; padding: 32px; margin-bottom: 24px; }
         .docs-card h2 { color: #667eea; margin-bottom: 16px; }
         .docs-card h3 { margin: 24px 0 12px 0; color: #cbd5e0; }
@@ -38,7 +50,6 @@
         th { color: #94a3b8; font-weight: 500; }
         td:nth-child(2) { font-family: monospace; font-size: 0.8rem; word-break: break-all; }
         .tag-pending { background: #f59e0b20; color: #fbbf24; padding: 2px 8px; border-radius: 50px; font-size: 0.7rem; margin-left: 8px; }
-        .step-box { background: #0f172a; padding: 16px; border-radius: 12px; flex: 1; }
         .guide-list { margin-left: 20px; color: #cbd5e0; margin-bottom: 16px; }
         .guide-list li { margin: 8px 0; }
         .status { margin-top: 16px; padding: 12px; border-radius: 12px; font-size: 0.8rem; display: none; }
@@ -47,55 +58,74 @@
         .status.loading { background: #3b82f620; color: #60a5fa; border-left: 3px solid #3b82f6; display: block; }
         .demo-wallet-info { margin-top: 16px; }
         .demo-verify-btn { background: #48bb78; margin-top: 8px; }
-        @media (max-width: 768px) { .container { padding: 80px 16px 32px; } .nav-links { display: none; } .language-selector { top: 70px; right: 10px; } td:nth-child(2) { font-size: 0.7rem; } .btn-copy { margin-left: 4px; padding: 2px 6px; } .address-box { flex-direction: column; align-items: flex-start; } }
+        @media (max-width: 768px) { .container { padding: 80px 16px 32px; } .nav-links { display: none; } .hamburger { display: flex; } .language-selector { top: 70px; right: 10px; } td:nth-child(2) { font-size: 0.7rem; } .btn-copy { margin-left: 4px; padding: 2px 6px; } .address-box { flex-direction: column; align-items: flex-start; } }
     </style>
 </head>
 <body>
-    <!-- LANGUAGE SELECTOR -->
-    <div class="language-selector">
-        <span>🌐</span>
-        <select id="languageSelect">
-            <option value="es">🇪🇸 Español</option>
-            <option value="en">🇬🇧 English</option>
-        </select>
-    </div>
 
-    <nav class="navbar">
-        <div class="container-nav">
-            <div class="nav-logo">
-                <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="16" cy="11" r="5" stroke="url(#grad)" stroke-width="2" fill="none"/>
-                    <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad)"/>
-                    <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad)"/>
-                    <circle cx="10" cy="22" r="2" fill="url(#grad)"/>
-                    <circle cx="22" cy="22" r="2" fill="url(#grad)"/>
-                    <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
-                </svg>
-                <span class="logo-text">Humanhood</span>
-            </div>
-            <div class="nav-links">
-                <a href="index.html" class="i18n-navWeb">Web</a>
-                <a href="docs.html" style="color: #667eea;" class="i18n-navDocsActive">Documentación</a>
-                <a href="contact.html">Contacto</a>
-            </div>
+<div class="language-selector">
+    <span>🌐</span>
+    <select id="languageSelect">
+        <option value="es">🇪🇸 Español</option>
+        <option value="en">🇬🇧 English</option>
+    </select>
+</div>
+
+<nav class="navbar">
+    <div class="container-nav">
+        <div class="nav-logo" onclick="location.href='index.html'">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="11" r="5" stroke="url(#grad)" stroke-width="2" fill="none"/>
+                <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad)"/>
+                <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad)"/>
+                <circle cx="10" cy="22" r="2" fill="url(#grad)"/>
+                <circle cx="22" cy="22" r="2" fill="url(#grad)"/>
+                <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
+            </svg>
+            <span class="logo-text">Humanhood</span>
         </div>
-    </nav>
+        <div class="nav-links">
+            <a href="index.html">Web</a>
+            <a href="docs.html" style="color: #667eea;">Documentación</a>
+            <a href="contact.html">Contacto</a>
+            <a href="deposit.html">Depósito</a>
+            <a href="early-access.html">Early Access</a>
+        </div>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
 
-    <div class="container">
-        <h1 style="font-size: 2.5rem; margin-bottom: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; background-clip: text; color: transparent;">Documentación de Integración</h1>
-        <p style="color: #94a3b8; margin-bottom: 32px;" class="i18n-docsSubtitle">API de verificación humana para proyectos Web3. Prevén bots y sybils en tus airdrops, DAOs y juegos.</p>
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <span class="logo-text">Humanhood</span>
+        <button id="closeMenuBtn" class="close-menu">✕</button>
+    </div>
+    <div class="mobile-menu-links">
+        <a href="index.html">Web</a>
+        <a href="docs.html">Documentación</a>
+        <a href="contact.html">Contacto</a>
+        <a href="deposit.html">Depósito</a>
+        <a href="early-access.html">Early Access</a>
+    </div>
+</div>
 
-        <!-- CONTRATO FREE (PRUEBA) -->
-        <div class="docs-card">
-            <span class="badge-doc i18n-freeBadge">📡 PRUEBA GRATIS - 1,000 CONSULTAS</span>
-            <h2 class="i18n-testContractTitle">Contrato de Prueba (Testnet)</h2>
-            <p><span class="network-badge network-test i18n-polygonAmoy">Polygon Amoy (Testnet)</span> <span class="network-badge network-test i18n-chainId">Chain ID: 80002</span></p>
-            <div class="address-box">
-                📍 <code>0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8</code>
-                <button class="btn-copy i18n-copyBtn" onclick="copyToClipboard('0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8')">Copiar</button>
-            </div>
-            <p><strong class="i18n-faucetLabel">Faucet para POL (gas):</strong> <a href="https://faucet.polygon.technology/" style="color: #667eea;" target="_blank" class="i18n-faucetLink">faucet.polygon.technology</a></p>
-            <pre><code id="testCodeExample">interface IHumanhood {
+<div class="container">
+    <h1 style="font-size: 2.5rem; margin-bottom: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; background-clip: text; color: transparent;" class="i18n-docsTitle">Documentación de Integración</h1>
+    <p style="color: #94a3b8; margin-bottom: 32px;" class="i18n-docsSubtitle">API de verificación humana para proyectos Web3. Prevén bots y sybils en tus airdrops, DAOs y juegos.</p>
+
+    <!-- CONTRATO FREE (PRUEBA) -->
+    <div class="docs-card">
+        <span class="badge-doc i18n-freeBadge">📡 PRUEBA GRATIS - 1,000 CONSULTAS</span>
+        <h2 class="i18n-testContractTitle">Contrato de Prueba (Testnet)</h2>
+        <p><span class="network-badge network-test i18n-polygonAmoy">Polygon Amoy (Testnet)</span> <span class="network-badge network-test i18n-chainId">Chain ID: 80002</span></p>
+        <div class="address-box">
+            📍 <code>0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8</code>
+            <button class="btn-copy i18n-copyBtn" onclick="copyToClipboard('0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8')">Copiar</button>
+        </div>
+        <p><strong class="i18n-faucetLabel">Faucet para POL (gas):</strong> <a href="https://faucet.polygon.technology/" style="color: #667eea;" target="_blank" class="i18n-faucetLink">faucet.polygon.technology</a></p>
+        <pre><code id="testCodeExample">interface IHumanhood {
     function checkHuman(address user) external view returns (bool);
 }
 
@@ -105,79 +135,77 @@ function claimReward() external {
         "Not verified as human"
     );
 }</code></pre>
-        </div>
+    </div>
 
-        <!-- DEMO GRATIS EN VIVO (POLYGON AMOY) -->
-        <div class="docs-card">
-            <span class="badge-doc i18n-demoBadge">🧪 DEMO GRATIS - PRUEBA ANTES DE INTEGRAR</span>
-            <h2 class="i18n-demoTitle">Prueba la verificación en vivo</h2>
-            <p class="i18n-demoDesc">Conecta tu wallet en <strong>Polygon Amoy</strong> y prueba cómo funciona la verificación humana sin coste real. Solo necesitas POL de testnet (gratis del faucet).</p>
-            
-            <div style="display: flex; gap: 16px; flex-wrap: wrap; margin: 16px 0;">
-                <button id="demoConnectBtn" class="btn-download btn-demo i18n-demoConnectBtn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🔌 Conectar Wallet (Demo)</button>
-                <a href="https://faucet.polygon.technology/" target="_blank" class="btn-download i18n-getPolBtn">💧 Obtener POL gratis</a>
-            </div>
-            
-            <div id="demoWalletInfo" class="demo-wallet-info" style="display: none;">
-                <div class="address-box">
-                    📍 <span class="i18n-walletLabel">Wallet</span>: <span id="demoWalletAddress">-</span>
-                    <span id="demoHumanStatus" class="i18n-statusChecking">❓ Verificando...</span>
-                </div>
-            </div>
-            
-            <div id="demoVerifyBtnContainer" style="display: none; margin-top: 16px;">
-                <button id="demoVerifyBtn" class="btn-download demo-verify-btn i18n-verifyMeBtn">✅ Verificarme como humano</button>
-            </div>
-            
-            <div id="demoStatus" class="status"></div>
-            
-            <h3 class="i18n-whatToTest">📝 ¿Qué vas a probar?</h3>
-            <ul class="guide-list i18n-testSteps">
-                <li>1. Conecta tu wallet (cambia a Polygon Amoy)</li>
-                <li>2. Solicita POL gratis del faucet si no tienes</li>
-                <li>3. Haz clic en "Verificarme como humano"</li>
-                <li>4. Tu wallet quedará marcada como humana en la testnet</li>
-                <li>5. Puedes consultar el estado con <code>checkHuman(tuWallet)</code></li>
-            </ul>
-            <p class="i18n-demoNote"><strong>Nota:</strong> Esta demo usa <strong>Polygon Amoy (testnet)</strong>. El POL es gratuito y no tiene valor real. Perfecto para probar sin riesgo.</p>
+    <!-- DEMO GRATIS EN VIVO (POLYGON AMOY) -->
+    <div class="docs-card">
+        <span class="badge-doc i18n-demoBadge">🧪 DEMO GRATIS - PRUEBA ANTES DE INTEGRAR</span>
+        <h2 class="i18n-demoTitle">Prueba la verificación en vivo</h2>
+        <p class="i18n-demoDesc">Conecta tu wallet en <strong>Polygon Amoy</strong> y prueba cómo funciona la verificación humana sin coste real. Solo necesitas POL de testnet (gratis del faucet).</p>
+        
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin: 16px 0;">
+            <button id="demoConnectBtn" class="btn-download btn-demo i18n-demoConnectBtn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🔌 Conectar Wallet (Demo)</button>
+            <a href="https://faucet.polygon.technology/" target="_blank" class="btn-download i18n-getPolBtn">💧 Obtener POL gratis</a>
         </div>
-
-        <!-- REDES DISPONIBLES PRODUCCIÓN -->
-        <div class="docs-card">
-            <span class="badge-doc i18n-productionBadge">🌍 PRODUCCIÓN - MÚLTIPLES REDES</span>
-            <h2 class="i18n-productionTitle">Contratos de Producción (Mainnets)</h2>
-            <p class="i18n-productionDesc">Elige la red que mejor se adapte a tu proyecto. El mismo contrato funciona en todas.</p>
-            <div style="overflow-x: auto;">
-                <table id="networksTable">
-                    <thead>
-                        <tr><th class="i18n-tableNetwork">Red</th><th class="i18n-tableAddress">Dirección del contrato</th><th class="i18n-tablePrice">Precio por consulta</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><span class="network-badge network-polygon i18n-polygonMainnet">🟣 Polygon Mainnet</span></td><td>0x2A7396876a13812fEFc5773094f217d5380FEeB9<button class="btn-copy i18n-copyBtn" onclick="copyToClipboard('0x2A7396876a13812fEFc5773094f217d5380FEeB9')">Copiar</button></td><td><strong>$0.05</strong> <span class="i18n-recommended">(recomendado)</span></td></tr>
-                        <tr><td><span class="network-badge network-bnb i18n-bnbChain">🟡 BNB Chain (BSC)</span></td><td>0xeCB6D54ac87D99b104535f95d5c38Bf48F2CCf4b<button class="btn-copy i18n-copyBtn" onclick="copyToClipboard('0xeCB6D54ac87D99b104535f95d5c38Bf48F2CCf4b')">Copiar</button></td><td><strong>$0.05</strong></td></tr>
-                        <tr><td><span class="network-badge network-ethereum i18n-ethereumMainnet">⚪ Ethereum Mainnet</span></td><td><code class="i18n-comingSoon">Próximamente</code> <span class="tag-pending i18n-inDevelopment">En desarrollo</span></td><td><strong>$0.10</strong></td></tr>
-                    </tbody>
-                </table>
+        
+        <div id="demoWalletInfo" class="demo-wallet-info" style="display: none;">
+            <div class="address-box">
+                📍 <span class="i18n-walletLabel">Wallet</span>: <span id="demoWalletAddress">-</span>
+                <span id="demoHumanStatus" class="i18n-statusChecking">❓ Verificando...</span>
             </div>
         </div>
+        
+        <div id="demoVerifyBtnContainer" style="display: none; margin-top: 16px;">
+            <button id="demoVerifyBtn" class="btn-download demo-verify-btn i18n-verifyMeBtn">✅ Verificarme como humano</button>
+        </div>
+        
+        <div id="demoStatus" class="status"></div>
+        
+        <h3 class="i18n-whatToTest">📝 ¿Qué vas a probar?</h3>
+        <ul class="guide-list i18n-testSteps">
+            <li>1. Conecta tu wallet (cambia a Polygon Amoy)</li>
+            <li>2. Solicita POL gratis del faucet si no tienes</li>
+            <li>3. Haz clic en "Verificarme como humano"</li>
+            <li>4. Tu wallet quedará marcada como humana en la testnet</li>
+            <li>5. Puedes consultar el estado con <code>checkHuman(tuWallet)</code></li>
+        </ul>
+        <p class="i18n-demoNote"><strong>Nota:</strong> Esta demo usa <strong>Polygon Amoy (testnet)</strong>. El POL es gratuito y no tiene valor real. Perfecto para probar sin riesgo.</p>
+    </div>
 
-        <!-- GUÍA DE INTEGRACIÓN -->
-        <div class="docs-card">
-            <span class="badge-doc i18n-guideBadge">📘 GUÍA DE INTEGRACIÓN</span>
-            <h2 class="i18n-guideTitle">¿Cómo funciona Humanhood?</h2>
-            <p class="i18n-guideDesc">Humanhood es una API de verificación humana descentralizada. Permite que cualquier proyecto Web3 sepa si una wallet pertenece a un humano real o a un bot, pagando solo por las consultas que realiza.</p>
-            <h3 class="i18n-systemFlow">🔄 Flujo completo del sistema</h3>
-            <pre style="background:#0f172a;color:#94a3b8;padding:16px;border-radius:12px;" id="systemFlowText" class="i18n-systemFlowText">1. Usuario final se verifica en humanhood.tech (paga gas una vez)
+    <!-- REDES DISPONIBLES PRODUCCIÓN -->
+    <div class="docs-card">
+        <span class="badge-doc i18n-productionBadge">🌍 PRODUCCIÓN - MÚLTIPLES REDES</span>
+        <h2 class="i18n-productionTitle">Contratos de Producción (Mainnets)</h2>
+        <p class="i18n-productionDesc">Elige la red que mejor se adapte a tu proyecto. El mismo contrato funciona en todas.</p>
+        <div style="overflow-x: auto;">
+            <table id="networksTable">
+                <thead><tr><th class="i18n-tableNetwork">Red</th><th class="i18n-tableAddress">Dirección del contrato</th><th class="i18n-tablePrice">Precio por consulta</th></tr></thead>
+                <tbody>
+                    <tr><td><span class="network-badge network-polygon i18n-polygonMainnet">🟣 Polygon Mainnet</span></td><td>0x2A7396876a13812fEFc5773094f217d5380FEeB9<button class="btn-copy i18n-copyBtn" onclick="copyToClipboard('0x2A7396876a13812fEFc5773094f217d5380FEeB9')">Copiar</button></td><td><strong>$0.05</strong> <span class="i18n-recommended">(recomendado)</span></td></tr>
+                    <tr><td><span class="network-badge network-bnb i18n-bnbChain">🟡 BNB Chain (BSC)</span></td><td>0xeCB6D54ac87D99b104535f95d5c38Bf48F2CCf4b<button class="btn-copy i18n-copyBtn" onclick="copyToClipboard('0xeCB6D54ac87D99b104535f95d5c38Bf48F2CCf4b')">Copiar</button></td><td><strong>$0.05</strong></td></tr>
+                    <tr><td><span class="network-badge network-ethereum i18n-ethereumMainnet">⚪ Ethereum Mainnet</span></td><td><code class="i18n-comingSoon">Próximamente</code> <span class="tag-pending i18n-inDevelopment">En desarrollo</span></td><td><strong>$0.10</strong></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- GUÍA DE INTEGRACIÓN -->
+    <div class="docs-card">
+        <span class="badge-doc i18n-guideBadge">📘 GUÍA DE INTEGRACIÓN</span>
+        <h2 class="i18n-guideTitle">¿Cómo funciona Humanhood?</h2>
+        <p class="i18n-guideDesc">Humanhood es una API de verificación humana descentralizada. Permite que cualquier proyecto Web3 sepa si una wallet pertenece a un humano real o a un bot, pagando solo por las consultas que realiza.</p>
+        <h3 class="i18n-systemFlow">🔄 Flujo completo del sistema</h3>
+        <pre style="background:#0f172a;color:#94a3b8;padding:16px;border-radius:12px;" id="systemFlowText" class="i18n-systemFlowText">1. Usuario final se verifica en humanhood.tech (paga gas una vez)
 2. Su wallet queda marcada como humana en la blockchain
 3. Tu proyecto consulta checkHuman(wallet)
 4. Si es true, el usuario recibe la recompensa
 5. Tu proyecto paga $0.05 por cada consulta</pre>
-            <h3 class="i18n-projectToDo">🧑‍💻 Lo que debe hacer TU PROYECTO</h3>
-            <ul class="guide-list i18n-projectSteps"><li>1. Integrar nuestro contrato (3 líneas de código)</li><li>2. Depositar USDC en nuestro contrato (mínimo 10 USDC)</li><li>3. Por cada usuario, llamar a checkHuman(wallet) → cuesta $0.05</li></ul>
-            <h3 class="i18n-userToDo">🧑‍💻 Lo que debe hacer el USUARIO FINAL</h3>
-            <ul class="guide-list i18n-userSteps"><li>1. Conectar su wallet en <a href="https://humanhood.tech" style="color:#667eea;">humanhood.tech</a></li><li>2. Hacer clic en "Verificarme como humano" (solo paga el gas)</li><li>3. Su wallet queda marcada como humana para siempre ✅</li></ul>
-            <h3 class="i18n-codeIntegration">📝 Código de integración para tu contrato</h3>
-            <pre><code id="integrationCode">interface IHumanhood {
+        <h3 class="i18n-projectToDo">🧑‍💻 Lo que debe hacer TU PROYECTO</h3>
+        <ul class="guide-list i18n-projectSteps"><li>1. Integrar nuestro contrato (3 líneas de código)</li><li>2. Depositar USDC en nuestro contrato (mínimo 10 USDC)</li><li>3. Por cada usuario, llamar a checkHuman(wallet) → cuesta $0.05</li></ul>
+        <h3 class="i18n-userToDo">🧑‍💻 Lo que debe hacer el USUARIO FINAL</h3>
+        <ul class="guide-list i18n-userSteps"><li>1. Conectar su wallet en <a href="https://humanhood.tech" style="color:#667eea;">humanhood.tech</a></li><li>2. Hacer clic en "Verificarme como humano" (solo paga el gas)</li><li>3. Su wallet queda marcada como humana para siempre ✅</li></ul>
+        <h3 class="i18n-codeIntegration">📝 Código de integración para tu contrato</h3>
+        <pre><code id="integrationCode">interface IHumanhood {
     function checkHuman(address user) external view returns (bool);
 }
 function claimReward() external {
@@ -187,446 +215,380 @@ function claimReward() external {
     );
     // Tu lógica de recompensa aquí
 }</code></pre>
-            <h3 class="i18n-numbersExample">💰 Ejemplo con números</h3>
-            <ul class="guide-list i18n-numbersList"><li>Depositas 100 USDC → saldo en contrato: 100 USDC</li><li>Consultas 1 wallet → saldo: 99.95 USDC (coste: $0.05)</li><li>Consultas 2,000 wallets → saldo: 0 USDC (coste: $100)</li><li>Vuelves a depositar cuando quieras más saldo</li></ul>
-            <h3 class="i18n-summaryTitle">✅ Resumen para tu proyecto</h3>
-            <ul class="guide-list i18n-summaryList"><li>📌 Tus usuarios se verifican UNA SOLA VEZ en humanhood.tech</li><li>📌 Tu proyecto paga $0.05 por cada consulta a checkHuman()</li><li>📌 El usuario NO PAGA NADA (solo el gas una vez en su vida)</li><li>📌 Puedes probar gratis en testnet (Polygon Amoy)</li></ul>
-        </div>
+        <h3 class="i18n-numbersExample">💰 Ejemplo con números</h3>
+        <ul class="guide-list i18n-numbersList"><li>Depositas 100 USDC → saldo en contrato: 100 USDC</li><li>Consultas 1 wallet → saldo: 99.95 USDC (coste: $0.05)</li><li>Consultas 2,000 wallets → saldo: 0 USDC (coste: $100)</li><li>Vuelves a depositar cuando quieras más saldo</li></ul>
+        <h3 class="i18n-summaryTitle">✅ Resumen para tu proyecto</h3>
+        <ul class="guide-list i18n-summaryList"><li>📌 Tus usuarios se verifican UNA SOLA VEZ en humanhood.tech</li><li>📌 Tu proyecto paga $0.05 por cada consulta a checkHuman()</li><li>📌 El usuario NO PAGA NADA (solo el gas una vez en su vida)</li><li>📌 Puedes probar gratis en testnet (Polygon Amoy)</li></ul>
+    </div>
 
-        <!-- DEPÓSITOS -->
-        <div class="docs-card">
-            <span class="badge-doc i18n-depositsBadge">💰 DEPÓSITOS</span>
-            <h2 class="i18n-depositsTitle">Depositar USDC</h2>
-            <p class="i18n-depositsDesc">Para usar nuestro servicio de pago por consulta, necesitas depositar USDC en nuestro contrato. Puedes hacerlo fácilmente desde nuestra página de depósito o integrando el script en tu dApp.</p>
-            <div style="display:flex;gap:16px;flex-wrap:wrap;margin:16px 0;"><a href="deposit.html" class="btn-download i18n-depositPageBtn" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);">🔗 Ir a la página de depósito</a><a href="example.js" download class="btn-download i18n-downloadScriptBtn">📥 Descargar script de ejemplo</a></div>
-            <h3 class="i18n-integrationCodeTitle">📝 Código de integración (para tu dApp)</h3>
-            <pre><code id="depositCode">// 1. Conectar wallet y obtener el contrato USDC
+    <!-- DEPÓSITOS -->
+    <div class="docs-card">
+        <span class="badge-doc i18n-depositsBadge">💰 DEPÓSITOS</span>
+        <h2 class="i18n-depositsTitle">Depositar USDC</h2>
+        <p class="i18n-depositsDesc">Para usar nuestro servicio de pago por consulta, necesitas depositar USDC en nuestro contrato. Puedes hacerlo fácilmente desde nuestra página de depósito o integrando el script en tu dApp.</p>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin:16px 0;"><a href="deposit.html" class="btn-download i18n-depositPageBtn" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);">🔗 Ir a la página de depósito</a><a href="example.js" download class="btn-download i18n-downloadScriptBtn">📥 Descargar script de ejemplo</a></div>
+        <h3 class="i18n-integrationCodeTitle">📝 Código de integración (para tu dApp)</h3>
+        <pre><code id="depositCode">// 1. Conectar wallet y obtener el contrato USDC
 const usdc = new ethers.Contract(USDC_ADDRESS, USDC_ABI, signer);
 await usdc.approve(CONTRACT_ADDRESS, ethers.utils.parseUnits("100", 6));
 
 // 2. Depositar en el contrato de Humanhood
 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 await contract.depositUSDC(ethers.utils.parseUnits("100", 6));</code></pre>
-            <p class="i18n-depositNote"><strong>Nota:</strong> El depósito mínimo es de <strong>10 USDC</strong>. Una vez depositado, cada consulta a <code>checkHuman()</code> descontará 0.05 USDC automáticamente.</p>
-        </div>
-
-        <!-- PREGUNTAS FRECUENTES -->
-        <div class="docs-card">
-            <h2 class="i18n-faqTitle">❓ Preguntas frecuentes</h2>
-            <h3 class="i18n-faq1Q">¿Cuánto cuesta la verificación?</h3>
-            <p class="i18n-faq1A"><strong>Prueba gratuita:</strong> 1,000 consultas gratis en testnet (Polygon Amoy).<br><strong>Producción:</strong> $0.05 en Polygon o BNB Chain, $0.10 en Ethereum.</p>
-            <h3 class="i18n-faq2Q">¿Qué red debo usar?</h3>
-            <p class="i18n-faq2A"><strong>Pruebas:</strong> Polygon Amoy (testnet).<br><strong>Producción:</strong> Polygon Mainnet (recomendado por bajo coste), BNB Chain o Ethereum.</p>
-            <h3 class="i18n-faq3Q">¿Qué dirección me pide Humanhood?</h3>
-            <p class="i18n-faq3A">La dirección de tu <strong>contrato</strong> o <strong>wallet</strong> desde la que llamas a <code>checkHuman()</code>.</p>
-            <h3 class="i18n-faq4Q">¿Necesito backend para integrarme?</h3>
-            <p class="i18n-faq4A">No. Todo es mediante contratos inteligentes. Tu proyecto llama directamente a nuestra función <code>checkHuman()</code>.</p>
-            <h3 class="i18n-faq5Q">¿Cómo deposito USDC?</h3>
-            <p class="i18n-faq5A">Tienes dos opciones: usar nuestra <a href="deposit.html" style="color:#667eea;">página de depósito</a> (sin programar) o integrar el script de ejemplo en tu dApp.</p>
-        </div>
-
-        <!-- SOPORTE -->
-        <div class="docs-card">
-            <h2 class="i18n-supportTitle">🆘 ¿Necesitas ayuda?</h2>
-            <p class="i18n-supportDesc">Contacta con nosotros en <strong>info@humanhood.tech</strong> y te ayudaremos con la integración.</p>
-        </div>
+        <p class="i18n-depositNote"><strong>Nota:</strong> El depósito mínimo es de <strong>10 USDC</strong>. Una vez depositado, cada consulta a <code>checkHuman()</code> descontará 0.05 USDC automáticamente.</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <script>
-        // ==================== TRADUCCIONES PARA DOCS ====================
-        const translationsDocs = {
-            es: {
-                navWeb: "Web",
-                navDocsActive: "Documentación",
-                docsTitle: "📘 Documentación de Integración",
-                docsSubtitle: "API de verificación humana para proyectos Web3. Prevén bots y sybils en tus airdrops, DAOs y juegos.",
-                freeBadge: "📡 PRUEBA GRATIS - 1,000 CONSULTAS",
-                testContractTitle: "Contrato de Prueba (Testnet)",
-                polygonAmoy: "Polygon Amoy (Testnet)",
-                chainId: "Chain ID: 80002",
-                copyBtn: "Copiar",
-                faucetLabel: "Faucet para POL (gas):",
-                faucetLink: "faucet.polygon.technology",
-                demoBadge: "🧪 DEMO GRATIS - PRUEBA ANTES DE INTEGRAR",
-                demoTitle: "Prueba la verificación en vivo",
-                demoDesc: "Conecta tu wallet en Polygon Amoy y prueba cómo funciona la verificación humana sin coste real. Solo necesitas POL de testnet (gratis del faucet).",
-                demoConnectBtn: "🔌 Conectar Wallet (Demo)",
-                getPolBtn: "💧 Obtener POL gratis",
-                walletLabel: "Wallet",
-                statusChecking: "❓ Verificando...",
-                verifyMeBtn: "✅ Verificarme como humano",
-                whatToTest: "📝 ¿Qué vas a probar?",
-                testSteps: "1. Conecta tu wallet (cambia a Polygon Amoy)\n2. Solicita POL gratis del faucet si no tienes\n3. Haz clic en \"Verificarme como humano\"\n4. Tu wallet quedará marcada como humana en la testnet\n5. Puedes consultar el estado con checkHuman(tuWallet)",
-                demoNote: "Nota: Esta demo usa Polygon Amoy (testnet). El POL es gratuito y no tiene valor real. Perfecto para probar sin riesgo.",
-                productionBadge: "🌍 PRODUCCIÓN - MÚLTIPLES REDES",
-                productionTitle: "Contratos de Producción (Mainnets)",
-                productionDesc: "Elige la red que mejor se adapte a tu proyecto. El mismo contrato funciona en todas.",
-                tableNetwork: "Red",
-                tableAddress: "Dirección del contrato",
-                tablePrice: "Precio por consulta",
-                polygonMainnet: "🟣 Polygon Mainnet",
-                bnbChain: "🟡 BNB Chain (BSC)",
-                ethereumMainnet: "⚪ Ethereum Mainnet",
-                comingSoon: "Próximamente",
-                inDevelopment: "En desarrollo",
-                recommended: "(recomendado)",
-                guideBadge: "📘 GUÍA DE INTEGRACIÓN",
-                guideTitle: "¿Cómo funciona Humanhood?",
-                guideDesc: "Humanhood es una API de verificación humana descentralizada. Permite que cualquier proyecto Web3 sepa si una wallet pertenece a un humano real o a un bot, pagando solo por las consultas que realiza.",
-                systemFlow: "🔄 Flujo completo del sistema",
-                systemFlowText: "1. Usuario final se verifica en humanhood.tech (paga gas una vez)\n2. Su wallet queda marcada como humana en la blockchain\n3. Tu proyecto consulta checkHuman(wallet)\n4. Si es true, el usuario recibe la recompensa\n5. Tu proyecto paga $0.05 por cada consulta",
-                projectToDo: "🧑‍💻 Lo que debe hacer TU PROYECTO",
-                projectSteps: "1. Integrar nuestro contrato (3 líneas de código)\n2. Depositar USDC en nuestro contrato (mínimo 10 USDC)\n3. Por cada usuario, llamar a checkHuman(wallet) → cuesta $0.05",
-                userToDo: "🧑‍💻 Lo que debe hacer el USUARIO FINAL",
-                userSteps: "1. Conectar su wallet en humanhood.tech\n2. Hacer clic en \"Verificarme como humano\" (solo paga el gas)\n3. Su wallet queda marcada como humana para siempre ✅",
-                codeIntegration: "📝 Código de integración para tu contrato",
-                numbersExample: "💰 Ejemplo con números",
-                numbersList: "Depositas 100 USDC → saldo en contrato: 100 USDC\nConsultas 1 wallet → saldo: 99.95 USDC (coste: $0.05)\nConsultas 2,000 wallets → saldo: 0 USDC (coste: $100)\nVuelves a depositar cuando quieras más saldo",
-                summaryTitle: "✅ Resumen para tu proyecto",
-                summaryList: "📌 Tus usuarios se verifican UNA SOLA VEZ en humanhood.tech\n📌 Tu proyecto paga $0.05 por cada consulta a checkHuman()\n📌 El usuario NO PAGA NADA (solo el gas una vez en su vida)\n📌 Puedes probar gratis en testnet (Polygon Amoy)",
-                depositsBadge: "💰 DEPÓSITOS",
-                depositsTitle: "Depositar USDC",
-                depositsDesc: "Para usar nuestro servicio de pago por consulta, necesitas depositar USDC en nuestro contrato. Puedes hacerlo fácilmente desde nuestra página de depósito o integrando el script en tu dApp.",
-                depositPageBtn: "🔗 Ir a la página de depósito",
-                downloadScriptBtn: "📥 Descargar script de ejemplo",
-                integrationCodeTitle: "📝 Código de integración (para tu dApp)",
-                depositNote: "Nota: El depósito mínimo es de 10 USDC. Una vez depositado, cada consulta a checkHuman() descontará 0.05 USDC automáticamente.",
-                faqTitle: "❓ Preguntas frecuentes",
-                faq1Q: "¿Cuánto cuesta la verificación?",
-                faq1A: "Prueba gratuita: 1,000 consultas gratis en testnet (Polygon Amoy).\nProducción: $0.05 en Polygon o BNB Chain, $0.10 en Ethereum.",
-                faq2Q: "¿Qué red debo usar?",
-                faq2A: "Pruebas: Polygon Amoy (testnet).\nProducción: Polygon Mainnet (recomendado por bajo coste), BNB Chain o Ethereum.",
-                faq3Q: "¿Qué dirección me pide Humanhood?",
-                faq3A: "La dirección de tu contrato o wallet desde la que llamas a checkHuman().",
-                faq4Q: "¿Necesito backend para integrarme?",
-                faq4A: "No. Todo es mediante contratos inteligentes. Tu proyecto llama directamente a nuestra función checkHuman().",
-                faq5Q: "¿Cómo deposito USDC?",
-                faq5A: "Tienes dos opciones: usar nuestra página de depósito (sin programar) o integrar el script de ejemplo en tu dApp.",
-                supportTitle: "🆘 ¿Necesitas ayuda?",
-                supportDesc: "Contacta con nosotros en info@humanhood.tech y te ayudaremos con la integración."
-            },
-            en: {
-                navWeb: "Web",
-                navDocsActive: "Documentation",
-                docsTitle: "📘 Integration Documentation",
-                docsSubtitle: "Human verification API for Web3 projects. Prevent bots and sybils in your airdrops, DAOs, and games.",
-                freeBadge: "📡 FREE TRIAL - 1,000 QUERIES",
-                testContractTitle: "Test Contract (Testnet)",
-                polygonAmoy: "Polygon Amoy (Testnet)",
-                chainId: "Chain ID: 80002",
-                copyBtn: "Copy",
-                faucetLabel: "Faucet for POL (gas):",
-                faucetLink: "faucet.polygon.technology",
-                demoBadge: "🧪 FREE DEMO - TEST BEFORE INTEGRATING",
-                demoTitle: "Test live verification",
-                demoDesc: "Connect your wallet on Polygon Amoy and test how human verification works at no real cost. You only need testnet POL (free from the faucet).",
-                demoConnectBtn: "🔌 Connect Wallet (Demo)",
-                getPolBtn: "💧 Get free POL",
-                walletLabel: "Wallet",
-                statusChecking: "❓ Checking...",
-                verifyMeBtn: "✅ Verify me as human",
-                whatToTest: "📝 What are you going to test?",
-                testSteps: "1. Connect your wallet (switch to Polygon Amoy)\n2. Get free POL from the faucet if you don't have any\n3. Click \"Verify me as human\"\n4. Your wallet will be marked as human on the testnet\n5. You can check the status with checkHuman(yourWallet)",
-                demoNote: "Note: This demo uses Polygon Amoy (testnet). POL is free and has no real value. Perfect for risk-free testing.",
-                productionBadge: "🌍 PRODUCTION - MULTIPLE NETWORKS",
-                productionTitle: "Production Contracts (Mainnets)",
-                productionDesc: "Choose the network that best suits your project. The same contract works on all.",
-                tableNetwork: "Network",
-                tableAddress: "Contract Address",
-                tablePrice: "Price per query",
-                polygonMainnet: "🟣 Polygon Mainnet",
-                bnbChain: "🟡 BNB Chain (BSC)",
-                ethereumMainnet: "⚪ Ethereum Mainnet",
-                comingSoon: "Coming soon",
-                inDevelopment: "In development",
-                recommended: "(recommended)",
-                guideBadge: "📘 INTEGRATION GUIDE",
-                guideTitle: "How does Humanhood work?",
-                guideDesc: "Humanhood is a decentralized human verification API. It allows any Web3 project to know if a wallet belongs to a real human or a bot, paying only for the queries it makes.",
-                systemFlow: "🔄 Complete system flow",
-                systemFlowText: "1. End user verifies at humanhood.tech (pays gas once)\n2. Their wallet is marked as human on the blockchain\n3. Your project queries checkHuman(wallet)\n4. If true, the user receives the reward\n5. Your project pays $0.05 per query",
-                projectToDo: "🧑‍💻 What YOUR PROJECT must do",
-                projectSteps: "1. Integrate our contract (3 lines of code)\n2. Deposit USDC into our contract (minimum 10 USDC)\n3. For each user, call checkHuman(wallet) → costs $0.05",
-                userToDo: "🧑‍💻 What the END USER must do",
-                userSteps: "1. Connect their wallet at humanhood.tech\n2. Click \"Verify me as human\" (only pays gas)\n3. Their wallet is marked as human forever ✅",
-                codeIntegration: "📝 Integration code for your contract",
-                numbersExample: "💰 Example with numbers",
-                numbersList: "Deposit 100 USDC → contract balance: 100 USDC\nQuery 1 wallet → balance: 99.95 USDC (cost: $0.05)\nQuery 2,000 wallets → balance: 0 USDC (cost: $100)\nDeposit again whenever you need more balance",
-                summaryTitle: "✅ Summary for your project",
-                summaryList: "📌 Your users verify ONCE at humanhood.tech\n📌 Your project pays $0.05 per checkHuman() query\n📌 The user pays NOTHING (only gas once in their lifetime)\n📌 You can test for free on testnet (Polygon Amoy)",
-                depositsBadge: "💰 DEPOSITS",
-                depositsTitle: "Deposit USDC",
-                depositsDesc: "To use our pay-per-query service, you need to deposit USDC into our contract. You can easily do this from our deposit page or by integrating the script into your dApp.",
-                depositPageBtn: "🔗 Go to deposit page",
-                downloadScriptBtn: "📥 Download example script",
-                integrationCodeTitle: "📝 Integration code (for your dApp)",
-                depositNote: "Note: The minimum deposit is 10 USDC. Once deposited, each checkHuman() query will automatically deduct 0.05 USDC.",
-                faqTitle: "❓ Frequently Asked Questions",
-                faq1Q: "How much does verification cost?",
-                faq1A: "Free trial: 1,000 free queries on testnet (Polygon Amoy).\nProduction: $0.05 on Polygon or BNB Chain, $0.10 on Ethereum.",
-                faq2Q: "Which network should I use?",
-                faq2A: "Testing: Polygon Amoy (testnet).\nProduction: Polygon Mainnet (recommended for low cost), BNB Chain or Ethereum.",
-                faq3Q: "What address does Humanhood ask for?",
-                faq3A: "The address of your contract or wallet from which you call checkHuman().",
-                faq4Q: "Do I need a backend to integrate?",
-                faq4A: "No. Everything is through smart contracts. Your project directly calls our checkHuman() function.",
-                faq5Q: "How do I deposit USDC?",
-                faq5A: "You have two options: use our deposit page (no coding) or integrate the example script into your dApp.",
-                supportTitle: "🆘 Need help?",
-                supportDesc: "Contact us at info@humanhood.tech and we'll help you with the integration."
-            }
-        };
+    <!-- PREGUNTAS FRECUENTES -->
+    <div class="docs-card">
+        <h2 class="i18n-faqTitle">❓ Preguntas frecuentes</h2>
+        <h3 class="i18n-faq1Q">¿Cuánto cuesta la verificación?</h3>
+        <p class="i18n-faq1A"><strong>Prueba gratuita:</strong> 1,000 consultas gratis en testnet (Polygon Amoy).<br><strong>Producción:</strong> $0.05 en Polygon o BNB Chain, $0.10 en Ethereum.</p>
+        <h3 class="i18n-faq2Q">¿Qué red debo usar?</h3>
+        <p class="i18n-faq2A"><strong>Pruebas:</strong> Polygon Amoy (testnet).<br><strong>Producción:</strong> Polygon Mainnet (recomendado por bajo coste), BNB Chain o Ethereum.</p>
+        <h3 class="i18n-faq3Q">¿Qué dirección me pide Humanhood?</h3>
+        <p class="i18n-faq3A">La dirección de tu <strong>contrato</strong> o <strong>wallet</strong> desde la que llamas a <code>checkHuman()</code>.</p>
+        <h3 class="i18n-faq4Q">¿Necesito backend para integrarme?</h3>
+        <p class="i18n-faq4A">No. Todo es mediante contratos inteligentes. Tu proyecto llama directamente a nuestra función <code>checkHuman()</code>.</p>
+        <h3 class="i18n-faq5Q">¿Cómo deposito USDC?</h3>
+        <p class="i18n-faq5A">Tienes dos opciones: usar nuestra <a href="deposit.html" style="color:#667eea;">página de depósito</a> (sin programar) o integrar el script de ejemplo en tu dApp.</p>
+    </div>
 
-        let currentLangDocs = "es";
+    <!-- SOPORTE -->
+    <div class="docs-card">
+        <h2 class="i18n-supportTitle">🆘 ¿Necesitas ayuda?</h2>
+        <p class="i18n-supportDesc">Contacta con nosotros en <strong>info@humanhood.tech</strong> y te ayudaremos con la integración.</p>
+    </div>
+</div>
 
-        function applyLanguageDocs(lang) {
-            currentLangDocs = lang;
-            document.documentElement.lang = lang;
-            localStorage.setItem('humanhood_lang_docs', lang);
-            
-            // Traducir elementos con clase i18n-
-            document.querySelectorAll('[class*="i18n-"]').forEach(el => {
-                const classes = el.className.split(' ');
-                const i18nClass = classes.find(c => c.startsWith('i18n-'));
-                if (i18nClass) {
-                    const key = i18nClass.replace('i18n-', '');
-                    if (translationsDocs[lang] && translationsDocs[lang][key] !== undefined) {
-                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'BUTTON' || el.tagName === 'A') {
-                            if (el.tagName === 'A' && el.classList.contains('btn-download')) {
-                                el.innerHTML = translationsDocs[lang][key];
-                            } else if (el.tagName === 'BUTTON') {
-                                el.innerHTML = translationsDocs[lang][key];
-                            } else {
-                                el.innerHTML = translationsDocs[lang][key];
-                            }
-                        } else {
-                            el.innerHTML = translationsDocs[lang][key];
-                        }
-                    }
-                }
-            });
-            
-            // Traducir listas especiales (UL con clase i18n-)
-            const testStepsEl = document.querySelector('.i18n-testSteps');
-            if (testStepsEl && translationsDocs[lang].testSteps) {
-                const steps = translationsDocs[lang].testSteps.split('\n');
-                testStepsEl.innerHTML = steps.map(step => `<li>${step}</li>`).join('');
-            }
-            
-            const projectStepsEl = document.querySelector('.i18n-projectSteps');
-            if (projectStepsEl && translationsDocs[lang].projectSteps) {
-                const steps = translationsDocs[lang].projectSteps.split('\n');
-                projectStepsEl.innerHTML = steps.map(step => `<li>${step}</li>`).join('');
-            }
-            
-            const userStepsEl = document.querySelector('.i18n-userSteps');
-            if (userStepsEl && translationsDocs[lang].userSteps) {
-                const steps = translationsDocs[lang].userSteps.split('\n');
-                userStepsEl.innerHTML = steps.map(step => `<li>${step}</li>`).join('');
-            }
-            
-            const numbersListEl = document.querySelector('.i18n-numbersList');
-            if (numbersListEl && translationsDocs[lang].numbersList) {
-                const items = translationsDocs[lang].numbersList.split('\n');
-                numbersListEl.innerHTML = items.map(item => `<li>${item}</li>`).join('');
-            }
-            
-            const summaryListEl = document.querySelector('.i18n-summaryList');
-            if (summaryListEl && translationsDocs[lang].summaryList) {
-                const items = translationsDocs[lang].summaryList.split('\n');
-                summaryListEl.innerHTML = items.map(item => `<li>${item}</li>`).join('');
-            }
-            
-            const systemFlowTextEl = document.getElementById('systemFlowText');
-            if (systemFlowTextEl && translationsDocs[lang].systemFlowText) {
-                systemFlowTextEl.innerText = translationsDocs[lang].systemFlowText;
-            }
-            
-            // Traducir códigos de ejemplo
-            const testCodeEl = document.getElementById('testCodeExample');
-            if (testCodeEl) {
-                if (lang === 'es') {
-                    testCodeEl.innerText = `interface IHumanhood {
-    function checkHuman(address user) external view returns (bool);
-}
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script>
+    const translationsDocs = {
+        es: {
+            docsTitle: "Documentación de Integración",
+            docsSubtitle: "API de verificación humana para proyectos Web3. Prevén bots y sybils en tus airdrops, DAOs y juegos.",
+            freeBadge: "📡 PRUEBA GRATIS - 1,000 CONSULTAS",
+            testContractTitle: "Contrato de Prueba (Testnet)",
+            polygonAmoy: "Polygon Amoy (Testnet)",
+            chainId: "Chain ID: 80002",
+            copyBtn: "Copiar",
+            faucetLabel: "Faucet para POL (gas):",
+            faucetLink: "faucet.polygon.technology",
+            demoBadge: "🧪 DEMO GRATIS - PRUEBA ANTES DE INTEGRAR",
+            demoTitle: "Prueba la verificación en vivo",
+            demoDesc: "Conecta tu wallet en Polygon Amoy y prueba cómo funciona la verificación humana sin coste real. Solo necesitas POL de testnet (gratis del faucet).",
+            demoConnectBtn: "🔌 Conectar Wallet (Demo)",
+            getPolBtn: "💧 Obtener POL gratis",
+            walletLabel: "Wallet",
+            statusChecking: "❓ Verificando...",
+            verifyMeBtn: "✅ Verificarme como humano",
+            whatToTest: "📝 ¿Qué vas a probar?",
+            testSteps: "1. Conecta tu wallet (cambia a Polygon Amoy)\n2. Solicita POL gratis del faucet si no tienes\n3. Haz clic en \"Verificarme como humano\"\n4. Tu wallet quedará marcada como humana en la testnet\n5. Puedes consultar el estado con checkHuman(tuWallet)",
+            demoNote: "Nota: Esta demo usa Polygon Amoy (testnet). El POL es gratuito y no tiene valor real. Perfecto para probar sin riesgo.",
+            productionBadge: "🌍 PRODUCCIÓN - MÚLTIPLES REDES",
+            productionTitle: "Contratos de Producción (Mainnets)",
+            productionDesc: "Elige la red que mejor se adapte a tu proyecto. El mismo contrato funciona en todas.",
+            tableNetwork: "Red",
+            tableAddress: "Dirección del contrato",
+            tablePrice: "Precio por consulta",
+            polygonMainnet: "🟣 Polygon Mainnet",
+            bnbChain: "🟡 BNB Chain (BSC)",
+            ethereumMainnet: "⚪ Ethereum Mainnet",
+            comingSoon: "Próximamente",
+            inDevelopment: "En desarrollo",
+            recommended: "(recomendado)",
+            guideBadge: "📘 GUÍA DE INTEGRACIÓN",
+            guideTitle: "¿Cómo funciona Humanhood?",
+            guideDesc: "Humanhood es una API de verificación humana descentralizada. Permite que cualquier proyecto Web3 sepa si una wallet pertenece a un humano real o a un bot, pagando solo por las consultas que realiza.",
+            systemFlow: "🔄 Flujo completo del sistema",
+            systemFlowText: "1. Usuario final se verifica en humanhood.tech (paga gas una vez)\n2. Su wallet queda marcada como humana en la blockchain\n3. Tu proyecto consulta checkHuman(wallet)\n4. Si es true, el usuario recibe la recompensa\n5. Tu proyecto paga $0.05 por cada consulta",
+            projectToDo: "🧑‍💻 Lo que debe hacer TU PROYECTO",
+            projectSteps: "1. Integrar nuestro contrato (3 líneas de código)\n2. Depositar USDC en nuestro contrato (mínimo 10 USDC)\n3. Por cada usuario, llamar a checkHuman(wallet) → cuesta $0.05",
+            userToDo: "🧑‍💻 Lo que debe hacer el USUARIO FINAL",
+            userSteps: "1. Conectar su wallet en humanhood.tech\n2. Hacer clic en \"Verificarme como humano\" (solo paga el gas)\n3. Su wallet queda marcada como humana para siempre ✅",
+            codeIntegration: "📝 Código de integración para tu contrato",
+            numbersExample: "💰 Ejemplo con números",
+            numbersList: "Depositas 100 USDC → saldo en contrato: 100 USDC\nConsultas 1 wallet → saldo: 99.95 USDC (coste: $0.05)\nConsultas 2,000 wallets → saldo: 0 USDC (coste: $100)\nVuelves a depositar cuando quieras más saldo",
+            summaryTitle: "✅ Resumen para tu proyecto",
+            summaryList: "📌 Tus usuarios se verifican UNA SOLA VEZ en humanhood.tech\n📌 Tu proyecto paga $0.05 por cada consulta a checkHuman()\n📌 El usuario NO PAGA NADA (solo el gas una vez en su vida)\n📌 Puedes probar gratis en testnet (Polygon Amoy)",
+            depositsBadge: "💰 DEPÓSITOS",
+            depositsTitle: "Depositar USDC",
+            depositsDesc: "Para usar nuestro servicio de pago por consulta, necesitas depositar USDC en nuestro contrato. Puedes hacerlo fácilmente desde nuestra página de depósito o integrando el script en tu dApp.",
+            depositPageBtn: "🔗 Ir a la página de depósito",
+            downloadScriptBtn: "📥 Descargar script de ejemplo",
+            integrationCodeTitle: "📝 Código de integración (para tu dApp)",
+            depositNote: "Nota: El depósito mínimo es de 10 USDC. Una vez depositado, cada consulta a checkHuman() descontará 0.05 USDC automáticamente.",
+            faqTitle: "❓ Preguntas frecuentes",
+            faq1Q: "¿Cuánto cuesta la verificación?",
+            faq1A: "Prueba gratuita: 1,000 consultas gratis en testnet (Polygon Amoy).\nProducción: $0.05 en Polygon o BNB Chain, $0.10 en Ethereum.",
+            faq2Q: "¿Qué red debo usar?",
+            faq2A: "Pruebas: Polygon Amoy (testnet).\nProducción: Polygon Mainnet (recomendado por bajo coste), BNB Chain o Ethereum.",
+            faq3Q: "¿Qué dirección me pide Humanhood?",
+            faq3A: "La dirección de tu contrato o wallet desde la que llamas a checkHuman().",
+            faq4Q: "¿Necesito backend para integrarme?",
+            faq4A: "No. Todo es mediante contratos inteligentes. Tu proyecto llama directamente a nuestra función checkHuman().",
+            faq5Q: "¿Cómo deposito USDC?",
+            faq5A: "Tienes dos opciones: usar nuestra página de depósito (sin programar) o integrar el script de ejemplo en tu dApp.",
+            supportTitle: "🆘 ¿Necesitas ayuda?",
+            supportDesc: "Contacta con nosotros en info@humanhood.tech y te ayudaremos con la integración."
+        },
+        en: {
+            docsTitle: "Integration Documentation",
+            docsSubtitle: "Human verification API for Web3 projects. Prevent bots and sybils in your airdrops, DAOs, and games.",
+            freeBadge: "📡 FREE TRIAL - 1,000 QUERIES",
+            testContractTitle: "Test Contract (Testnet)",
+            polygonAmoy: "Polygon Amoy (Testnet)",
+            chainId: "Chain ID: 80002",
+            copyBtn: "Copy",
+            faucetLabel: "Faucet for POL (gas):",
+            faucetLink: "faucet.polygon.technology",
+            demoBadge: "🧪 FREE DEMO - TEST BEFORE INTEGRATING",
+            demoTitle: "Test live verification",
+            demoDesc: "Connect your wallet on Polygon Amoy and test how human verification works at no real cost. You only need testnet POL (free from the faucet).",
+            demoConnectBtn: "🔌 Connect Wallet (Demo)",
+            getPolBtn: "💧 Get free POL",
+            walletLabel: "Wallet",
+            statusChecking: "❓ Checking...",
+            verifyMeBtn: "✅ Verify me as human",
+            whatToTest: "📝 What are you going to test?",
+            testSteps: "1. Connect your wallet (switch to Polygon Amoy)\n2. Get free POL from the faucet if you don't have any\n3. Click \"Verify me as human\"\n4. Your wallet will be marked as human on the testnet\n5. You can check the status with checkHuman(yourWallet)",
+            demoNote: "Note: This demo uses Polygon Amoy (testnet). POL is free and has no real value. Perfect for risk-free testing.",
+            productionBadge: "🌍 PRODUCTION - MULTIPLE NETWORKS",
+            productionTitle: "Production Contracts (Mainnets)",
+            productionDesc: "Choose the network that best suits your project. The same contract works on all.",
+            tableNetwork: "Network",
+            tableAddress: "Contract Address",
+            tablePrice: "Price per query",
+            polygonMainnet: "🟣 Polygon Mainnet",
+            bnbChain: "🟡 BNB Chain (BSC)",
+            ethereumMainnet: "⚪ Ethereum Mainnet",
+            comingSoon: "Coming soon",
+            inDevelopment: "In development",
+            recommended: "(recommended)",
+            guideBadge: "📘 INTEGRATION GUIDE",
+            guideTitle: "How does Humanhood work?",
+            guideDesc: "Humanhood is a decentralized human verification API. It allows any Web3 project to know if a wallet belongs to a real human or a bot, paying only for the queries it makes.",
+            systemFlow: "🔄 Complete system flow",
+            systemFlowText: "1. End user verifies at humanhood.tech (pays gas once)\n2. Their wallet is marked as human on the blockchain\n3. Your project queries checkHuman(wallet)\n4. If true, the user receives the reward\n5. Your project pays $0.05 per query",
+            projectToDo: "🧑‍💻 What YOUR PROJECT must do",
+            projectSteps: "1. Integrate our contract (3 lines of code)\n2. Deposit USDC into our contract (minimum 10 USDC)\n3. For each user, call checkHuman(wallet) → costs $0.05",
+            userToDo: "🧑‍💻 What the END USER must do",
+            userSteps: "1. Connect their wallet at humanhood.tech\n2. Click \"Verify me as human\" (only pays gas)\n3. Their wallet is marked as human forever ✅",
+            codeIntegration: "📝 Integration code for your contract",
+            numbersExample: "💰 Example with numbers",
+            numbersList: "Deposit 100 USDC → contract balance: 100 USDC\nQuery 1 wallet → balance: 99.95 USDC (cost: $0.05)\nQuery 2,000 wallets → balance: 0 USDC (cost: $100)\nDeposit again whenever you need more balance",
+            summaryTitle: "✅ Summary for your project",
+            summaryList: "📌 Your users verify ONCE at humanhood.tech\n📌 Your project pays $0.05 per checkHuman() query\n📌 The user pays NOTHING (only gas once in their lifetime)\n📌 You can test for free on testnet (Polygon Amoy)",
+            depositsBadge: "💰 DEPOSITS",
+            depositsTitle: "Deposit USDC",
+            depositsDesc: "To use our pay-per-query service, you need to deposit USDC into our contract. You can easily do this from our deposit page or by integrating the script into your dApp.",
+            depositPageBtn: "🔗 Go to deposit page",
+            downloadScriptBtn: "📥 Download example script",
+            integrationCodeTitle: "📝 Integration code (for your dApp)",
+            depositNote: "Note: The minimum deposit is 10 USDC. Once deposited, each checkHuman() query will automatically deduct 0.05 USDC.",
+            faqTitle: "❓ Frequently Asked Questions",
+            faq1Q: "How much does verification cost?",
+            faq1A: "Free trial: 1,000 free queries on testnet (Polygon Amoy).\nProduction: $0.05 on Polygon or BNB Chain, $0.10 on Ethereum.",
+            faq2Q: "Which network should I use?",
+            faq2A: "Testing: Polygon Amoy (testnet).\nProduction: Polygon Mainnet (recommended for low cost), BNB Chain or Ethereum.",
+            faq3Q: "What address does Humanhood ask for?",
+            faq3A: "The address of your contract or wallet from which you call checkHuman().",
+            faq4Q: "Do I need a backend to integrate?",
+            faq4A: "No. Everything is through smart contracts. Your project directly calls our checkHuman() function.",
+            faq5Q: "How do I deposit USDC?",
+            faq5A: "You have two options: use our deposit page (no coding) or integrate the example script into your dApp.",
+            supportTitle: "🆘 Need help?",
+            supportDesc: "Contact us at info@humanhood.tech and we'll help you with the integration."
+        }
+    };
 
-function claimReward() external {
-    require(
-        IHumanhood(0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8).checkHuman(msg.sender),
-        "No verificado como humano"
-    );
-}`;
-                } else {
-                    testCodeEl.innerText = `interface IHumanhood {
-    function checkHuman(address user) external view returns (bool);
-}
+    let currentLangDocs = "es";
 
-function claimReward() external {
-    require(
-        IHumanhood(0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8).checkHuman(msg.sender),
-        "Not verified as human"
-    );
-}`;
+    function applyLanguageDocs(lang) {
+        currentLangDocs = lang;
+        document.documentElement.lang = lang;
+        localStorage.setItem('humanhood_lang_docs', lang);
+        
+        document.querySelectorAll('[class*="i18n-"]').forEach(el => {
+            const classes = el.className.split(' ');
+            const i18nClass = classes.find(c => c.startsWith('i18n-'));
+            if (i18nClass) {
+                const key = i18nClass.replace('i18n-', '');
+                if (translationsDocs[lang] && translationsDocs[lang][key] !== undefined) {
+                    if (el.tagName === 'BUTTON') el.innerHTML = translationsDocs[lang][key];
+                    else el.innerHTML = translationsDocs[lang][key];
                 }
             }
-            
-            const integrationCodeEl = document.getElementById('integrationCode');
-            if (integrationCodeEl) {
-                if (lang === 'es') {
-                    integrationCodeEl.innerText = `interface IHumanhood {
-    function checkHuman(address user) external view returns (bool);
-}
-function claimReward() external {
-    require(
-        IHumanhood(0x2A7396876a13812fEFc5773094f217d5380FEeB9).checkHuman(msg.sender),
-        "No estás verificado como humano"
-    );
-    // Tu lógica de recompensa aquí
-}`;
-                } else {
-                    integrationCodeEl.innerText = `interface IHumanhood {
-    function checkHuman(address user) external view returns (bool);
-}
-function claimReward() external {
-    require(
-        IHumanhood(0x2A7396876a13812fEFc5773094f217d5380FEeB9).checkHuman(msg.sender),
-        "You are not verified as human"
-    );
-    // Your reward logic here
-}`;
-                }
+        });
+        
+        // Códigos de ejemplo
+        const testCodeEl = document.getElementById('testCodeExample');
+        if (testCodeEl) testCodeEl.innerText = lang === 'es' ? 
+            `interface IHumanhood {\n    function checkHuman(address user) external view returns (bool);\n}\n\nfunction claimReward() external {\n    require(\n        IHumanhood(0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8).checkHuman(msg.sender),\n        "No verificado como humano"\n    );\n}` :
+            `interface IHumanhood {\n    function checkHuman(address user) external view returns (bool);\n}\n\nfunction claimReward() external {\n    require(\n        IHumanhood(0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8).checkHuman(msg.sender),\n        "Not verified as human"\n    );\n}`;
+        
+        const integrationCodeEl = document.getElementById('integrationCode');
+        if (integrationCodeEl) integrationCodeEl.innerText = lang === 'es' ?
+            `interface IHumanhood {\n    function checkHuman(address user) external view returns (bool);\n}\nfunction claimReward() external {\n    require(\n        IHumanhood(0x2A7396876a13812fEFc5773094f217d5380FEeB9).checkHuman(msg.sender),\n        "No estás verificado como humano"\n    );\n    // Tu lógica de recompensa aquí\n}` :
+            `interface IHumanhood {\n    function checkHuman(address user) external view returns (bool);\n}\nfunction claimReward() external {\n    require(\n        IHumanhood(0x2A7396876a13812fEFc5773094f217d5380FEeB9).checkHuman(msg.sender),\n        "You are not verified as human"\n    );\n    // Your reward logic here\n}`;
+        
+        // Listas
+        const testStepsEl = document.querySelector('.i18n-testSteps');
+        if (testStepsEl && translationsDocs[lang].testSteps) {
+            const steps = translationsDocs[lang].testSteps.split('\n');
+            testStepsEl.innerHTML = steps.map(step => `<li>${step}</li>`).join('');
+        }
+        const projectStepsEl = document.querySelector('.i18n-projectSteps');
+        if (projectStepsEl && translationsDocs[lang].projectSteps) {
+            const steps = translationsDocs[lang].projectSteps.split('\n');
+            projectStepsEl.innerHTML = steps.map(step => `<li>${step}</li>`).join('');
+        }
+        const userStepsEl = document.querySelector('.i18n-userSteps');
+        if (userStepsEl && translationsDocs[lang].userSteps) {
+            const steps = translationsDocs[lang].userSteps.split('\n');
+            userStepsEl.innerHTML = steps.map(step => `<li>${step}</li>`).join('');
+        }
+        const numbersListEl = document.querySelector('.i18n-numbersList');
+        if (numbersListEl && translationsDocs[lang].numbersList) {
+            const items = translationsDocs[lang].numbersList.split('\n');
+            numbersListEl.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+        }
+        const summaryListEl = document.querySelector('.i18n-summaryList');
+        if (summaryListEl && translationsDocs[lang].summaryList) {
+            const items = translationsDocs[lang].summaryList.split('\n');
+            summaryListEl.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+        }
+        const systemFlowTextEl = document.getElementById('systemFlowText');
+        if (systemFlowTextEl && translationsDocs[lang].systemFlowText) systemFlowTextEl.innerText = translationsDocs[lang].systemFlowText;
+    }
+
+    const savedLangDocs = localStorage.getItem('humanhood_lang_docs') || (navigator.language.startsWith('es') ? 'es' : 'en');
+    if(document.getElementById('languageSelect')) {
+        document.getElementById('languageSelect').value = savedLangDocs;
+        document.getElementById('languageSelect').addEventListener('change', (e) => applyLanguageDocs(e.target.value));
+    }
+    applyLanguageDocs(savedLangDocs);
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text);
+        alert(currentLangDocs === 'es' ? "Dirección copiada al portapapeles" : "Address copied to clipboard");
+    }
+
+    // Demo
+    const DEMO_CONTRACT_ADDRESS = "0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8";
+    const DEMO_CONTRACT_ABI = [
+        "function checkHuman(address) view returns (bool)",
+        "function verifyMe() external",
+        "event Verified(address indexed user)"
+    ];
+
+    let demoProvider, demoSigner, demoContract;
+    let demoUserAddress = null;
+
+    const demoConnectBtn = document.getElementById("demoConnectBtn");
+    const demoWalletInfo = document.getElementById("demoWalletInfo");
+    const demoWalletAddressSpan = document.getElementById("demoWalletAddress");
+    const demoHumanStatusSpan = document.getElementById("demoHumanStatus");
+    const demoVerifyBtnContainer = document.getElementById("demoVerifyBtnContainer");
+    const demoVerifyBtn = document.getElementById("demoVerifyBtn");
+    const demoStatusDiv = document.getElementById("demoStatus");
+
+    function showDemoStatus(message, type) {
+        demoStatusDiv.textContent = message;
+        demoStatusDiv.className = `status ${type}`;
+        setTimeout(() => { if(demoStatusDiv) demoStatusDiv.style.display = "none"; }, 8000);
+    }
+
+    if (demoConnectBtn) {
+        demoConnectBtn.onclick = async () => {
+            if (!window.ethereum) {
+                alert(currentLangDocs === 'es' ? "Instala MetaMask" : "Install MetaMask");
+                return;
             }
-        }
-
-        const savedLangDocs = localStorage.getItem('humanhood_lang_docs') || (navigator.language.startsWith('es') ? 'es' : 'en');
-        if(document.getElementById('languageSelect')) {
-            document.getElementById('languageSelect').value = savedLangDocs;
-            document.getElementById('languageSelect').addEventListener('change', (e) => applyLanguageDocs(e.target.value));
-        }
-        applyLanguageDocs(savedLangDocs);
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text);
-            alert(currentLangDocs === 'es' ? "Dirección copiada al portapapeles" : "Address copied to clipboard");
-        }
-
-        // ==================== DEMO GRATIS EN DOCS ====================
-        const DEMO_CONTRACT_ADDRESS = "0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8";
-        const DEMO_CONTRACT_ABI = [
-            "function checkHuman(address) view returns (bool)",
-            "function verifyMe() external",
-            "event Verified(address indexed user)"
-        ];
-
-        let demoProvider, demoSigner, demoContract;
-        let demoUserAddress = null;
-
-        const demoConnectBtn = document.getElementById("demoConnectBtn");
-        const demoWalletInfo = document.getElementById("demoWalletInfo");
-        const demoWalletAddressSpan = document.getElementById("demoWalletAddress");
-        const demoHumanStatusSpan = document.getElementById("demoHumanStatus");
-        const demoVerifyBtnContainer = document.getElementById("demoVerifyBtnContainer");
-        const demoVerifyBtn = document.getElementById("demoVerifyBtn");
-        const demoStatusDiv = document.getElementById("demoStatus");
-
-        function showDemoStatus(message, type) {
-            demoStatusDiv.textContent = message;
-            demoStatusDiv.className = `status ${type}`;
-            setTimeout(() => { if(demoStatusDiv) demoStatusDiv.style.display = "none"; }, 8000);
-        }
-
-        if (demoConnectBtn) {
-            demoConnectBtn.onclick = async () => {
-                if (!window.ethereum) {
-                    alert(currentLangDocs === 'es' ? "Instala MetaMask" : "Install MetaMask");
+            try {
+                demoConnectBtn.textContent = currentLangDocs === 'es' ? "⏳ Conectando..." : "⏳ Connecting...";
+                demoConnectBtn.disabled = true;
+                
+                try {
+                    await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x13881' }] });
+                } catch(switchError) {
+                    if (switchError.code === 4902) {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{ chainId: '0x13881', chainName: 'Polygon Amoy', nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 }, rpcUrls: ['https://rpc-amoy.polygon.technology/'], blockExplorerUrls: ['https://amoy.polygonscan.com/'] }]
+                        });
+                    } else throw switchError;
+                }
+                
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                demoUserAddress = accounts[0];
+                demoWalletAddressSpan.textContent = demoUserAddress.slice(0,8)+"..."+demoUserAddress.slice(-6);
+                demoWalletInfo.style.display = "block";
+                demoConnectBtn.textContent = currentLangDocs === 'es' ? "✅ Conectado" : "✅ Connected";
+                demoConnectBtn.disabled = true;
+                
+                demoProvider = new ethers.providers.Web3Provider(window.ethereum);
+                demoSigner = demoProvider.getSigner();
+                demoContract = new ethers.Contract(DEMO_CONTRACT_ADDRESS, DEMO_CONTRACT_ABI, demoSigner);
+                
+                const network = await demoProvider.getNetwork();
+                if (network.chainId !== 80002) {
+                    showDemoStatus(currentLangDocs === 'es' ? "❌ Cambia a Polygon Amoy en MetaMask" : "❌ Switch to Polygon Amoy in MetaMask", "error");
                     return;
                 }
-                try {
-                    demoConnectBtn.textContent = currentLangDocs === 'es' ? "⏳ Conectando..." : "⏳ Connecting...";
-                    demoConnectBtn.disabled = true;
-                    
-                    try {
-                        await window.ethereum.request({
-                            method: 'wallet_switchEthereumChain',
-                            params: [{ chainId: '0x13881' }]
-                        });
-                    } catch(switchError) {
-                        if (switchError.code === 4902) {
-                            await window.ethereum.request({
-                                method: 'wallet_addEthereumChain',
-                                params: [{
-                                    chainId: '0x13881',
-                                    chainName: 'Polygon Amoy',
-                                    nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 },
-                                    rpcUrls: ['https://rpc-amoy.polygon.technology/'],
-                                    blockExplorerUrls: ['https://amoy.polygonscan.com/']
-                                }]
-                            });
-                        } else {
-                            throw switchError;
-                        }
-                    }
-                    
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    demoUserAddress = accounts[0];
-                    demoWalletAddressSpan.textContent = demoUserAddress.slice(0,8)+"..."+demoUserAddress.slice(-6);
-                    demoWalletInfo.style.display = "block";
-                    demoConnectBtn.textContent = currentLangDocs === 'es' ? "✅ Conectado" : "✅ Connected";
-                    demoConnectBtn.disabled = true;
-                    
-                    demoProvider = new ethers.providers.Web3Provider(window.ethereum);
-                    demoSigner = demoProvider.getSigner();
-                    demoContract = new ethers.Contract(DEMO_CONTRACT_ADDRESS, DEMO_CONTRACT_ABI, demoSigner);
-                    
-                    const network = await demoProvider.getNetwork();
-                    if (network.chainId !== 80002) {
-                        showDemoStatus(currentLangDocs === 'es' ? "❌ Cambia a Polygon Amoy en MetaMask" : "❌ Switch to Polygon Amoy in MetaMask", "error");
-                        return;
-                    }
-                    
-                    const isHuman = await demoContract.checkHuman(demoUserAddress);
-                    if (isHuman) {
-                        demoHumanStatusSpan.innerHTML = currentLangDocs === 'es' ? "✅ Verificado" : "✅ Verified";
-                        demoVerifyBtnContainer.style.display = "none";
-                        showDemoStatus(currentLangDocs === 'es' ? "✅ Ya estás verificado como humano en la testnet" : "✅ You are already verified as human on testnet", "success");
-                    } else {
-                        demoHumanStatusSpan.innerHTML = currentLangDocs === 'es' ? "❌ No verificado" : "❌ Not verified";
-                        demoVerifyBtnContainer.style.display = "block";
-                    }
-                    
-                } catch(e) {
-                    console.error(e);
-                    showDemoStatus(currentLangDocs === 'es' ? "Error al conectar: " + (e.message || "Intenta de nuevo") : "Error connecting: " + (e.message || "Try again"), "error");
-                    demoConnectBtn.textContent = currentLangDocs === 'es' ? "🔌 Conectar Wallet (Demo)" : "🔌 Connect Wallet (Demo)";
-                    demoConnectBtn.disabled = false;
-                }
-            };
-        }
-
-        if (demoVerifyBtn) {
-            demoVerifyBtn.onclick = async () => {
-                if (!demoContract || !demoUserAddress) return;
-                try {
-                    demoVerifyBtn.disabled = true;
-                    demoVerifyBtn.textContent = currentLangDocs === 'es' ? "⏳ Procesando..." : "⏳ Processing...";
-                    showDemoStatus(currentLangDocs === 'es' ? "⛓️ Registrando verificación en la blockchain..." : "⛓️ Registering verification on the blockchain...", "loading");
-                    
-                    const tx = await demoContract.verifyMe();
-                    await tx.wait();
-                    
+                
+                const isHuman = await demoContract.checkHuman(demoUserAddress);
+                if (isHuman) {
                     demoHumanStatusSpan.innerHTML = currentLangDocs === 'es' ? "✅ Verificado" : "✅ Verified";
                     demoVerifyBtnContainer.style.display = "none";
-                    showDemoStatus(currentLangDocs === 'es' ? "✅ ¡Verificación exitosa! Ya eres humano en la testnet." : "✅ Verification successful! You are now human on testnet.", "success");
-                    
-                } catch(e) {
-                    console.error(e);
-                    showDemoStatus(currentLangDocs === 'es' ? "Error: " + (e.message || "Intenta de nuevo") : "Error: " + (e.message || "Try again"), "error");
-                    demoVerifyBtn.disabled = false;
-                    demoVerifyBtn.textContent = currentLangDocs === 'es' ? "✅ Verificarme como humano" : "✅ Verify me as human";
+                    showDemoStatus(currentLangDocs === 'es' ? "✅ Ya estás verificado como humano en la testnet" : "✅ You are already verified as human on testnet", "success");
+                } else {
+                    demoHumanStatusSpan.innerHTML = currentLangDocs === 'es' ? "❌ No verificado" : "❌ Not verified";
+                    demoVerifyBtnContainer.style.display = "block";
                 }
-            };
+            } catch(e) {
+                console.error(e);
+                showDemoStatus(currentLangDocs === 'es' ? "Error al conectar: " + (e.message || "Intenta de nuevo") : "Error connecting: " + (e.message || "Try again"), "error");
+                demoConnectBtn.textContent = currentLangDocs === 'es' ? "🔌 Conectar Wallet (Demo)" : "🔌 Connect Wallet (Demo)";
+                demoConnectBtn.disabled = false;
+            }
+        };
+    }
+
+    if (demoVerifyBtn) {
+        demoVerifyBtn.onclick = async () => {
+            if (!demoContract || !demoUserAddress) return;
+            try {
+                demoVerifyBtn.disabled = true;
+                demoVerifyBtn.textContent = currentLangDocs === 'es' ? "⏳ Procesando..." : "⏳ Processing...";
+                showDemoStatus(currentLangDocs === 'es' ? "⛓️ Registrando verificación en la blockchain..." : "⛓️ Registering verification on the blockchain...", "loading");
+                
+                const tx = await demoContract.verifyMe();
+                await tx.wait();
+                
+                demoHumanStatusSpan.innerHTML = currentLangDocs === 'es' ? "✅ Verificado" : "✅ Verified";
+                demoVerifyBtnContainer.style.display = "none";
+                showDemoStatus(currentLangDocs === 'es' ? "✅ ¡Verificación exitosa! Ya eres humano en la testnet." : "✅ Verification successful! You are now human on testnet.", "success");
+            } catch(e) {
+                console.error(e);
+                showDemoStatus(currentLangDocs === 'es' ? "Error: " + (e.message || "Intenta de nuevo") : "Error: " + (e.message || "Try again"), "error");
+                demoVerifyBtn.disabled = false;
+                demoVerifyBtn.textContent = currentLangDocs === 'es' ? "✅ Verificarme como humano" : "✅ Verify me as human";
+            }
+        };
+    }
+
+    // Menú hamburguesa
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    if (hamburgerBtn) hamburgerBtn.onclick = () => mobileMenu.classList.add('open');
+    if (closeMenuBtn) closeMenuBtn.onclick = () => mobileMenu.classList.remove('open');
+    document.querySelectorAll('.mobile-menu-links a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.remove('open')));
+    document.addEventListener('click', (e) => {
+        if (mobileMenu && mobileMenu.classList.contains('open')) {
+            if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) mobileMenu.classList.remove('open');
         }
-    </script>
+    });
+</script>
 </body>
 </html>
