@@ -9,9 +9,11 @@ const translations = {
         navVerify: "Verificar",
         navDocs: "Docs",
         navContact: "Contacto",
+        navEarly: "Early Access",
         navFaq: "FAQ",
         navVerifyBtn: "Verificar",
         navIntegrateBtn: "Integrar",
+        navEarlyBtn: "🎁 1,000 gratis",
         
         // Hero
         heroBadge: "🚀 Lanzamiento oficial",
@@ -20,6 +22,7 @@ const translations = {
         heroDesc: "Protege tus airdrops, DAOs y juegos de bots y sybils.<br>Una API sencilla que cualquier proyecto Web3 puede integrar.",
         heroBtnVerify: "Verificarme ahora",
         heroBtnPricing: "Ver precios",
+        heroEarlyLink: "🎁 ¿Proyecto Web3? Prueba 1,000 consultas gratis →",
         
         // Stats
         stat1Label: "por consulta",
@@ -103,6 +106,7 @@ const translations = {
         footerVerify: "Verificar",
         footerResources: "Recursos",
         footerDocs: "Documentación",
+        footerEarly: "Early Access",
         footerGitHub: "GitHub",
         footerContact: "Contacto",
         footerCopyright: "© 2026 Humanhood. Todos los derechos reservados.",
@@ -131,9 +135,11 @@ const translations = {
         navVerify: "Verify",
         navDocs: "Docs",
         navContact: "Contact",
+        navEarly: "Early Access",
         navFaq: "FAQ",
         navVerifyBtn: "Verify",
         navIntegrateBtn: "Integrate",
+        navEarlyBtn: "🎁 1,000 free",
         
         // Hero
         heroBadge: "🚀 Official Launch",
@@ -142,6 +148,7 @@ const translations = {
         heroDesc: "Protect your airdrops, DAOs, and games from bots and sybils.<br>A simple API that any Web3 project can integrate.",
         heroBtnVerify: "Verify me now",
         heroBtnPricing: "View pricing",
+        heroEarlyLink: "🎁 Web3 project? Try 1,000 free queries →",
         
         // Stats
         stat1Label: "per query",
@@ -225,6 +232,7 @@ const translations = {
         footerVerify: "Verify",
         footerResources: "Resources",
         footerDocs: "Documentation",
+        footerEarly: "Early Access",
         footerGitHub: "GitHub",
         footerContact: "Contact",
         footerCopyright: "© 2026 Humanhood. All rights reserved.",
@@ -248,7 +256,6 @@ const translations = {
     }
 };
 
-// ==================== FUNCIÓN APPLYLANGUAGE CORREGIDA ====================
 function applyLanguage(lang) {
     currentLang = lang;
     document.documentElement.lang = lang;
@@ -258,24 +265,17 @@ function applyLanguage(lang) {
     const allElements = document.querySelectorAll('[class*="i18n-"]');
     
     allElements.forEach(el => {
-        // Obtiene todas las clases del elemento
         const classes = el.className.split(' ');
-        // Busca la primera clase que empiece con 'i18n-'
         const i18nClass = classes.find(c => c.startsWith('i18n-'));
         
         if (i18nClass) {
             const key = i18nClass.replace('i18n-', '');
             if (translations[lang] && translations[lang][key] !== undefined) {
-                // Para inputs y textareas, actualiza el placeholder
                 if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                     el.placeholder = translations[lang][key];
-                } 
-                // Para botones, actualiza el innerHTML
-                else if (el.tagName === 'BUTTON') {
+                } else if (el.tagName === 'BUTTON') {
                     el.innerHTML = translations[lang][key];
-                }
-                // Para el resto (span, div, p, h1, h2, h3, a, etc.)
-                else {
+                } else {
                     el.innerHTML = translations[lang][key];
                 }
             }
@@ -313,7 +313,6 @@ require(
     }
 }
 
-// ==================== INICIALIZACIÓN ====================
 const savedLang = localStorage.getItem('humanhood_lang') || (navigator.language.startsWith('es') ? 'es' : 'en');
 if(document.getElementById('languageSelect')) {
     document.getElementById('languageSelect').value = savedLang;

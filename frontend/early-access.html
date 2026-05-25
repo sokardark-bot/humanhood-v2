@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humanhood | Early Access - 1,000 consultas gratis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); min-height: 100vh; color: #f1f5f9; }
+        .container { max-width: 800px; margin: 0 auto; padding: 80px 20px; text-align: center; }
+        .logo { margin-bottom: 32px; cursor: pointer; }
+        .logo svg { width: 80px; height: 80px; }
+        h1 { font-size: 3rem; margin-bottom: 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .subtitle { font-size: 1.2rem; color: #94a3b8; margin-bottom: 48px; }
+        .card { background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(10px); border-radius: 32px; padding: 48px; border: 1px solid #334155; }
+        .benefits { text-align: left; margin-bottom: 32px; }
+        .benefits li { margin: 16px 0; font-size: 1rem; display: flex; align-items: center; gap: 12px; list-style: none; }
+        .benefits li::before { content: "✅"; }
+        .input-group { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+        input { flex: 1; padding: 16px 20px; background: #0f172a; border: 1px solid #334155; border-radius: 16px; font-size: 1rem; color: white; outline: none; }
+        input:focus { border-color: #667eea; }
+        button { padding: 16px 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 16px; font-size: 1rem; font-weight: 600; color: white; cursor: pointer; transition: transform 0.2s; }
+        button:hover { transform: translateY(-2px); }
+        button:disabled { opacity: 0.7; cursor: not-allowed; }
+        .note { font-size: 0.8rem; color: #64748b; margin-top: 24px; }
+        .footer { margin-top: 48px; font-size: 0.8rem; color: #475569; }
+        .footer a { color: #667eea; text-decoration: none; }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #22c55e; color: white; padding: 12px 24px; border-radius: 50px; font-size: 0.9rem; z-index: 1000; animation: fadeOut 3s ease; }
+        .toast.error { background: #ef4444; }
+        .language-selector { position: fixed; top: 20px; right: 20px; z-index: 1001; background: #1e293b; border-radius: 50px; padding: 6px 12px; font-size: 0.8rem; border: 1px solid #334155; }
+        .language-selector select { background: transparent; border: none; color: #667eea; font-weight: 500; cursor: pointer; outline: none; }
+        .nav-links { display: flex; justify-content: center; gap: 32px; margin-bottom: 40px; flex-wrap: wrap; }
+        .nav-links a { color: #94a3b8; text-decoration: none; transition: color 0.3s; }
+        .nav-links a:hover { color: #667eea; }
+        @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }
+        @media (max-width: 640px) { .container { padding: 40px 16px; } h1 { font-size: 2rem; } .card { padding: 32px 24px; } .nav-links { gap: 16px; } }
+    </style>
+</head>
+<body>
+
+<!-- LANGUAGE SELECTOR -->
+<div class="language-selector">
+    <span>🌐</span>
+    <select id="languageSelect">
+        <option value="es">🇪🇸 Español</option>
+        <option value="en">🇬🇧 English</option>
+    </select>
+</div>
+
+<div class="container">
+    <!-- NAVEGACIÓN -->
+    <div class="nav-links">
+        <a href="index.html" class="i18n-navWeb">Web</a>
+        <a href="docs.html" class="i18n-navDocs">Documentación</a>
+        <a href="contact.html" class="i18n-navContact">Contacto</a>
+    </div>
+
+    <div class="logo" onclick="location.href='index.html'" style="cursor: pointer;">
+        <svg width="80" height="80" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="11" r="5" stroke="url(#grad)" stroke-width="2" fill="none"/>
+            <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad)"/>
+            <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad)"/>
+            <circle cx="10" cy="22" r="2" fill="url(#grad)"/>
+            <circle cx="22" cy="22" r="2" fill="url(#grad)"/>
+            <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
+        </svg>
+    </div>
+    
+    <h1 class="i18n-title">Early Access</h1>
+    <p class="subtitle i18n-subtitle">Sé de los primeros en probar Humanhood.<br>Te regalamos <strong>1,000 consultas gratis</strong>.</p>
+    
+    <div class="card">
+        <ul class="benefits">
+            <li class="i18n-benefit1"><strong>1,000 consultas gratis</strong> en testnet</li>
+            <li class="i18n-benefit2">Integración en <strong>3 líneas de código</strong></li>
+            <li class="i18n-benefit3"><strong>Soporte prioritario</strong> por email</li>
+            <li class="i18n-benefit4"><strong>Sin compromiso</strong>, sin tarjeta de crédito</li>
+            <li class="i18n-benefit5"><strong>Polygon Amoy</strong> (testnet, gratis)</li>
+        </ul>
+        
+        <form id="earlyAccessForm">
+            <div class="input-group">
+                <input type="email" id="email" name="email" class="i18n-email-placeholder" placeholder="tu@proyecto.com" required>
+                <button type="submit" id="submitBtn" class="i18n-submitBtn">📝 Quiero probarlo</button>
+            </div>
+            <div class="note i18n-note">🔒 Tu email está seguro. Te enviaremos las instrucciones para empezar.</div>
+        </form>
+    </div>
+    
+    <div class="footer">
+        <span class="i18n-footer">¿Tienes dudas? Escríbenos a</span> <a href="mailto:info@humanhood.tech">info@humanhood.tech</a>
+    </div>
+</div>
+
+<script>
+    // ==================== TRADUCCIONES ====================
+    const translationsEarly = {
+        es: {
+            navWeb: "Web",
+            navDocs: "Documentación",
+            navContact: "Contacto",
+            title: "Early Access",
+            subtitle: "Sé de los primeros en probar Humanhood.<br>Te regalamos <strong>1,000 consultas gratis</strong>.",
+            benefit1: "<strong>1,000 consultas gratis</strong> en testnet",
+            benefit2: "Integración en <strong>3 líneas de código</strong>",
+            benefit3: "<strong>Soporte prioritario</strong> por email",
+            benefit4: "<strong>Sin compromiso</strong>, sin tarjeta de crédito",
+            benefit5: "<strong>Polygon Amoy</strong> (testnet, gratis)",
+            emailPlaceholder: "tu@proyecto.com",
+            submitBtn: "📝 Quiero probarlo",
+            note: "🔒 Tu email está seguro. Te enviaremos las instrucciones para empezar.",
+            footer: "¿Tienes dudas? Escríbenos a"
+        },
+        en: {
+            navWeb: "Web",
+            navDocs: "Documentation",
+            navContact: "Contact",
+            title: "Early Access",
+            subtitle: "Be among the first to try Humanhood.<br>We give you <strong>1,000 free queries</strong>.",
+            benefit1: "<strong>1,000 free queries</strong> on testnet",
+            benefit2: "Integration in <strong>3 lines of code</strong>",
+            benefit3: "<strong>Priority support</strong> by email",
+            benefit4: "<strong>No commitment</strong>, no credit card",
+            benefit5: "<strong>Polygon Amoy</strong> (testnet, free)",
+            emailPlaceholder: "your@project.com",
+            submitBtn: "📝 Try it now",
+            note: "🔒 Your email is safe. We'll send you the instructions to get started.",
+            footer: "Questions? Write to us at"
+        }
+    };
+
+    let currentLangEarly = "es";
+
+    function applyLanguageEarly(lang) {
+        currentLangEarly = lang;
+        document.documentElement.lang = lang;
+        localStorage.setItem('humanhood_lang_early', lang);
+        
+        document.querySelectorAll('[class*="i18n-"]').forEach(el => {
+            const classes = el.className.split(' ');
+            const i18nClass = classes.find(c => c.startsWith('i18n-'));
+            if (i18nClass) {
+                const key = i18nClass.replace('i18n-', '');
+                if (translationsEarly[lang] && translationsEarly[lang][key] !== undefined) {
+                    if (el.tagName === 'INPUT') {
+                        el.placeholder = translationsEarly[lang][key];
+                    } else if (el.tagName === 'BUTTON') {
+                        el.innerHTML = translationsEarly[lang][key];
+                    } else {
+                        el.innerHTML = translationsEarly[lang][key];
+                    }
+                }
+            }
+        });
+    }
+
+    const savedLangEarly = localStorage.getItem('humanhood_lang_early') || (navigator.language.startsWith('es') ? 'es' : 'en');
+    if(document.getElementById('languageSelect')) {
+        document.getElementById('languageSelect').value = savedLangEarly;
+        document.getElementById('languageSelect').addEventListener('change', (e) => applyLanguageEarly(e.target.value));
+    }
+    applyLanguageEarly(savedLangEarly);
+
+    // ==================== FORMULARIO ====================
+    const form = document.getElementById('earlyAccessForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const emailInput = document.getElementById('email');
+    
+    function showToast(message, isError = false) {
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) existingToast.remove();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${isError ? 'error' : ''}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+    
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            if (!email) {
+                showToast(currentLangEarly === 'es' ? '❌ Introduce un email válido' : '❌ Enter a valid email', true);
+                return;
+            }
+            
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = currentLangEarly === 'es' ? '⏳ Enviando...' : '⏳ Sending...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/.netlify/functions/early-access', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ email: email })
+                });
+                
+                if (response.ok) {
+                    showToast(currentLangEarly === 'es' ? '✅ ¡Revisa tu email! Te hemos enviado las instrucciones.' : '✅ Check your email! We have sent you the instructions.');
+                    form.reset();
+                } else {
+                    throw new Error('Error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast(currentLangEarly === 'es' ? '❌ Error al enviar. Inténtalo de nuevo.' : '❌ Error sending. Please try again.', true);
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    }
+</script>
+</body>
+</html>
