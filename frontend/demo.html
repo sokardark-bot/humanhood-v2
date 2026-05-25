@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humanhood | Testnet Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f1f5f9; line-height: 1.5; }
+        .container { max-width: 800px; margin: 0 auto; padding: 120px 20px 40px; }
+        
+        /* NAVBAR */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; background: rgba(15,23,42,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #334155; z-index: 1000; padding: 16px 0; }
+        .navbar .container-nav { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { display: flex; align-items: center; gap: 8px; font-size: 1.5rem; font-weight: 700; cursor: pointer; }
+        .logo-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a { text-decoration: none; color: #94a3b8; transition: color 0.3s; }
+        .nav-links a:hover { color: #667eea; }
+        
+        .language-selector { position: fixed; top: 80px; right: 20px; z-index: 1001; background: #1e293b; border-radius: 50px; padding: 6px 12px; font-size: 0.8rem; border: 1px solid #334155; }
+        .language-selector select { background: transparent; border: none; color: #667eea; font-weight: 500; cursor: pointer; outline: none; }
+        
+        .card { background: #1e293b; border-radius: 32px; padding: 48px; border: 1px solid #334155; text-align: center; }
+        .btn { padding: 16px 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 16px; font-size: 1rem; font-weight: 600; color: white; cursor: pointer; transition: transform 0.2s; margin: 8px; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 2px solid #667eea; color: #667eea; }
+        .status { margin-top: 20px; padding: 16px; border-radius: 16px; font-size: 0.9rem; display: none; }
+        .status.success { background: #22c55e20; color: #4ade80; border-left: 4px solid #4ade80; display: block; }
+        .status.error { background: #ef444420; color: #f87171; border-left: 4px solid #ef4444; display: block; }
+        .status.loading { background: #3b82f620; color: #60a5fa; border-left: 4px solid #3b82f6; display: block; }
+        .demo-info { margin-top: 24px; padding: 16px; background: #0f172a; border-radius: 16px; text-align: left; }
+        code { word-break: break-all; background: #0f172a; padding: 4px 8px; border-radius: 6px; }
+        pre { background: #0f172a; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 12px; margin: 8px 0; }
+        @media (max-width: 640px) { .container { padding: 100px 16px 40px; } .card { padding: 32px 24px; } .nav-links { display: none; } .language-selector { top: 70px; right: 10px; } }
+    </style>
+</head>
+<body>
+
+<!-- LANGUAGE SELECTOR -->
+<div class="language-selector">
+    <span>🌐</span>
+    <select id="languageSelect">
+        <option value="es">🇪🇸 Español</option>
+        <option value="en">🇬🇧 English</option>
+    </select>
+</div>
+
+<nav class="navbar">
+    <div class="container-nav">
+        <div class="nav-logo" onclick="location.href='index.html'">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="11" r="5" stroke="url(#grad)" stroke-width="2" fill="none"/>
+                <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad)"/>
+                <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad)"/>
+                <circle cx="10" cy="22" r="2" fill="url(#grad)"/>
+                <circle cx="22" cy="22" r="2" fill="url(#grad)"/>
+                <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
+            </svg>
+            <span class="logo-text">Humanhood</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="i18n-web">Web</a>
+            <a href="docs.html" class="i18n-docs">Documentación</a>
+            <a href="contact.html" class="i18n-contact">Contacto</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <h2 class="i18n-title">🧪 Testnet Demo</h2>
+        <p class="i18n-subtitle" style="color: #94a3b8; margin: 16px 0;">Prueba Humanhood en <strong>Polygon Amoy (testnet)</strong><br>La verificación es <strong>simulada</strong> (siempre exitosa).</p>
+        
+        <button id="connectBtn" class="btn i18n-connect-btn">🔌 Conectar Wallet</button>
+        <button id="simulateBtn" class="btn btn-outline i18n-simulate-btn" style="display: none;">✅ Simular verificación humana</button>
+        
+        <div id="status" class="status"></div>
+        
+        <div class="demo-info">
+            <h4 class="i18n-contract-title">📝 Contrato de testnet:</h4>
+            <code>0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8</code>
+            <h4 class="i18n-code-title" style="margin-top: 16px;">📝 Código de integración:</h4>
+            <pre>interface IHumanhood {
+    function checkHuman(address user) external view returns (bool);
+}
+
+function claimReward() external {
+    require(
+        IHumanhood(0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8).checkHuman(msg.sender),
+        "Not verified as human"
+    );
+}</pre>
+            <p class="i18n-note" style="font-size: 12px; color: #64748b; margin-top: 16px;">⚠️ En testnet, <code>checkHuman()</code> devuelve <strong>true</strong> para todas las wallets (simulación).</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script>
+    // ==================== TRADUCCIONES ====================
+    const translationsDemo = {
+        es: {
+            web: "Web",
+            docs: "Documentación",
+            contact: "Contacto",
+            title: "🧪 Demo en Testnet",
+            subtitle: "Prueba Humanhood en <strong>Polygon Amoy (testnet)</strong><br>La verificación es <strong>simulada</strong> (siempre exitosa).",
+            connectBtn: "🔌 Conectar Wallet",
+            simulateBtn: "✅ Simular verificación humana",
+            contractTitle: "📝 Contrato de testnet:",
+            codeTitle: "📝 Código de integración:",
+            note: "⚠️ En testnet, checkHuman() devuelve true para todas las wallets (simulación).",
+            connected: "✅ Conectado: ",
+            errorConnect: "❌ Error: ",
+            simulating: "🔍 Simulando verificación... (siempre true en testnet)",
+            successSim: "✅ ¡Simulación exitosa! Tu wallet sería verificada como humana en testnet.",
+            errorSim: "❌ Error: "
+        },
+        en: {
+            web: "Web",
+            docs: "Documentation",
+            contact: "Contact",
+            title: "🧪 Testnet Demo",
+            subtitle: "Test Humanhood on <strong>Polygon Amoy (testnet)</strong><br>Verification is <strong>simulated</strong> (always successful).",
+            connectBtn: "🔌 Connect Wallet",
+            simulateBtn: "✅ Simulate human verification",
+            contractTitle: "📝 Testnet contract:",
+            codeTitle: "📝 Integration code:",
+            note: "⚠️ On testnet, checkHuman() returns true for ALL wallets (simulation).",
+            connected: "✅ Connected: ",
+            errorConnect: "❌ Error: ",
+            simulating: "🔍 Simulating verification... (always true on testnet)",
+            successSim: "✅ Simulation successful! Your wallet would be verified as human on testnet.",
+            errorSim: "❌ Error: "
+        }
+    };
+
+    let currentLangDemo = "es";
+
+    function applyLanguageDemo(lang) {
+        currentLangDemo = lang;
+        document.documentElement.lang = lang;
+        localStorage.setItem('humanhood_lang_demo', lang);
+        
+        document.querySelectorAll('[class*="i18n-"]').forEach(el => {
+            const classes = el.className.split(' ');
+            const i18nClass = classes.find(c => c.startsWith('i18n-'));
+            if (i18nClass) {
+                const key = i18nClass.replace('i18n-', '');
+                if (translationsDemo[lang] && translationsDemo[lang][key] !== undefined) {
+                    if (el.tagName === 'BUTTON') {
+                        el.innerHTML = translationsDemo[lang][key];
+                    } else {
+                        el.innerHTML = translationsDemo[lang][key];
+                    }
+                }
+            }
+        });
+    }
+
+    const savedLangDemo = localStorage.getItem('humanhood_lang_demo') || (navigator.language.startsWith('es') ? 'es' : 'en');
+    if(document.getElementById('languageSelect')) {
+        document.getElementById('languageSelect').value = savedLangDemo;
+        document.getElementById('languageSelect').addEventListener('change', (e) => applyLanguageDemo(e.target.value));
+    }
+    applyLanguageDemo(savedLangDemo);
+
+    // ==================== DEMO LOGIC ====================
+    const CONTRACT_ADDRESS = "0xD9f766cCbE8EBb138925D22cEA589B1c5faEdEf8";
+    const CONTRACT_ABI = [
+        "function checkHuman(address) view returns (bool)"
+    ];
+    
+    let provider, signer, contract;
+    let userAddress = null;
+    
+    const connectBtn = document.getElementById('connectBtn');
+    const simulateBtn = document.getElementById('simulateBtn');
+    const statusDiv = document.getElementById('status');
+    
+    function showStatus(message, type) {
+        statusDiv.textContent = message;
+        statusDiv.className = `status ${type}`;
+    }
+    
+    connectBtn.onclick = async () => {
+        if (!window.ethereum) {
+            alert(currentLangDemo === 'es' ? "Instala MetaMask" : "Install MetaMask");
+            return;
+        }
+        try {
+            connectBtn.disabled = true;
+            connectBtn.innerHTML = currentLangDemo === 'es' ? "⏳ Conectando..." : "⏳ Connecting...";
+            
+            // Cambiar a Polygon Amoy
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x13881' }]
+                });
+            } catch(switchError) {
+                if (switchError.code === 4902) {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: '0x13881',
+                            chainName: 'Polygon Amoy',
+                            nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 },
+                            rpcUrls: ['https://rpc-amoy.polygon.technology/']
+                        }]
+                    });
+                } else throw switchError;
+            }
+            
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            userAddress = accounts[0];
+            
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            signer = provider.getSigner();
+            contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+            
+            showStatus(`${translationsDemo[currentLangDemo].connected} ${userAddress.slice(0,8)}...${userAddress.slice(-6)}`, "success");
+            connectBtn.style.display = "none";
+            simulateBtn.style.display = "inline-block";
+            
+        } catch(e) {
+            showStatus(translationsDemo[currentLangDemo].errorConnect + e.message, "error");
+            connectBtn.disabled = false;
+            connectBtn.innerHTML = translationsDemo[currentLangDemo].connectBtn;
+        }
+    };
+    
+    simulateBtn.onclick = async () => {
+        if (!contract || !userAddress) return;
+        try {
+            simulateBtn.disabled = true;
+            simulateBtn.innerHTML = currentLangDemo === 'es' ? "⏳ Verificando..." : "⏳ Verifying...";
+            showStatus(translationsDemo[currentLangDemo].simulating, "loading");
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const isHuman = true;
+            
+            if (isHuman) {
+                showStatus(translationsDemo[currentLangDemo].successSim, "success");
+            } else {
+                showStatus(translationsDemo[currentLangDemo].errorSim, "error");
+            }
+        } catch(e) {
+            showStatus(translationsDemo[currentLangDemo].errorSim + e.message, "error");
+        } finally {
+            simulateBtn.disabled = false;
+            simulateBtn.innerHTML = translationsDemo[currentLangDemo].simulateBtn;
+        }
+    };
+</script>
+</body>
+</html>
