@@ -33,7 +33,7 @@
         .mobile-menu-cta .btn { text-align: center; }
         
         .language-selector { position: fixed; top: 80px; right: 20px; z-index: 1001; background: white; border-radius: 50px; padding: 6px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 0.8rem; border: 1px solid #e2e8f0; }
-        .language-selector select { background: transparent; border: none; font-weight: 500; cursor: pointer; outline: none; }
+        .language-selector select { background: transparent; border: none; color: #667eea; font-weight: 500; cursor: pointer; outline: none; }
         
         .btn { display: inline-block; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; cursor: pointer; border: none; font-size: 0.9rem; }
         .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
@@ -92,12 +92,12 @@
             <span class="logo-text">Humanhood</span>
         </div>
         <div class="nav-links">
-            <a href="index.html">Web</a>
-            <a href="docs.html">Documentación</a>
-            <a href="deposit.html">Depósito</a>
-            <a href="early-access.html">Early Access</a>
-            <a href="demo.html">Demo</a>
-            <a href="contact.html" style="color: #667eea;">Contacto</a>
+            <a href="index.html" class="i18n-navWeb">Web</a>
+            <a href="docs.html" class="i18n-navDocs">Documentación</a>
+            <a href="deposit.html" class="i18n-navDeposit" >Depósito</a>
+            <a href="early-access.html"  class="i18n-navEarly">Early Access</a>
+            <a href="demo.html" class="i18n-navDemo">Demo</a>
+            <a href="contact.html" style="color: #667eea;" class="i18n-navContact">Contacto</a>
         </div>
         <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
             <span></span><span></span><span></span>
@@ -115,7 +115,13 @@
         <button id="closeMenuBtn" class="close-menu">✕</button>
     </div>
     <div class="mobile-menu-links">
-        <a href="index.html">Web</a>
+            <a href="index.html" class="i18n-navWeb">Web</a>
+            <a href="docs.html" class="i18n-navDocs">Documentación</a>
+            <a href="deposit.html" class="i18n-navDeposit" >Depósito</a>
+            <a href="early-access.html"  class="i18n-navEarly">Early Access</a>
+            <a href="demo.html" class="i18n-navDemo">Demo</a>
+            <a href="contact.html" style="color: #667eea;"class="i18n-navContact">Contacto</a>
+        </div>
         <div class="mobile-menu-cta">
             <a href="/#verificar" class="btn btn-outline">Verificar</a>
             <a href="/#precios" class="btn btn-primary">Integrar</a>
