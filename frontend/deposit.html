@@ -33,30 +33,8 @@
         .mobile-menu-cta { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
         .mobile-menu-cta .btn { text-align: center; }
         
-        /* LANGUAGE SELECTOR - FORZADO */
-        .language-selector { 
-            position: fixed !important; 
-            top: 80px !important; 
-            right: 20px !important; 
-            z-index: 9999 !important; 
-            background: white !important; 
-            border-radius: 50px !important; 
-            padding: 6px 12px !important; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important; 
-            font-size: 0.8rem !important; 
-            font-family: 'Inter', sans-serif !important;
-            border: 1px solid #e2e8f0 !important; 
-        }
-        .language-selector select { 
-            background: transparent !important; 
-            border: none !important; 
-            color: #667eea !important; 
-            font-weight: 500 !important; 
-            cursor: pointer !important; 
-            outline: none !important; 
-            font-family: 'Inter', sans-serif !important;
-            font-size: 0.8rem !important;
-        }
+        .language-selector { position: fixed; top: 80px; right: 20px; z-index: 1001; background: white; border-radius: 50px; padding: 6px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 0.8rem; border: 1px solid #e2e8f0; }
+        .language-selector select { background: transparent; border: none; color: #667eea; font-weight: 500; cursor: pointer; outline: none; }
         
         .btn { display: inline-block; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; cursor: pointer; border: none; font-size: 0.9rem; }
         .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
@@ -193,13 +171,12 @@
             .deposit-card { padding: 32px 24px; }
             .nav-links, .nav-cta { display: none; }
             .hamburger { display: flex; }
-            .language-selector { top: 70px !important; right: 10px !important; }
+            .language-selector { top: 70px; right: 10px; }
         }
     </style>
 </head>
 <body>
 
-<!-- LANGUAGE SELECTOR -->
 <div class="language-selector">
     <span>🌐</span>
     <select id="languageSelect">
@@ -208,7 +185,6 @@
     </select>
 </div>
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <div class="container">
         <div class="nav-logo" onclick="location.href='index.html'">
@@ -240,7 +216,6 @@
     </div>
 </nav>
 
-<!-- MENÚ MÓVIL -->
 <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-header">
         <span class="logo-text">Humanhood</span>
@@ -260,7 +235,6 @@
     </div>
 </div>
 
-<!-- CONTENIDO PRINCIPAL -->
 <div class="container">
     <div class="deposit-card">
         <h1 class="i18n-depositTitle" style="text-align: center;">💰 Depositar USDC</h1>
@@ -290,7 +264,6 @@
     </div>
 </div>
 
-<!-- FOOTER -->
 <footer class="footer">
     <div class="container">
         <div class="footer-content">
@@ -353,7 +326,6 @@
         });
     }
     
-    // Detectar idioma inicial
     const savedLangDeposit = localStorage.getItem('humanhood_lang_early') || (navigator.language.startsWith('es') ? 'es' : 'en');
     if (langSelect) langSelect.value = savedLangDeposit;
     applyDepositLanguage(savedLangDeposit);
