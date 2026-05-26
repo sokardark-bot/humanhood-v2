@@ -4,16 +4,17 @@ let currentLang = "es";
 const translations = {
     es: {
         // Navbar
+        navWeb: "Web",
         navProduct: "Producto",
         navPricing: "Precios",
         navVerify: "Verificar",
         navDocs: "Docs",
         navContact: "Contacto",
         navEarly: "Early Access",
+        navDeposit: "Depósito",
         navFaq: "FAQ",
         navVerifyBtn: "Verificar",
         navIntegrateBtn: "Integrar",
-        navEarlyBtn: "🎁 1,000 gratis",
         
         // Hero
         heroBadge: "🚀 Lanzamiento oficial",
@@ -22,14 +23,13 @@ const translations = {
         heroDesc: "Protege tus airdrops, DAOs y juegos de bots y sybils.<br>Una API sencilla que cualquier proyecto Web3 puede integrar.",
         heroBtnVerify: "Verificarme ahora",
         heroBtnPricing: "Ver precios",
-        heroEarlyLink: "🎁 ¿Proyecto Web3? Prueba 1,000 consultas gratis →",
         
         // Stats
         stat1Label: "por consulta",
         stat2Label: "consultas gratis",
         stat3Label: "wallets protegidas",
         
-        // Producto / Cómo funciona
+        // Producto
         productTag: "¿Cómo funciona?",
         productTitle1: "Integración en",
         productTitle2: "3 líneas de código",
@@ -41,7 +41,7 @@ const translations = {
         step3Title: "Consulta el estado",
         step3Desc: "Tu contrato llama a checkHuman(wallet) y obtiene true/false.",
         
-        // Bloque de código
+        // Código
         codeTitle: "📝 Integración en tu contrato (versión de pago)",
         copyBtn: "Copiar",
         
@@ -106,7 +106,9 @@ const translations = {
         footerVerify: "Verificar",
         footerResources: "Recursos",
         footerDocs: "Documentación",
+        footerDemo: "Demo Testnet",
         footerEarly: "Early Access",
+        footerDeposit: "Depósito",
         footerGitHub: "GitHub",
         footerContact: "Contacto",
         footerCopyright: "© 2026 Humanhood. Todos los derechos reservados.",
@@ -124,22 +126,76 @@ const translations = {
         faq4Q: "¿Cuánto cuesta en producción?",
         faq4A: "$0.05 por consulta en Polygon Mainnet o BNB Chain. $0.10 en Ethereum Mainnet.",
         
-        // Mensajes de éxito/error
+        // Mensajes
         successMsg: "✅ Mensaje enviado correctamente. Te responderemos pronto.",
-        errorMsg: "❌ Error al enviar. Inténtalo de nuevo."
+        errorMsg: "❌ Error al enviar. Inténtalo de nuevo.",
+        
+        // Docs específicos
+        docsTitle: "Documentación de Integración",
+        docsSubtitle: "API de verificación humana para proyectos Web3. Prevén bots y sybils en tus airdrops, DAOs y juegos.",
+        freeBadge: "📡 PRUEBA GRATIS - 1,000 CONSULTAS",
+        testContractTitle: "Contrato de Prueba (Testnet)",
+        polygonAmoy: "Polygon Amoy (Testnet)",
+        chainId: "Chain ID: 80002",
+        faucetLabel: "Faucet para POL (gas):",
+        faucetLink: "faucet.polygon.technology",
+        productionBadge: "🌍 PRODUCCIÓN - MÚLTIPLES REDES",
+        productionTitle: "Contratos de Producción (Mainnets)",
+        productionDesc: "Elige la red que mejor se adapte a tu proyecto.",
+        tableNetwork: "Red",
+        tableAddress: "Dirección del contrato",
+        tablePrice: "Precio por consulta",
+        recommended: "(recomendado)",
+        comingSoon: "Próximamente",
+        inDevelopment: "En desarrollo",
+        guideBadge: "📘 GUÍA DE INTEGRACIÓN",
+        guideTitle: "¿Cómo funciona Humanhood?",
+        guideDesc: "Humanhood es una API de verificación humana descentralizada.",
+        systemFlow: "🔄 Flujo completo del sistema",
+        systemFlowText: "1. Usuario final se verifica en humanhood.tech (paga gas una vez)\n2. Su wallet queda marcada como humana en la blockchain\n3. Tu proyecto consulta checkHuman(wallet)\n4. Si es true, el usuario recibe la recompensa\n5. Tu proyecto paga $0.05 por cada consulta",
+        projectToDo: "🧑‍💻 Lo que debe hacer TU PROYECTO",
+        projectSteps: "1. Integrar nuestro contrato (3 líneas de código)\n2. Depositar USDC en nuestro contrato (mínimo 10 USDC)\n3. Por cada usuario, llamar a checkHuman(wallet) → cuesta $0.05",
+        userToDo: "🧑‍💻 Lo que debe hacer el USUARIO FINAL",
+        userSteps: "1. Conectar su wallet en humanhood.tech\n2. Hacer clic en \"Verificarme como humano\" (solo paga el gas)\n3. Su wallet queda marcada como humana para siempre ✅",
+        codeIntegration: "📝 Código de integración para tu contrato",
+        numbersExample: "💰 Ejemplo con números",
+        numbersList: "Depositas 100 USDC → saldo en contrato: 100 USDC\nConsultas 1 wallet → saldo: 99.95 USDC (coste: $0.05)\nConsultas 2,000 wallets → saldo: 0 USDC (coste: $100)\nVuelves a depositar cuando quieras más saldo",
+        summaryTitle: "✅ Resumen para tu proyecto",
+        summaryList: "📌 Tus usuarios se verifican UNA SOLA VEZ en humanhood.tech\n📌 Tu proyecto paga $0.05 por cada consulta a checkHuman()\n📌 El usuario NO PAGA NADA (solo el gas una vez en su vida)\n📌 Puedes probar gratis en testnet (Polygon Amoy)",
+        depositsBadge: "💰 DEPÓSITOS",
+        depositsTitle: "Depositar USDC",
+        depositsDesc: "Para usar nuestro servicio de pago por consulta, necesitas depositar USDC en nuestro contrato.",
+        depositPageBtn: "🔗 Ir a la página de depósito",
+        downloadScriptBtn: "📥 Descargar script de ejemplo",
+        integrationCodeTitle: "📝 Código de integración (para tu dApp)",
+        depositNote: "Nota: El depósito mínimo es de 10 USDC. Una vez depositado, cada consulta a checkHuman() descontará 0.05 USDC automáticamente.",
+        faqTitle: "❓ Preguntas frecuentes",
+        faq1Q: "¿Cuánto cuesta la verificación?",
+        faq1A: "Prueba gratuita: 1,000 consultas gratis en testnet (Polygon Amoy).\nProducción: $0.05 en Polygon o BNB Chain, $0.10 en Ethereum.",
+        faq2Q: "¿Qué red debo usar?",
+        faq2A: "Pruebas: Polygon Amoy (testnet).\nProducción: Polygon Mainnet (recomendado por bajo coste), BNB Chain o Ethereum.",
+        faq3Q: "¿Qué dirección me pide Humanhood?",
+        faq3A: "La dirección de tu contrato o wallet desde la que llamas a checkHuman().",
+        faq4Q: "¿Necesito backend para integrarme?",
+        faq4A: "No. Todo es mediante contratos inteligentes. Tu proyecto llama directamente a nuestra función checkHuman().",
+        faq5Q: "¿Cómo deposito USDC?",
+        faq5A: "Tienes dos opciones: usar nuestra página de depósito (sin programar) o integrar el script de ejemplo en tu dApp.",
+        supportTitle: "🆘 ¿Necesitas ayuda?",
+        supportDesc: "Contacta con nosotros en info@humanhood.tech y te ayudaremos con la integración."
     },
     en: {
         // Navbar
+        navWeb: "Web",
         navProduct: "Product",
         navPricing: "Pricing",
         navVerify: "Verify",
         navDocs: "Docs",
         navContact: "Contact",
         navEarly: "Early Access",
+        navDeposit: "Deposit",
         navFaq: "FAQ",
         navVerifyBtn: "Verify",
         navIntegrateBtn: "Integrate",
-        navEarlyBtn: "🎁 1,000 free",
         
         // Hero
         heroBadge: "🚀 Official Launch",
@@ -148,14 +204,13 @@ const translations = {
         heroDesc: "Protect your airdrops, DAOs, and games from bots and sybils.<br>A simple API that any Web3 project can integrate.",
         heroBtnVerify: "Verify me now",
         heroBtnPricing: "View pricing",
-        heroEarlyLink: "🎁 Web3 project? Try 1,000 free queries →",
         
         // Stats
         stat1Label: "per query",
         stat2Label: "free queries",
         stat3Label: "wallets protected",
         
-        // Producto / How it works
+        // Product
         productTag: "How it works?",
         productTitle1: "Integration in",
         productTitle2: "3 lines of code",
@@ -167,7 +222,7 @@ const translations = {
         step3Title: "Check status",
         step3Desc: "Your contract calls checkHuman(wallet) and gets true/false.",
         
-        // Code block
+        // Code
         codeTitle: "📝 Integration in your contract (paid version)",
         copyBtn: "Copy",
         
@@ -232,7 +287,9 @@ const translations = {
         footerVerify: "Verify",
         footerResources: "Resources",
         footerDocs: "Documentation",
+        footerDemo: "Testnet Demo",
         footerEarly: "Early Access",
+        footerDeposit: "Deposit",
         footerGitHub: "GitHub",
         footerContact: "Contact",
         footerCopyright: "© 2026 Humanhood. All rights reserved.",
@@ -250,12 +307,66 @@ const translations = {
         faq4Q: "How much does production cost?",
         faq4A: "$0.05 per query on Polygon Mainnet or BNB Chain. $0.10 on Ethereum Mainnet.",
         
-        // Success/Error messages
+        // Messages
         successMsg: "✅ Message sent successfully. We will reply soon.",
-        errorMsg: "❌ Error sending message. Please try again."
+        errorMsg: "❌ Error sending message. Please try again.",
+        
+        // Docs
+        docsTitle: "Integration Documentation",
+        docsSubtitle: "Human verification API for Web3 projects. Prevent bots and sybils in your airdrops, DAOs, and games.",
+        freeBadge: "📡 FREE TRIAL - 1,000 QUERIES",
+        testContractTitle: "Test Contract (Testnet)",
+        polygonAmoy: "Polygon Amoy (Testnet)",
+        chainId: "Chain ID: 80002",
+        faucetLabel: "Faucet for POL (gas):",
+        faucetLink: "faucet.polygon.technology",
+        productionBadge: "🌍 PRODUCTION - MULTIPLE NETWORKS",
+        productionTitle: "Production Contracts (Mainnets)",
+        productionDesc: "Choose the network that best suits your project.",
+        tableNetwork: "Network",
+        tableAddress: "Contract Address",
+        tablePrice: "Price per query",
+        recommended: "(recommended)",
+        comingSoon: "Coming soon",
+        inDevelopment: "In development",
+        guideBadge: "📘 INTEGRATION GUIDE",
+        guideTitle: "How does Humanhood work?",
+        guideDesc: "Humanhood is a decentralized human verification API.",
+        systemFlow: "🔄 Complete system flow",
+        systemFlowText: "1. End user verifies at humanhood.tech (pays gas once)\n2. Their wallet is marked as human on the blockchain\n3. Your project queries checkHuman(wallet)\n4. If true, the user receives the reward\n5. Your project pays $0.05 per query",
+        projectToDo: "🧑‍💻 What YOUR PROJECT must do",
+        projectSteps: "1. Integrate our contract (3 lines of code)\n2. Deposit USDC into our contract (minimum 10 USDC)\n3. For each user, call checkHuman(wallet) → costs $0.05",
+        userToDo: "🧑‍💻 What the END USER must do",
+        userSteps: "1. Connect their wallet at humanhood.tech\n2. Click \"Verify me as human\" (only pays gas)\n3. Their wallet is marked as human forever ✅",
+        codeIntegration: "📝 Integration code for your contract",
+        numbersExample: "💰 Example with numbers",
+        numbersList: "Deposit 100 USDC → contract balance: 100 USDC\nQuery 1 wallet → balance: 99.95 USDC (cost: $0.05)\nQuery 2,000 wallets → balance: 0 USDC (cost: $100)\nDeposit again whenever you need more balance",
+        summaryTitle: "✅ Summary for your project",
+        summaryList: "📌 Your users verify ONCE at humanhood.tech\n📌 Your project pays $0.05 per checkHuman() query\n📌 The user pays NOTHING (only gas once in their lifetime)\n📌 You can test for free on testnet (Polygon Amoy)",
+        depositsBadge: "💰 DEPOSITS",
+        depositsTitle: "Deposit USDC",
+        depositsDesc: "To use our pay-per-query service, you need to deposit USDC into our contract.",
+        depositPageBtn: "🔗 Go to deposit page",
+        downloadScriptBtn: "📥 Download example script",
+        integrationCodeTitle: "📝 Integration code (for your dApp)",
+        depositNote: "Note: The minimum deposit is 10 USDC. Once deposited, each checkHuman() query will automatically deduct 0.05 USDC.",
+        faqTitle: "❓ Frequently Asked Questions",
+        faq1Q: "How much does verification cost?",
+        faq1A: "Free trial: 1,000 free queries on testnet (Polygon Amoy).\nProduction: $0.05 on Polygon or BNB Chain, $0.10 on Ethereum.",
+        faq2Q: "Which network should I use?",
+        faq2A: "Testing: Polygon Amoy (testnet).\nProduction: Polygon Mainnet (recommended for low cost), BNB Chain or Ethereum.",
+        faq3Q: "What address does Humanhood ask for?",
+        faq3A: "The address of your contract or wallet from which you call checkHuman().",
+        faq4Q: "Do I need a backend to integrate?",
+        faq4A: "No. Everything is through smart contracts. Your project directly calls our checkHuman() function.",
+        faq5Q: "How do I deposit USDC?",
+        faq5A: "You have two options: use our deposit page (no coding) or integrate the example script into your dApp.",
+        supportTitle: "🆘 Need help?",
+        supportDesc: "Contact us at info@humanhood.tech and we'll help you with the integration."
     }
 };
 
+// ==================== FUNCIÓN APPLYLANGUAGE ====================
 function applyLanguage(lang) {
     currentLang = lang;
     document.documentElement.lang = lang;
@@ -313,6 +424,7 @@ require(
     }
 }
 
+// ==================== INICIALIZACIÓN ====================
 const savedLang = localStorage.getItem('humanhood_lang') || (navigator.language.startsWith('es') ? 'es' : 'en');
 if(document.getElementById('languageSelect')) {
     document.getElementById('languageSelect').value = savedLang;
