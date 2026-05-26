@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Humanhood | Deposit USDC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #ffffff; color: #1a1a2e; line-height: 1.5; }
+        .container { max-width: 800px; margin: 0 auto; padding: 100px 20px 40px; }
         
         /* NAVBAR */
         .navbar { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; z-index: 1000; padding: 16px 0; }
@@ -31,9 +33,30 @@
         .mobile-menu-cta { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
         .mobile-menu-cta .btn { text-align: center; }
         
-        /* LANGUAGE SELECTOR */
-        .language-selector { position: fixed; top: 80px; right: 20px; z-index: 1001; background: white; border-radius: 50px; padding: 6px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 0.8rem; border: 1px solid #e2e8f0; }
-        .language-selector select { background: transparent; border: none; color: #667eea; font-weight: 500; cursor: pointer; outline: none; font-size: 0.8rem; }
+        /* LANGUAGE SELECTOR - FORZADO */
+        .language-selector { 
+            position: fixed !important; 
+            top: 80px !important; 
+            right: 20px !important; 
+            z-index: 9999 !important; 
+            background: white !important; 
+            border-radius: 50px !important; 
+            padding: 6px 12px !important; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important; 
+            font-size: 0.8rem !important; 
+            font-family: 'Inter', sans-serif !important;
+            border: 1px solid #e2e8f0 !important; 
+        }
+        .language-selector select { 
+            background: transparent !important; 
+            border: none !important; 
+            color: #667eea !important; 
+            font-weight: 500 !important; 
+            cursor: pointer !important; 
+            outline: none !important; 
+            font-family: 'Inter', sans-serif !important;
+            font-size: 0.8rem !important;
+        }
         
         .btn { display: inline-block; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; cursor: pointer; border: none; font-size: 0.9rem; }
         .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
@@ -41,45 +64,136 @@
         .btn-outline { background: transparent; border: 2px solid #e2e8f0; color: #4a5568; }
         .btn-outline:hover { border-color: #667eea; color: #667eea; }
         
-        /* CARD */
-        .deposit-wrapper { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 100px 20px 60px; }
-        .card { background: #f8fafc; border-radius: 24px; padding: 40px; max-width: 550px; width: 100%; border: 1px solid #e2e8f0; }
-        .input-group { margin: 20px 0; }
-        label { display: block; margin-bottom: 8px; color: #64748b; font-size: 0.8rem; font-weight: 500; }
-        input, select { width: 100%; padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; color: #1a1a2e; font-size: 1rem; outline: none; }
-        input:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
-        .balance-box { background: #f1f5f9; padding: 16px; border-radius: 16px; margin: 20px 0; text-align: center; border: 1px solid #e2e8f0; }
-        .balance-box .amount { font-size: 2rem; font-weight: 700; color: #22c55e; }
-        .status { margin-top: 16px; padding: 12px; border-radius: 12px; font-size: 0.8rem; display: none; }
-        .status.success { background: #22c55e20; color: #166534; display: block; }
-        .status.error { background: #ef444420; color: #991b1b; display: block; }
-        .status.info { background: #3b82f620; color: #1e40af; display: block; }
-        .hidden { display: none; }
-        .network-selector { display: flex; gap: 12px; margin-bottom: 20px; }
-        .network-option { flex: 1; text-align: center; padding: 10px; background: #f1f5f9; border-radius: 12px; cursor: pointer; border: 1px solid #e2e8f0; transition: all 0.3s; font-weight: 500; }
-        .network-option.selected { border-color: #667eea; background: #667eea10; }
-        .network-option.polygon.selected { border-color: #a855f7; background: #a855f710; }
-        .network-option.bnb.selected { border-color: #f0b90b; background: #f0b90b10; }
+        /* Estilos específicos de deposit */
+        .deposit-card {
+            background: #f8fafc;
+            border-radius: 32px;
+            padding: 48px;
+            border: 1px solid #e2e8f0;
+        }
         
-        /* FOOTER */
-        .footer { background: #1a1a2e; color: white; padding: 48px 0 24px; margin-top: 0; width: 100%; }
-        .footer .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .input-group {
+            margin: 20px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #64748b;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            color: #1a1a2e;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+        
+        .balance-box {
+            background: #f1f5f9;
+            padding: 16px;
+            border-radius: 16px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .balance-box .amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #22c55e;
+        }
+        
+        .status {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            display: none;
+        }
+        
+        .status.success {
+            background: #22c55e20;
+            color: #166534;
+            display: block;
+        }
+        
+        .status.error {
+            background: #ef444420;
+            color: #991b1b;
+            display: block;
+        }
+        
+        .status.info {
+            background: #3b82f620;
+            color: #1e40af;
+            display: block;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .network-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .network-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .network-option.selected {
+            border-color: #667eea;
+            background: #667eea10;
+        }
+        
+        .network-option.polygon.selected {
+            border-color: #a855f7;
+            background: #a855f710;
+        }
+        
+        .network-option.bnb.selected {
+            border-color: #f0b90b;
+            background: #f0b90b10;
+        }
+        
+        .footer { background: #1a1a2e; color: white; padding: 48px 0 24px; margin-top: 48px; }
+        .footer .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 48px; margin-bottom: 48px; }
         .footer-brand p { margin-top: 8px; color: #a0aec0; }
         .footer-links { display: flex; gap: 48px; flex-wrap: wrap; }
-        .footer-col h4 { margin-bottom: 16px; font-size: 1rem; color: white; }
+        .footer-col h4 { margin-bottom: 16px; font-size: 1rem; }
         .footer-col a { display: block; color: #a0aec0; text-decoration: none; margin-bottom: 12px; font-size: 0.9rem; transition: color 0.3s; }
         .footer-col a:hover { color: #667eea; }
         .footer-bottom { text-align: center; padding-top: 24px; border-top: 1px solid #2d3748; color: #718096; font-size: 0.8rem; }
         
-        @media (max-width: 768px) { 
-            .deposit-wrapper { padding: 80px 16px 40px; }
-            .card { padding: 32px 24px; }
-            .nav-links, .nav-cta { display: none; } 
-            .hamburger { display: flex; } 
-            .language-selector { top: 70px; right: 10px; }
-            .footer-content { flex-direction: column; gap: 32px; }
-            .footer-links { flex-direction: column; gap: 32px; }
+        @media (max-width: 768px) {
+            .container { padding: 80px 16px 40px; }
+            .deposit-card { padding: 32px 24px; }
+            .nav-links, .nav-cta { display: none; }
+            .hamburger { display: flex; }
+            .language-selector { top: 70px !important; right: 10px !important; }
         }
     </style>
 </head>
@@ -120,8 +234,8 @@
             <span></span><span></span><span></span>
         </button>
         <div class="nav-cta">
-            <a href="index.html#verificar" class="btn btn-outline i18n-navVerifyBtn">Verificar</a>
-            <a href="index.html#precios" class="btn btn-primary i18n-navIntegrateBtn">Integrar</a>
+            <a href="index.html#verificar" class="btn btn-outline">Verificar</a>
+            <a href="index.html#precios" class="btn btn-primary">Integrar</a>
         </div>
     </div>
 </nav>
@@ -137,20 +251,20 @@
         <a href="docs.html" class="i18n-navDocs">Documentación</a>
         <a href="deposit.html" class="i18n-navDeposit">Depósito</a>
         <a href="early-access.html" class="i18n-navEarly">Early Access</a>
-        <a href="demo.html" class="i18n-navContact">Demo</a>
+        <a href="demo.html" class="i18n-navDemo">Demo</a>
         <a href="contact.html" class="i18n-navContact">Contacto</a>
         <div class="mobile-menu-cta">
-            <a href="index.html#verificar" class="btn btn-outline i18n-navVerifyBtn">Verificar</a>
-            <a href="index.html#precios" class="btn btn-primary i18n-navIntegrateBtn">Integrar</a>
+            <a href="index.html#verificar" class="btn btn-outline">Verificar</a>
+            <a href="index.html#precios" class="btn btn-primary">Integrar</a>
         </div>
     </div>
 </div>
 
 <!-- CONTENIDO PRINCIPAL -->
-<div class="deposit-wrapper">
-    <div class="card">
-        <h1 id="title" class="i18n-title">💰 Depositar USDC</h1>
-        <p id="subtitle" class="i18n-subtitle" style="color: #64748b; margin: 8px 0 20px;">Deposita saldo en tu cuenta de Humanhood</p>
+<div class="container">
+    <div class="deposit-card">
+        <h1 class="i18n-depositTitle" style="text-align: center;">💰 Depositar USDC</h1>
+        <p class="i18n-depositSubtitle" style="color: #64748b; text-align: center; margin-bottom: 32px;">Deposita saldo en tu cuenta de Humanhood</p>
 
         <div class="network-selector">
             <div class="network-option polygon" data-network="polygon">🟣 Polygon</div>
@@ -158,13 +272,13 @@
         </div>
 
         <div class="balance-box">
-            <div id="balanceLabel" class="i18n-balanceLabel">💰 Tu USDC depositado</div>
+            <div class="i18n-balanceLabel">💰 Tu USDC depositado</div>
             <div class="amount" id="depositBalance">0.00</div>
             <div style="font-size: 0.7rem; color: #64748b;" id="walletAddress">No conectado</div>
         </div>
 
         <div class="input-group">
-            <label id="amountLabel" class="i18n-amountLabel">📥 Cantidad a depositar (USDC)</label>
+            <label class="i18n-amountLabel">📥 Cantidad a depositar (USDC)</label>
             <input type="number" id="depositAmount" placeholder="Ej: 100" step="10" min="10">
         </div>
 
@@ -172,13 +286,13 @@
         <button id="connectBtn" class="btn btn-outline i18n-connectBtn" style="width: 100%; margin-top: 12px;">🔌 Conectar Wallet</button>
 
         <div id="status" class="status"></div>
-        <div id="info" class="status info i18n-infoText" style="margin-top: 20px;">💡 Al depositar, se te pedirá aprobar primero el gasto y luego confirmar el depósito.</div>
+        <div class="status info i18n-infoText" style="margin-top: 20px;">💡 Al depositar, se te pedirá aprobar primero el gasto y luego confirmar el depósito.</div>
     </div>
 </div>
 
 <!-- FOOTER -->
 <footer class="footer">
-    <div class="footer-container">
+    <div class="container">
         <div class="footer-content">
             <div class="footer-brand">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="11" r="5" stroke="url(#gradF)" stroke-width="2" fill="none"/><path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#gradF)"/><path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#gradF)"/><circle cx="10" cy="22" r="2" fill="url(#gradF)"/><circle cx="22" cy="22" r="2" fill="url(#gradF)"/><defs><linearGradient id="gradF" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs></svg>
@@ -197,89 +311,52 @@
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script>
-    // ==================== TRADUCCIONES ====================
-    const translationsDeposit = {
+    // ==================== TRADUCCIONES ESPECÍFICAS PARA DEPÓSITO ====================
+    const depositTranslations = {
         es: {
-            navWeb: "Web",
-            navDocs: "Documentación",
-            navContact: "Contacto",
-            navDeposit: "Depósito",
-            navEarly: "Early Access",
-            navVerifyBtn: "Verificar",
-            navIntegrateBtn: "Integrar",
-            title: "💰 Depositar USDC",
-            subtitle: "Deposita saldo en tu cuenta de Humanhood",
+            depositTitle: "💰 Depositar USDC",
+            depositSubtitle: "Deposita saldo en tu cuenta de Humanhood",
             balanceLabel: "💰 Tu USDC depositado",
             amountLabel: "📥 Cantidad a depositar (USDC)",
             depositBtn: "📥 Depositar USDC",
             connectBtn: "🔌 Conectar Wallet",
-            infoText: "💡 Al depositar, se te pedirá aprobar primero el gasto y luego confirmar el depósito.",
-            footerDesc: "Verificación humana descentralizada",
-            footerProduct: "Producto",
-            footerHowItWorks: "Cómo funciona",
-            footerPricing: "Precios",
-            footerVerify: "Verificar",
-            footerResources: "Recursos",
-            footerDocs: "Documentación",
-            footerDemo: "Demo Testnet",
-            footerEarly: "Early Access",
-            footerDeposit: "Depósito",
-            footerContact: "Contacto",
-            footerCopyright: "© 2026 Humanhood. Todos los derechos reservados."
+            infoText: "💡 Al depositar, se te pedirá aprobar primero el gasto y luego confirmar el depósito."
         },
         en: {
-            navWeb: "Web",
-            navDocs: "Documentation",
-            navContact: "Contact",
-            navDeposit: "Deposit",
-            navEarly: "Early Access",
-            navVerifyBtn: "Verify",
-            navIntegrateBtn: "Integrate",
-            title: "💰 Deposit USDC",
-            subtitle: "Deposit balance into your Humanhood account",
+            depositTitle: "💰 Deposit USDC",
+            depositSubtitle: "Deposit balance into your Humanhood account",
             balanceLabel: "💰 Your deposited USDC",
             amountLabel: "📥 Amount to deposit (USDC)",
             depositBtn: "📥 Deposit USDC",
             connectBtn: "🔌 Connect Wallet",
-            infoText: "💡 You will be asked to approve the spending first, then confirm the deposit.",
-            footerDesc: "Decentralized human verification",
-            footerProduct: "Product",
-            footerHowItWorks: "How it works",
-            footerPricing: "Pricing",
-            footerVerify: "Verify",
-            footerResources: "Resources",
-            footerDocs: "Documentation",
-            footerDemo: "Testnet Demo",
-            footerEarly: "Early Access",
-            footerDeposit: "Deposit",
-            footerContact: "Contact",
-            footerCopyright: "© 2026 Humanhood. All rights reserved."
+            infoText: "💡 You will be asked to approve the spending first, then confirm the deposit."
         }
     };
 
-    let currentLang = "es";
+    let currentDepositLang = "es";
 
-    function applyLanguage(lang) {
-        currentLang = lang;
-        document.documentElement.lang = lang;
-        localStorage.setItem('humanhood_lang_deposit', lang);
-        
+    function applyDepositLanguage(lang) {
+        currentDepositLang = lang;
         document.querySelectorAll('[class*="i18n-"]').forEach(el => {
             const classes = el.className.split(' ');
             const i18nClass = classes.find(c => c.startsWith('i18n-'));
-            if (i18nClass && translationsDeposit[lang][i18nClass.replace('i18n-', '')]) {
-                if (el.tagName === 'BUTTON') el.innerHTML = translationsDeposit[lang][i18nClass.replace('i18n-', '')];
-                else el.innerHTML = translationsDeposit[lang][i18nClass.replace('i18n-', '')];
+            if (i18nClass && depositTranslations[lang][i18nClass.replace('i18n-', '')]) {
+                el.innerHTML = depositTranslations[lang][i18nClass.replace('i18n-', '')];
             }
         });
     }
 
-    const savedLang = localStorage.getItem('humanhood_lang_deposit') || (navigator.language.startsWith('es') ? 'es' : 'en');
-    if(document.getElementById('languageSelect')) {
-        document.getElementById('languageSelect').value = savedLang;
-        document.getElementById('languageSelect').addEventListener('change', (e) => applyLanguage(e.target.value));
+    const langSelect = document.getElementById('languageSelect');
+    if (langSelect) {
+        langSelect.addEventListener('change', (e) => {
+            applyDepositLanguage(e.target.value);
+        });
     }
-    applyLanguage(savedLang);
+    
+    // Detectar idioma inicial
+    const savedLangDeposit = localStorage.getItem('humanhood_lang_early') || (navigator.language.startsWith('es') ? 'es' : 'en');
+    if (langSelect) langSelect.value = savedLangDeposit;
+    applyDepositLanguage(savedLangDeposit);
 
     // ==================== LÓGICA DE DEPÓSITO ====================
     let currentNetwork = "polygon";
@@ -367,19 +444,6 @@
             else { userAddress = accounts[0]; document.getElementById("walletAddress").textContent = userAddress.slice(0,8)+"..."+userAddress.slice(-6); updateBalance(); }
         });
     }
-
-    // Menú hamburguesa
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const closeMenuBtn = document.getElementById('closeMenuBtn');
-    if (hamburgerBtn) hamburgerBtn.onclick = () => mobileMenu.classList.add('open');
-    if (closeMenuBtn) closeMenuBtn.onclick = () => mobileMenu.classList.remove('open');
-    document.querySelectorAll('.mobile-menu-links a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.remove('open')));
-    document.addEventListener('click', (e) => {
-        if (mobileMenu && mobileMenu.classList.contains('open')) {
-            if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) mobileMenu.classList.remove('open');
-        }
-    });
 </script>
 </body>
 </html>
