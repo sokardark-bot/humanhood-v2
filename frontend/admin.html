@@ -4,12 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Humanhood | Panel de Administración</title>
+    <meta name="description" content="Panel de administración de Humanhood">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f1f5f9; padding: 40px 20px; }
-        .container { max-width: 1400px; margin: 0 auto; }
+        /* Estilos específicos del panel de administración */
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+        }
         .card { background: #1e293b; border-radius: 16px; padding: 24px; margin-bottom: 24px; }
-        .login-card { max-width: 500px; margin: 100px auto; text-align: center; }
+        .login-card { max-width: 500px; margin: 100px auto; text-align: center; background: #1e293b; border-radius: 16px; padding: 40px; }
         .btn { padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; }
         .btn-sm { padding: 6px 12px; font-size: 0.7rem; }
         .btn-danger { background: #ef4444; }
@@ -36,19 +42,83 @@
         .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .modal-content { background: #1e293b; padding: 24px; border-radius: 16px; max-width: 400px; width: 90%; }
         .modal-content input, .modal-content textarea { width: 100%; margin: 8px 0; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; }
-        @media (max-width: 768px) { th, td { font-size: 0.7rem; padding: 8px; } .add-client-form { flex-direction: column; } .add-client-form input { width: 100%; } }
+        @media (max-width: 768px) { .admin-container { padding: 80px 16px 40px; } th, td { font-size: 0.7rem; padding: 8px; } .add-client-form { flex-direction: column; } .add-client-form input { width: 100%; } }
     </style>
 </head>
 <body>
-    <div id="loginContainer" class="container">
-        <div class="card login-card">
-            <svg width="60" height="60" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 20px;">
+
+<!-- LANGUAGE SELECTOR -->
+<div class="language-selector">
+    <span>🌐</span>
+    <select id="languageSelect">
+        <option value="es">🇪🇸 Español</option>
+        <option value="en">🇬🇧 English</option>
+    </select>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="container">
+        <div class="nav-logo" onclick="location.href='index.html'">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
                 <circle cx="16" cy="11" r="5" stroke="url(#grad)" stroke-width="2" fill="none"/>
                 <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad)"/>
                 <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad)"/>
                 <circle cx="10" cy="22" r="2" fill="url(#grad)"/>
                 <circle cx="22" cy="22" r="2" fill="url(#grad)"/>
                 <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
+            </svg>
+            <span class="logo-text">Humanhood</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="i18n-navWeb">Web</a>
+            <a href="docs.html" class="i18n-navDocs">Documentación</a>
+            <a href="deposit.html" class="i18n-navDeposit">Depósito</a>
+            <a href="early-access.html" class="i18n-navEarly">Early Access</a>
+            <a href="demo.html" class="i18n-navDemo">Demo</a>
+            <a href="contact.html" class="i18n-navContact">Contacto</a>
+        </div>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-cta">
+            <a href="index.html#verificar" class="btn btn-outline i18n-navVerifyBtn">Verificar</a>
+            <a href="index.html#precios" class="btn btn-primary i18n-navIntegrateBtn">Integrar</a>
+        </div>
+    </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <span class="logo-text">Humanhood</span>
+        <button id="closeMenuBtn" class="close-menu">✕</button>
+    </div>
+    <div class="mobile-menu-links">
+        <a href="index.html" class="i18n-navWeb">Web</a>
+        <a href="docs.html" class="i18n-navDocs">Documentación</a>
+        <a href="deposit.html" class="i18n-navDeposit">Depósito</a>
+        <a href="early-access.html" class="i18n-navEarly">Early Access</a>
+        <a href="demo.html" class="i18n-navDemo">Demo</a>
+        <a href="contact.html" class="i18n-navContact">Contacto</a>
+        <div class="mobile-menu-cta">
+            <a href="index.html#verificar" class="btn btn-outline i18n-navVerifyBtn">Verificar</a>
+            <a href="index.html#precios" class="btn btn-primary i18n-navIntegrateBtn">Integrar</a>
+        </div>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main class="admin-container">
+    <!-- PANTALLA DE LOGIN -->
+    <div id="loginContainer">
+        <div class="login-card">
+            <svg width="60" height="60" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 20px;">
+                <circle cx="16" cy="11" r="5" stroke="url(#gradLogin)" stroke-width="2" fill="none"/>
+                <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#gradLogin)"/>
+                <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#gradLogin)"/>
+                <circle cx="10" cy="22" r="2" fill="url(#gradLogin)"/>
+                <circle cx="22" cy="22" r="2" fill="url(#gradLogin)"/>
+                <defs><linearGradient id="gradLogin" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
             </svg>
             <h2>🔐 Panel de Administración</h2>
             <p style="color: #94a3b8; margin: 16px 0;">Acceso exclusivo para el equipo de Humanhood</p>
@@ -57,16 +127,17 @@
         </div>
     </div>
 
-    <div id="adminContainer" class="container hidden">
+    <!-- PANTALLA DE ADMIN (oculta hasta login) -->
+    <div id="adminContainer" class="hidden">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
             <div style="display: flex; align-items: center; gap: 12px;">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="16" cy="11" r="5" stroke="url(#grad2)" stroke-width="2" fill="none"/>
-                    <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad2)"/>
-                    <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad2)"/>
-                    <circle cx="10" cy="22" r="2" fill="url(#grad2)"/>
-                    <circle cx="22" cy="22" r="2" fill="url(#grad2)"/>
-                    <defs><linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
+                    <circle cx="16" cy="11" r="5" stroke="url(#gradAdmin)" stroke-width="2" fill="none"/>
+                    <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#gradAdmin)"/>
+                    <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#gradAdmin)"/>
+                    <circle cx="10" cy="22" r="2" fill="url(#gradAdmin)"/>
+                    <circle cx="22" cy="22" r="2" fill="url(#gradAdmin)"/>
+                    <defs><linearGradient id="gradAdmin" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
                 </svg>
                 <h2>📊 Panel de Administración</h2>
             </div>
@@ -119,233 +190,264 @@
             </div>
         </div>
     </div>
+</main>
 
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <script>
-        // ==================== CONFIGURACIÓN ====================
-        const CONTRACTS = {
-            polygon: {
-                address: "0x2A7396876a13812fEFc5773094f217d5380FEeB9",
-                usdc: "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
-                rpc: "https://polygon-rpc.com",
-                explorer: "https://polygonscan.com",
-                name: "🟣 Polygon Mainnet"
-            },
-            bnb: {
-                address: "0xeCB6D54ac87D99b104535f95d5c38Bf48F2CCf4b",
-                usdc: "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
-                rpc: "https://bsc-dataseed.binance.org/",
-                explorer: "https://bscscan.com",
-                name: "🟡 BNB Chain"
-            }
-        };
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-columns">
+            <div class="footer-col"><h4 class="i18n-footerProduct">Producto</h4><a href="index.html#producto" class="i18n-footerHowItWorks">Cómo funciona</a><a href="index.html#precios" class="i18n-footerPricing">Precios</a><a href="index.html#verificar" class="i18n-footerVerify">Verificar</a><a href="index.html#faq" class="i18n-footerFaq">Preguntas frecuentes</a></div>
+            <div class="footer-col"><h4 class="i18n-footerDevs">Desarrolladores</h4><a href="docs.html" class="i18n-footerDocs">Documentación</a><a href="demo.html" class="i18n-footerDemo">Demo Testnet</a><a href="early-access.html" class="i18n-footerEarly">Early Access</a><a href="deposit.html" class="i18n-footerDeposit">Depósito USDC</a><a href="https://github.com/sokardark-bot/humanhood-v2/blob/main/contracts/HumanhoodPaid.sol" target="_blank" class="i18n-footerContract">Contrato inteligente</a></div>
+            <div class="footer-col"><h4 class="i18n-footerResources">Recursos</h4><a href="https://polygon.technology/" target="_blank" class="i18n-footerPolygon">Polygon</a><a href="https://www.bnbchain.org/" target="_blank" class="i18n-footerBNB">BNB Chain</a><a href="https://ethereum.org/" target="_blank" class="i18n-footerEthereum">Ethereum</a><a href="https://passport.gitcoin.co/" target="_blank" class="i18n-footerPassport">Gitcoin Passport</a><a href="https://www.cloudflare.com/products/turnstile/" target="_blank" class="i18n-footerTurnstile">Cloudflare Turnstile</a></div>
+            <div class="footer-col"><h4 class="i18n-footerLegal">Legal</h4><a href="#" class="i18n-footerTerms">Términos de servicio</a><a href="#" class="i18n-footerPrivacy">Política de privacidad</a><a href="#" class="i18n-footerCookies">Política de cookies</a><a href="#" class="i18n-footerGDPR">GDPR / RGPD</a></div>
+            <div class="footer-col"><h4 class="i18n-footerContact">Contacto</h4><a href="mailto:info@humanhood.tech">info@humanhood.tech</a><a href="contact.html">Formulario de contacto</a><a href="#" class="i18n-footerSupport">Soporte técnico</a><a href="#" class="i18n-footerPartners">Asóciate con nosotros</a></div>
+            <div class="footer-col"><h4 class="i18n-footerSocial">Redes Sociales</h4><a href="https://twitter.com/humanhood" target="_blank" class="i18n-footerTwitter">Twitter</a><a href="https://github.com/sokardark-bot/humanhood-v2" target="_blank" class="i18n-footerGitHub">GitHub</a><a href="https://discord.gg/humanhood" target="_blank" class="i18n-footerDiscord">Discord</a><a href="https://t.me/humanhood" target="_blank" class="i18n-footerTelegram">Telegram</a></div>
+        </div>
+        <div class="footer-bottom"><p class="i18n-footerCopyright">&copy; 2026 Humanhood. Todos los derechos reservados.</p></div>
+        <div class="footer-badges"><span>⚡ Polygon</span><span>🔷 BNB Chain</span><span>🔶 Web3</span></div>
+    </div>
+</footer>
 
-        const OWNER_WALLET = "0xED022975870410189Ba6d72183A989463E563bBE".toLowerCase();
-        const CONTRACT_ABI = [
-            "function checkHuman(address) view returns (bool)",
-            "function balanceOf(address) view returns (uint256)",
-            "function depositUSDC(uint256) external",
-            "function withdrawUSDC(address, uint256) external",
-            "function owner() view returns (address)"
-        ];
-        const USDC_ABI = [
-            "function balanceOf(address) view returns (uint256)",
-            "function decimals() view returns (uint8)"
-        ];
-
-        let currentWallet = null;
-        let clients = [];
-        let providerCache = {};
-
-        function getProvider(network) {
-            if (!providerCache[network]) {
-                providerCache[network] = new ethers.providers.JsonRpcProvider(CONTRACTS[network].rpc);
-            }
-            return providerCache[network];
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script src="app.js"></script>
+<script>
+    // ==================== PANEL DE ADMINISTRACIÓN ====================
+    const CONTRACTS = {
+        polygon: {
+            address: "0x2A7396876a13812fEFc5773094f217d5380FEeB9",
+            usdc: "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+            rpc: "https://polygon-rpc.com",
+            explorer: "https://polygonscan.com",
+            name: "🟣 Polygon Mainnet"
+        },
+        bnb: {
+            address: "0xeCB6D54ac87D99b104535f95d5c38Bf48F2CCf4b",
+            usdc: "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
+            rpc: "https://bsc-dataseed.binance.org/",
+            explorer: "https://bscscan.com",
+            name: "🟡 BNB Chain"
         }
+    };
 
-        async function getContractBalance(address, network) {
-            try {
-                const provider = getProvider(network);
-                const usdcContract = new ethers.Contract(CONTRACTS[network].usdc, USDC_ABI, provider);
-                const decimals = await usdcContract.decimals();
-                const balance = await usdcContract.balanceOf(address);
-                return { balance: Number(balance) / 10**decimals, decimals };
-            } catch (e) {
-                console.error(`Error obteniendo balance de ${address} en ${network}:`, e);
-                return { balance: 0, decimals: 6 };
-            }
+    const OWNER_WALLET = "0xED022975870410189Ba6d72183A989463E563bBE".toLowerCase();
+    const CONTRACT_ABI = [
+        "function checkHuman(address) view returns (bool)",
+        "function balanceOf(address) view returns (uint256)",
+        "function depositUSDC(uint256) external",
+        "function withdrawUSDC(address, uint256) external",
+        "function owner() view returns (address)"
+    ];
+    const USDC_ABI = [
+        "function balanceOf(address) view returns (uint256)",
+        "function decimals() view returns (uint8)"
+    ];
+
+    let currentWallet = null;
+    let clients = [];
+    let providerCache = {};
+
+    function getProvider(network) {
+        if (!providerCache[network]) {
+            providerCache[network] = new ethers.providers.JsonRpcProvider(CONTRACTS[network].rpc);
         }
+        return providerCache[network];
+    }
 
-        async function getConsultas(address, network) {
-            try {
-                const provider = getProvider(network);
-                const contract = new ethers.Contract(CONTRACTS[network].address, CONTRACT_ABI, provider);
-                const balanceUSDCRaw = await contract.balanceOf(address);
-                const { decimals } = await getContractBalance(address, network);
-                const saldoUSDC = Number(balanceUSDCRaw) / 10**decimals;
-                const consultas = Math.floor(saldoUSDC / 0.05);
-                return { consultas, saldoUSDC };
-            } catch (e) {
-                console.error(`Error obteniendo consultas de ${address} en ${network}:`, e);
-                return { consultas: 0, saldoUSDC: 0 };
-            }
+    async function getContractBalance(address, network) {
+        try {
+            const provider = getProvider(network);
+            const usdcContract = new ethers.Contract(CONTRACTS[network].usdc, USDC_ABI, provider);
+            const decimals = await usdcContract.decimals();
+            const balance = await usdcContract.balanceOf(address);
+            return { balance: Number(balance) / 10**decimals, decimals };
+        } catch (e) {
+            console.error(`Error obteniendo balance de ${address} en ${network}:`, e);
+            return { balance: 0, decimals: 6 };
         }
+    }
 
-        async function updateClientData(client) {
-            const { saldoUSDC, consultas } = await getConsultas(client.address, client.network);
-            client.saldoUSDC = saldoUSDC;
-            client.consultas = consultas;
-            client.estado = consultas > 0 ? "Activo" : "Sin saldo";
-            client.ultimaActualizacion = new Date().toISOString();
-            return client;
+    async function getConsultas(address, network) {
+        try {
+            const provider = getProvider(network);
+            const contract = new ethers.Contract(CONTRACTS[network].address, CONTRACT_ABI, provider);
+            const balanceUSDCRaw = await contract.balanceOf(address);
+            const { decimals } = await getContractBalance(address, network);
+            const saldoUSDC = Number(balanceUSDCRaw) / 10**decimals;
+            const consultas = Math.floor(saldoUSDC / 0.05);
+            return { consultas, saldoUSDC };
+        } catch (e) {
+            console.error(`Error obteniendo consultas de ${address} en ${network}:`, e);
+            return { consultas: 0, saldoUSDC: 0 };
         }
+    }
 
-        function filterClients() {
-            const networkFilter = document.getElementById("filterNetwork").value;
-            const searchTerm = document.getElementById("filterSearch").value.toLowerCase();
-            return clients.filter(c => 
-                (networkFilter === "all" || c.network === networkFilter) &&
-                (c.name.toLowerCase().includes(searchTerm) || c.address.toLowerCase().includes(searchTerm))
-            );
-        }
+    async function updateClientData(client) {
+        const { saldoUSDC, consultas } = await getConsultas(client.address, client.network);
+        client.saldoUSDC = saldoUSDC;
+        client.consultas = consultas;
+        client.estado = consultas > 0 ? "Activo" : "Sin saldo";
+        client.ultimaActualizacion = new Date().toISOString();
+        return client;
+    }
 
-        async function renderTable() {
-            const tbody = document.getElementById("clientsTableBody");
-            const filtered = filterClients();
-            tbody.innerHTML = "";
-            
-            for (const client of filtered) {
-                await updateClientData(client);
-                const row = tbody.insertRow();
-                row.innerHTML = `
-                    <td><strong>${client.name || "—"}</strong></td>
-                    <td style="font-family: monospace; font-size: 0.75rem;">${client.address.slice(0,8)}...${client.address.slice(-6)}</td>
-                    <td><span class="network-badge ${client.network === 'polygon' ? 'network-polygon' : 'network-bnb'}">${CONTRACTS[client.network].name}</span></td>
-                    <td>${client.saldoUSDC.toFixed(2)} USDC</td>
-                    <td>${client.consultas.toLocaleString()}</td>
-                    <td class="${client.consultas > 0 ? 'status-active' : 'status-warning'}">${client.estado}</td>
-                    <td><span style="font-size: 0.7rem;">${client.notas ? (client.notas.length > 30 ? client.notas.slice(0,30)+"..." : client.notas) : "—"}</span></td>
-                    <td><button class="edit-btn" data-index="${clients.indexOf(client)}" title="Editar">✏️</button><button class="delete-btn" data-index="${clients.indexOf(client)}" title="Eliminar">🗑️</button></td>
-                `;
-            }
-            attachButtonEvents();
-            updateStats();
-        }
+    function filterClients() {
+        const networkFilter = document.getElementById("filterNetwork").value;
+        const searchTerm = document.getElementById("filterSearch").value.toLowerCase();
+        return clients.filter(c => 
+            (networkFilter === "all" || c.network === networkFilter) &&
+            (c.name.toLowerCase().includes(searchTerm) || c.address.toLowerCase().includes(searchTerm))
+        );
+    }
 
-        function attachButtonEvents() {
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.onclick = () => editClient(parseInt(btn.dataset.index));
-            });
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.onclick = () => deleteClient(parseInt(btn.dataset.index));
-            });
-        }
-
-        async function updateStats() {
-            let totalDepositado = 0;
-            let totalConsultas = 0;
-            let polygonClients = 0;
-            let bnbClients = 0;
-            
-            for (const client of clients) {
-                await updateClientData(client);
-                totalDepositado += client.saldoUSDC;
-                totalConsultas += client.consultas;
-                if (client.network === 'polygon') polygonClients++;
-                else bnbClients++;
-            }
-            
-            document.getElementById("statsGrid").innerHTML = `
-                <div class="stat-card"><div class="stat-number">${clients.length}</div><div>Clientes totales</div></div>
-                <div class="stat-card"><div class="stat-number">${polygonClients}</div><div>🟣 Polygon</div></div>
-                <div class="stat-card"><div class="stat-number">${bnbClients}</div><div>🟡 BNB Chain</div></div>
-                <div class="stat-card"><div class="stat-number">$${totalDepositado.toFixed(2)}</div><div>USDC depositado</div></div>
-                <div class="stat-card"><div class="stat-number">${totalConsultas.toLocaleString()}</div><div>Consultas realizadas</div></div>
-                <div class="stat-card"><div class="stat-number">$${(totalDepositado * 0.05).toFixed(2)}</div><div>Ingresos potenciales</div></div>
+    async function renderTable() {
+        const tbody = document.getElementById("clientsTableBody");
+        const filtered = filterClients();
+        tbody.innerHTML = "";
+        
+        for (const client of filtered) {
+            await updateClientData(client);
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td><strong>${client.name || "—"}</strong></td>
+                <td style="font-family: monospace; font-size: 0.75rem;">${client.address.slice(0,8)}...${client.address.slice(-6)}</td>
+                <td><span class="network-badge ${client.network === 'polygon' ? 'network-polygon' : 'network-bnb'}">${CONTRACTS[client.network].name}</span></td>
+                <td>${client.saldoUSDC.toFixed(2)} USDC</td>
+                <td>${client.consultas.toLocaleString()}</td>
+                <td class="${client.consultas > 0 ? 'status-active' : 'status-warning'}">${client.estado}</td>
+                <td><span style="font-size: 0.7rem;">${client.notas ? (client.notas.length > 30 ? client.notas.slice(0,30)+"..." : client.notas) : "—"}</span></td>
+                <td><button class="edit-btn" data-index="${clients.indexOf(client)}" title="Editar">✏️</button><button class="delete-btn" data-index="${clients.indexOf(client)}" title="Eliminar">🗑️</button></td>
             `;
         }
+        attachButtonEvents();
+        updateStats();
+    }
 
-        function editClient(index) {
-            const client = clients[index];
-            const newName = prompt("Nombre de la empresa:", client.name);
-            const newNotes = prompt("Notas adicionales (contacto, proyecto, etc.):", client.notes);
-            if (newName !== null) client.name = newName;
-            if (newNotes !== null) client.notes = newNotes;
+    function attachButtonEvents() {
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.onclick = () => editClient(parseInt(btn.dataset.index));
+        });
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.onclick = () => deleteClient(parseInt(btn.dataset.index));
+        });
+    }
+
+    async function updateStats() {
+        let totalDepositado = 0;
+        let totalConsultas = 0;
+        let polygonClients = 0;
+        let bnbClients = 0;
+        
+        for (const client of clients) {
+            await updateClientData(client);
+            totalDepositado += client.saldoUSDC;
+            totalConsultas += client.consultas;
+            if (client.network === 'polygon') polygonClients++;
+            else bnbClients++;
+        }
+        
+        document.getElementById("statsGrid").innerHTML = `
+            <div class="stat-card"><div class="stat-number">${clients.length}</div><div>Clientes totales</div></div>
+            <div class="stat-card"><div class="stat-number">${polygonClients}</div><div>🟣 Polygon</div></div>
+            <div class="stat-card"><div class="stat-number">${bnbClients}</div><div>🟡 BNB Chain</div></div>
+            <div class="stat-card"><div class="stat-number">$${totalDepositado.toFixed(2)}</div><div>USDC depositado</div></div>
+            <div class="stat-card"><div class="stat-number">${totalConsultas.toLocaleString()}</div><div>Consultas realizadas</div></div>
+            <div class="stat-card"><div class="stat-number">$${(totalDepositado * 0.05).toFixed(2)}</div><div>Ingresos potenciales</div></div>
+        `;
+    }
+
+    function editClient(index) {
+        const client = clients[index];
+        const newName = prompt("Nombre de la empresa:", client.name);
+        const newNotes = prompt("Notas adicionales (contacto, proyecto, etc.):", client.notes);
+        if (newName !== null) client.name = newName;
+        if (newNotes !== null) client.notes = newNotes;
+        saveClients();
+        renderTable();
+    }
+
+    function deleteClient(index) {
+        if (confirm(`¿Eliminar a "${clients[index].name || clients[index].address.slice(0,10)}..."?`)) {
+            clients.splice(index, 1);
             saveClients();
             renderTable();
         }
+    }
 
-        function deleteClient(index) {
-            if (confirm(`¿Eliminar a "${clients[index].name || clients[index].address.slice(0,10)}..."?`)) {
-                clients.splice(index, 1);
-                saveClients();
-                renderTable();
-            }
+    function saveClients() {
+        localStorage.setItem('humanhood_admin_clients', JSON.stringify(clients));
+    }
+
+    function loadClients() {
+        const saved = localStorage.getItem('humanhood_admin_clients');
+        if (saved) {
+            clients = JSON.parse(saved);
+        } else {
+            clients = [];
         }
+        renderTable();
+    }
 
-        function saveClients() {
-            localStorage.setItem('humanhood_admin_clients', JSON.stringify(clients));
+    document.getElementById("addClientBtn").onclick = async () => {
+        const name = document.getElementById("newClientName").value.trim();
+        const address = document.getElementById("newClientAddress").value.trim();
+        const network = document.getElementById("newClientNetwork").value;
+        
+        if (!address) { alert("Dirección wallet requerida"); return; }
+        if (!address.startsWith("0x")) { alert("Dirección no válida"); return; }
+        if (clients.find(c => c.address.toLowerCase() === address.toLowerCase() && c.network === network)) {
+            alert("Este cliente ya existe en esta red");
+            return;
         }
+        
+        clients.push({
+            address: address,
+            name: name || "Cliente sin nombre",
+            network: network,
+            notas: "",
+            saldoUSDC: 0,
+            consultas: 0,
+            estado: "Sin saldo"
+        });
+        saveClients();
+        renderTable();
+        document.getElementById("newClientName").value = "";
+        document.getElementById("newClientAddress").value = "";
+    };
 
-        function loadClients() {
-            const saved = localStorage.getItem('humanhood_admin_clients');
-            if (saved) {
-                clients = JSON.parse(saved);
-            } else {
-                clients = [];
-            }
-            renderTable();
-        }
+    document.getElementById("filterNetwork").onchange = () => renderTable();
+    document.getElementById("filterSearch").oninput = () => renderTable();
 
-        document.getElementById("addClientBtn").onclick = async () => {
-            const name = document.getElementById("newClientName").value.trim();
-            const address = document.getElementById("newClientAddress").value.trim();
-            const network = document.getElementById("newClientNetwork").value;
+    async function login() {
+        if (!window.ethereum) { document.getElementById('authStatus').innerHTML = '❌ Instala MetaMask'; return; }
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const wallet = accounts[0].toLowerCase();
+            if (wallet !== OWNER_WALLET) { document.getElementById('authStatus').innerHTML = '❌ Acceso denegado. No eres el administrador.'; return; }
             
-            if (!address) { alert("Dirección wallet requerida"); return; }
-            if (!address.startsWith("0x")) { alert("Dirección no válida"); return; }
-            if (clients.find(c => c.address.toLowerCase() === address.toLowerCase() && c.network === network)) {
-                alert("Este cliente ya existe en esta red");
-                return;
-            }
+            currentWallet = wallet;
+            document.getElementById('loginContainer').classList.add('hidden');
+            document.getElementById('adminContainer').classList.remove('hidden');
+            document.getElementById('walletDisplay').innerHTML = `👑 ${wallet.slice(0,8)}...${wallet.slice(-6)}`;
             
-            clients.push({
-                address: address,
-                name: name || "Cliente sin nombre",
-                network: network,
-                notas: "",
-                saldoUSDC: 0,
-                consultas: 0,
-                estado: "Sin saldo"
-            });
-            saveClients();
-            renderTable();
-            document.getElementById("newClientName").value = "";
-            document.getElementById("newClientAddress").value = "";
-        };
+            loadClients();
+        } catch(e) { document.getElementById('authStatus').innerHTML = '❌ Error al conectar'; }
+    }
 
-        document.getElementById("filterNetwork").onchange = () => renderTable();
-        document.getElementById("filterSearch").oninput = () => renderTable();
+    document.getElementById('connectAdminBtn').onclick = login;
+    document.getElementById('logoutBtn').onclick = () => { location.reload(); };
 
-        async function login() {
-            if (!window.ethereum) { document.getElementById('authStatus').innerHTML = '❌ Instala MetaMask'; return; }
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                const wallet = accounts[0].toLowerCase();
-                if (wallet !== OWNER_WALLET) { document.getElementById('authStatus').innerHTML = '❌ Acceso denegado. No eres el administrador.'; return; }
-                
-                currentWallet = wallet;
-                document.getElementById('loginContainer').classList.add('hidden');
-                document.getElementById('adminContainer').classList.remove('hidden');
-                document.getElementById('walletDisplay').innerHTML = `👑 ${wallet.slice(0,8)}...${wallet.slice(-6)}`;
-                
-                loadClients();
-            } catch(e) { document.getElementById('authStatus').innerHTML = '❌ Error al conectar'; }
+    // Menú hamburguesa
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    if (hamburgerBtn) hamburgerBtn.onclick = () => mobileMenu.classList.add('open');
+    if (closeMenuBtn) closeMenuBtn.onclick = () => mobileMenu.classList.remove('open');
+    document.querySelectorAll('.mobile-menu-links a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.remove('open')));
+    document.addEventListener('click', (e) => {
+        if (mobileMenu && mobileMenu.classList.contains('open')) {
+            if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) mobileMenu.classList.remove('open');
         }
-
-        document.getElementById('connectAdminBtn').onclick = login;
-        document.getElementById('logoutBtn').onclick = () => { location.reload(); };
-    </script>
+    });
+</script>
 </body>
 </html>
