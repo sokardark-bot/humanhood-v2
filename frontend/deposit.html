@@ -4,211 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Humanhood | Deposit USDC</title>
+    <meta name="description" content="Deposit USDC to use Humanhood API.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #ffffff; color: #1a1a2e; line-height: 1.5; }
-        .container { max-width: 800px; margin: 0 auto; padding: 100px 20px 40px; }
-        
-        /* NAVBAR */
-        .navbar { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; z-index: 1000; padding: 16px 0; }
-        .navbar .container-nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-        .nav-logo { display: flex; align-items: center; gap: 8px; font-size: 1.5rem; font-weight: 700; cursor: pointer; }
-        .logo-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .nav-links { display: flex; gap: 32px; }
-        .nav-links a { text-decoration: none; color: #4a5568; font-weight: 500; transition: color 0.3s; }
-        .nav-links a:hover { color: #667eea; }
-        .nav-cta { display: flex; gap: 12px; }
-        
-        .hamburger { display: none; flex-direction: column; justify-content: space-between; width: 30px; height: 21px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 1001; }
-        .hamburger span { width: 100%; height: 3px; background: #4a5568; border-radius: 3px; transition: all 0.3s ease; }
-        .mobile-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 2000; transform: translateX(-100%); transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
-        .mobile-menu.open { transform: translateX(0); }
-        .mobile-menu-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #e2e8f0; }
-        .mobile-menu-header .logo-text { font-size: 1.3rem; font-weight: 700; }
-        .close-menu { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #4a5568; }
-        .mobile-menu-links { display: flex; flex-direction: column; padding: 20px; gap: 20px; }
-        .mobile-menu-links a { text-decoration: none; color: #4a5568; font-size: 1.1rem; font-weight: 500; padding: 10px 0; border-bottom: 1px solid #e2e8f0; transition: color 0.3s; }
-        .mobile-menu-links a:hover { color: #667eea; }
-        .mobile-menu-cta { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .mobile-menu-cta .btn { text-align: center; }
-        
-        /* LANGUAGE SELECTOR - AISLADO Y FORZADO */
-        .language-selector { 
-            position: fixed !important; 
-            top: 80px !important; 
-            right: 20px !important; 
-            z-index: 9999 !important; 
-            background: white !important; 
-            border-radius: 50px !important; 
-            padding: 6px 12px !important; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important; 
-            font-size: 0.8rem !important; 
-            font-family: 'Inter', sans-serif !important;
-            border: 1px solid #e2e8f0 !important; 
-            display: inline-block !important;
-            width: auto !important;
-            height: auto !important;
+        .deposit-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 100px 20px 60px;
         }
-        .language-selector select { 
-            background: transparent !important; 
-            border: none !important; 
-            color: #667eea !important; 
-            font-weight: 500 !important; 
-            cursor: pointer !important; 
-            outline: none !important; 
-            font-family: 'Inter', sans-serif !important;
-            font-size: 0.8rem !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-        .language-selector span {
-            font-size: 0.8rem !important;
-        }
-        
-        .btn { display: inline-block; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; cursor: pointer; border: none; font-size: 0.9rem; }
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102,126,234,0.3); }
-        .btn-outline { background: transparent; border: 2px solid #e2e8f0; color: #4a5568; }
-        .btn-outline:hover { border-color: #667eea; color: #667eea; }
-        
-        /* ===== ESTILOS DE DEPÓSITO ===== */
         .deposit-card {
             background: #f8fafc;
-            border-radius: 32px;
-            padding: 48px;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .input-group {
-            margin: 20px 0;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #64748b;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        
-        input {
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 550px;
             width: 100%;
-            padding: 12px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            color: #1a1a2e;
-            font-size: 1rem;
-            outline: none;
-        }
-        
-        input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
-        }
-        
-        .balance-box {
-            background: #f1f5f9;
-            padding: 16px;
-            border-radius: 16px;
-            margin: 20px 0;
-            text-align: center;
             border: 1px solid #e2e8f0;
         }
-        
-        .balance-box .amount {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #22c55e;
-        }
-        
-        .status {
-            margin-top: 16px;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            display: none;
-        }
-        
-        .status.success {
-            background: #22c55e20;
-            color: #166534;
-            display: block;
-        }
-        
-        .status.error {
-            background: #ef444420;
-            color: #991b1b;
-            display: block;
-        }
-        
-        .status.info {
-            background: #3b82f620;
-            color: #1e40af;
-            display: block;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .network-selector {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .network-option {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            background: #f1f5f9;
-            border-radius: 12px;
-            cursor: pointer;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .network-option.selected {
-            border-color: #667eea;
-            background: #667eea10;
-        }
-        
-        .network-option.polygon.selected {
-            border-color: #a855f7;
-            background: #a855f710;
-        }
-        
-        .network-option.bnb.selected {
-            border-color: #f0b90b;
-            background: #f0b90b10;
-        }
-        
-        /* FOOTER */
-        .footer { background: #1a1a2e; color: white; padding: 48px 0 24px; margin-top: 48px; }
-        .footer .container-footer { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 48px; margin-bottom: 48px; }
-        .footer-brand p { margin-top: 8px; color: #a0aec0; }
-        .footer-links { display: flex; gap: 48px; flex-wrap: wrap; }
-        .footer-col h4 { margin-bottom: 16px; font-size: 1rem; color: white; }
-        .footer-col a { display: block; color: #a0aec0; text-decoration: none; margin-bottom: 12px; font-size: 0.9rem; transition: color 0.3s; }
-        .footer-col a:hover { color: #667eea; }
-        .footer-bottom { text-align: center; padding-top: 24px; border-top: 1px solid #2d3748; color: #718096; font-size: 0.8rem; }
-        
-        @media (max-width: 768px) {
-            .container { padding: 80px 16px 40px; }
-            .deposit-card { padding: 32px 24px; }
-            .nav-links, .nav-cta { display: none; }
-            .hamburger { display: flex; }
-            .language-selector { top: 70px !important; right: 10px !important; }
-        }
+        .input-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 8px; color: #64748b; font-size: 0.8rem; font-weight: 500; }
+        input { width: 100%; padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; color: #1a1a2e; font-size: 1rem; outline: none; }
+        input:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+        .balance-box { background: #f1f5f9; padding: 16px; border-radius: 16px; margin: 20px 0; text-align: center; border: 1px solid #e2e8f0; }
+        .balance-box .amount { font-size: 2rem; font-weight: 700; color: #22c55e; }
+        .status { margin-top: 16px; padding: 12px; border-radius: 12px; font-size: 0.8rem; display: none; }
+        .status.success { background: #22c55e20; color: #166534; display: block; }
+        .status.error { background: #ef444420; color: #991b1b; display: block; }
+        .status.info { background: #3b82f620; color: #1e40af; display: block; }
+        .hidden { display: none; }
+        .network-selector { display: flex; gap: 12px; margin-bottom: 20px; }
+        .network-option { flex: 1; text-align: center; padding: 10px; background: #f1f5f9; border-radius: 12px; cursor: pointer; border: 1px solid #e2e8f0; transition: all 0.3s; font-weight: 500; }
+        .network-option.selected { border-color: #667eea; background: #667eea10; }
+        .network-option.polygon.selected { border-color: #a855f7; background: #a855f710; }
+        .network-option.bnb.selected { border-color: #f0b90b; background: #f0b90b10; }
+        @media (max-width: 768px) { .deposit-container { padding: 80px 16px 40px; } .deposit-card { padding: 32px 24px; } }
     </style>
 </head>
 <body>
 
-<!-- LANGUAGE SELECTOR -->
 <div class="language-selector">
     <span>🌐</span>
     <select id="languageSelect">
@@ -217,9 +52,8 @@
     </select>
 </div>
 
-<!-- NAVBAR -->
 <nav class="navbar">
-    <div class="container-nav">
+    <div class="container">
         <div class="nav-logo" onclick="location.href='index.html'">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
                 <circle cx="16" cy="11" r="5" stroke="url(#grad)" stroke-width="2" fill="none"/>
@@ -243,13 +77,12 @@
             <span></span><span></span><span></span>
         </button>
         <div class="nav-cta">
-            <a href="index.html#verificar" class="btn btn-outline">Verificar</a>
-            <a href="index.html#precios" class="btn btn-primary">Integrar</a>
+            <a href="index.html#verificar" class="btn btn-outline i18n-navVerifyBtn">Verificar</a>
+            <a href="index.html#precios" class="btn btn-primary i18n-navIntegrateBtn">Integrar</a>
         </div>
     </div>
 </nav>
 
-<!-- MENÚ MÓVIL -->
 <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-header">
         <span class="logo-text">Humanhood</span>
@@ -263,17 +96,16 @@
         <a href="demo.html" class="i18n-navDemo">Demo</a>
         <a href="contact.html" class="i18n-navContact">Contacto</a>
         <div class="mobile-menu-cta">
-            <a href="index.html#verificar" class="btn btn-outline">Verificar</a>
-            <a href="index.html#precios" class="btn btn-primary">Integrar</a>
+            <a href="index.html#verificar" class="btn btn-outline i18n-navVerifyBtn">Verificar</a>
+            <a href="index.html#precios" class="btn btn-primary i18n-navIntegrateBtn">Integrar</a>
         </div>
     </div>
 </div>
 
-<!-- CONTENIDO PRINCIPAL -->
-<div class="container">
+<main class="deposit-container">
     <div class="deposit-card">
-        <h1 style="text-align: center;">💰 Depositar USDC</h1>
-        <p style="color: #64748b; text-align: center; margin-bottom: 32px;">Deposita saldo en tu cuenta de Humanhood</p>
+        <h1 style="text-align: center; font-size: 1.8rem; margin-bottom: 8px;">💰 Depositar USDC</h1>
+        <p style="color: #64748b; text-align: center; margin-bottom: 24px;">Deposita saldo en tu cuenta de Humanhood</p>
 
         <div class="network-selector">
             <div class="network-option polygon" data-network="polygon">🟣 Polygon</div>
@@ -297,31 +129,27 @@
         <div id="status" class="status"></div>
         <div class="status info" style="margin-top: 20px;">💡 Al depositar, se te pedirá aprobar primero el gasto y luego confirmar el depósito.</div>
     </div>
-</div>
+</main>
 
 <!-- FOOTER -->
 <footer class="footer">
-    <div class="container-footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="11" r="5" stroke="url(#gradF)" stroke-width="2" fill="none"/><path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#gradF)"/><path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#gradF)"/><circle cx="10" cy="22" r="2" fill="url(#gradF)"/><circle cx="22" cy="22" r="2" fill="url(#gradF)"/><defs><linearGradient id="gradF" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs></svg>
-                <span class="logo-text">Humanhood</span>
-                <p class="i18n-footerDesc">Verificación humana descentralizada</p>
-            </div>
-            <div class="footer-links">
-                <div class="footer-col"><h4 class="i18n-footerProduct">Producto</h4><a href="index.html#producto" class="i18n-footerHowItWorks">Cómo funciona</a><a href="index.html#precios" class="i18n-footerPricing">Precios</a><a href="index.html#verificar" class="i18n-footerVerify">Verificar</a></div>
-                <div class="footer-col"><h4 class="i18n-footerResources">Recursos</h4><a href="docs.html" class="i18n-footerDocs">Documentación</a><a href="demo.html" class="i18n-footerDemo">Demo Testnet</a><a href="early-access.html" class="i18n-footerEarly">Early Access</a><a href="deposit.html" class="i18n-footerDeposit">Depósito</a></div>
-                <div class="footer-col"><h4 class="i18n-footerContact">Contacto</h4><a href="mailto:info@humanhood.tech">info@humanhood.tech</a><a href="contact.html">Formulario</a></div>
-            </div>
+    <div class="container">
+        <div class="footer-columns">
+            <div class="footer-col"><h4 class="i18n-footerProduct">Producto</h4><a href="index.html#producto" class="i18n-footerHowItWorks">Cómo funciona</a><a href="index.html#precios" class="i18n-footerPricing">Precios</a><a href="index.html#verificar" class="i18n-footerVerify">Verificar</a><a href="index.html#faq" class="i18n-footerFaq">Preguntas frecuentes</a></div>
+            <div class="footer-col"><h4 class="i18n-footerDevs">Desarrolladores</h4><a href="docs.html" class="i18n-footerDocs">Documentación</a><a href="demo.html" class="i18n-footerDemo">Demo Testnet</a><a href="early-access.html" class="i18n-footerEarly">Early Access</a><a href="deposit.html" class="i18n-footerDeposit">Depósito USDC</a><a href="https://github.com/sokardark-bot/humanhood-v2/blob/main/contracts/HumanhoodPaid.sol" target="_blank" class="i18n-footerContract">Contrato inteligente</a></div>
+            <div class="footer-col"><h4 class="i18n-footerResources">Recursos</h4><a href="https://polygon.technology/" target="_blank" class="i18n-footerPolygon">Polygon</a><a href="https://www.bnbchain.org/" target="_blank" class="i18n-footerBNB">BNB Chain</a><a href="https://ethereum.org/" target="_blank" class="i18n-footerEthereum">Ethereum</a><a href="https://passport.gitcoin.co/" target="_blank" class="i18n-footerPassport">Gitcoin Passport</a><a href="https://www.cloudflare.com/products/turnstile/" target="_blank" class="i18n-footerTurnstile">Cloudflare Turnstile</a></div>
+            <div class="footer-col"><h4 class="i18n-footerLegal">Legal</h4><a href="#" class="i18n-footerTerms">Términos de servicio</a><a href="#" class="i18n-footerPrivacy">Política de privacidad</a><a href="#" class="i18n-footerCookies">Política de cookies</a><a href="#" class="i18n-footerGDPR">GDPR / RGPD</a></div>
+            <div class="footer-col"><h4 class="i18n-footerContact">Contacto</h4><a href="mailto:info@humanhood.tech">info@humanhood.tech</a><a href="contact.html">Formulario de contacto</a><a href="#" class="i18n-footerSupport">Soporte técnico</a><a href="#" class="i18n-footerPartners">Asóciate con nosotros</a></div>
+            <div class="footer-col"><h4 class="i18n-footerSocial">Redes Sociales</h4><a href="https://twitter.com/humanhood" target="_blank" class="i18n-footerTwitter">Twitter</a><a href="https://github.com/sokardark-bot/humanhood-v2" target="_blank" class="i18n-footerGitHub">GitHub</a><a href="https://discord.gg/humanhood" target="_blank" class="i18n-footerDiscord">Discord</a><a href="https://t.me/humanhood" target="_blank" class="i18n-footerTelegram">Telegram</a></div>
         </div>
         <div class="footer-bottom"><p class="i18n-footerCopyright">&copy; 2026 Humanhood. Todos los derechos reservados.</p></div>
+        <div class="footer-badges"><span>⚡ Polygon</span><span>🔷 BNB Chain</span><span>🔶 Web3</span></div>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script src="app.js"></script>
 <script>
-    // ==================== LÓGICA DE DEPÓSITO ====================
     let currentNetwork = "polygon";
     let provider, signer, userAddress;
     let usdcContract, humanhoodContract;
@@ -407,6 +235,18 @@
             else { userAddress = accounts[0]; document.getElementById("walletAddress").textContent = userAddress.slice(0,8)+"..."+userAddress.slice(-6); updateBalance(); }
         });
     }
+
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    if (hamburgerBtn) hamburgerBtn.onclick = () => mobileMenu.classList.add('open');
+    if (closeMenuBtn) closeMenuBtn.onclick = () => mobileMenu.classList.remove('open');
+    document.querySelectorAll('.mobile-menu-links a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.remove('open')));
+    document.addEventListener('click', (e) => {
+        if (mobileMenu && mobileMenu.classList.contains('open')) {
+            if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) mobileMenu.classList.remove('open');
+        }
+    });
 </script>
 </body>
 </html>
