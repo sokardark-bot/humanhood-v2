@@ -4,16 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Humanhood | Panel de Administración</title>
-    <meta name="description" content="Panel de administración de Humanhood">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Estilos específicos del panel de administración */
-        .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 100px 20px 40px;
-        }
+        .admin-container { max-width: 1400px; margin: 0 auto; padding: 100px 20px 40px; }
         .card { background: #1e293b; border-radius: 16px; padding: 24px; margin-bottom: 24px; }
         .login-card { max-width: 500px; margin: 100px auto; text-align: center; background: #1e293b; border-radius: 16px; padding: 40px; }
         .btn { padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; }
@@ -47,7 +41,6 @@
 </head>
 <body>
 
-<!-- LANGUAGE SELECTOR -->
 <div class="language-selector">
     <span>🌐</span>
     <select id="languageSelect">
@@ -56,7 +49,6 @@
     </select>
 </div>
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <div class="container">
         <div class="nav-logo" onclick="location.href='index.html'">
@@ -107,9 +99,7 @@
     </div>
 </div>
 
-<!-- CONTENIDO PRINCIPAL -->
 <main class="admin-container">
-    <!-- PANTALLA DE LOGIN -->
     <div id="loginContainer">
         <div class="login-card">
             <svg width="60" height="60" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 20px;">
@@ -120,14 +110,13 @@
                 <circle cx="22" cy="22" r="2" fill="url(#gradLogin)"/>
                 <defs><linearGradient id="gradLogin" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
             </svg>
-            <h2>🔐 Panel de Administración</h2>
-            <p style="color: #94a3b8; margin: 16px 0;">Acceso exclusivo para el equipo de Humanhood</p>
-            <button id="connectAdminBtn" class="btn">🔌 Conectar con MetaMask</button>
+            <h2 class="i18n-adminTitle">🔐 Panel de Administración</h2>
+            <p class="i18n-adminSubtitle" style="color: #94a3b8; margin: 16px 0;">Acceso exclusivo para el equipo de Humanhood</p>
+            <button id="connectAdminBtn" class="btn i18n-connectAdminBtn">🔌 Conectar con MetaMask</button>
             <div id="authStatus" style="margin-top: 16px;"></div>
         </div>
     </div>
 
-    <!-- PANTALLA DE ADMIN (oculta hasta login) -->
     <div id="adminContainer" class="hidden">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -139,50 +128,50 @@
                     <circle cx="22" cy="22" r="2" fill="url(#gradAdmin)"/>
                     <defs><linearGradient id="gradAdmin" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
                 </svg>
-                <h2>📊 Panel de Administración</h2>
+                <h2 class="i18n-adminPanelTitle">📊 Panel de Administración</h2>
             </div>
             <div>
                 <span id="walletDisplay" style="background: #0f172a; padding: 8px 16px; border-radius: 50px; font-family: monospace;"></span>
-                <button id="logoutBtn" style="margin-left: 12px; background: #ef4444; border: none; padding: 8px 16px; border-radius: 8px; color: white; cursor: pointer;">Cerrar sesión</button>
+                <button id="logoutBtn" class="i18n-logoutBtn" style="margin-left: 12px; background: #ef4444; border: none; padding: 8px 16px; border-radius: 8px; color: white; cursor: pointer;">Cerrar sesión</button>
             </div>
         </div>
 
         <div class="stats-grid" id="statsGrid"></div>
 
         <div class="card">
-            <h3>➕ Añadir nuevo cliente</h3>
+            <h3 class="i18n-addClientTitle">➕ Añadir nuevo cliente</h3>
             <div class="add-client-form">
-                <input type="text" id="newClientName" placeholder="Nombre/Empresa" autocomplete="off">
-                <input type="text" id="newClientAddress" placeholder="Dirección wallet (0x...)" autocomplete="off">
+                <input type="text" id="newClientName" class="i18n-namePlaceholder" placeholder="Nombre/Empresa" autocomplete="off">
+                <input type="text" id="newClientAddress" class="i18n-addressPlaceholder" placeholder="Dirección wallet (0x...)" autocomplete="off">
                 <select id="newClientNetwork">
-                    <option value="polygon">🟣 Polygon Mainnet</option>
-                    <option value="bnb">🟡 BNB Chain</option>
+                    <option value="polygon" class="i18n-polygonOption">🟣 Polygon Mainnet</option>
+                    <option value="bnb" class="i18n-bnbOption">🟡 BNB Chain</option>
                 </select>
-                <button id="addClientBtn" class="btn btn-sm">➕ Añadir</button>
+                <button id="addClientBtn" class="btn btn-sm i18n-addClientBtn">➕ Añadir</button>
             </div>
 
             <div class="filter-bar">
-                <label>🔍 Filtrar por red:</label>
+                <label class="i18n-filterLabel">🔍 Filtrar por red:</label>
                 <select id="filterNetwork">
-                    <option value="all">Todas</option>
-                    <option value="polygon">🟣 Polygon Mainnet</option>
-                    <option value="bnb">🟡 BNB Chain</option>
+                    <option value="all" class="i18n-allOption">Todas</option>
+                    <option value="polygon" class="i18n-polygonOption">🟣 Polygon Mainnet</option>
+                    <option value="bnb" class="i18n-bnbOption">🟡 BNB Chain</option>
                 </select>
-                <input type="text" id="filterSearch" placeholder="Buscar por nombre o dirección..." style="flex: 1;">
+                <input type="text" id="filterSearch" class="i18n-searchPlaceholder" placeholder="Buscar por nombre o dirección..." style="flex: 1;">
             </div>
 
             <div style="overflow-x: auto;">
                 <table id="clientsTable">
                     <thead>
                         <tr>
-                            <th>Empresa</th>
-                            <th>Dirección wallet</th>
-                            <th>Red</th>
-                            <th>Saldo depositado</th>
-                            <th>Consultas realizadas</th>
-                            <th>Estado</th>
-                            <th>Notas</th>
-                            <th>Acciones</th>
+                            <th class="i18n-tableCompany">Empresa</th>
+                            <th class="i18n-tableAddress">Dirección wallet</th>
+                            <th class="i18n-tableNetwork">Red</th>
+                            <th class="i18n-tableBalance">Saldo depositado</th>
+                            <th class="i18n-tableQueries">Consultas realizadas</th>
+                            <th class="i18n-tableStatus">Estado</th>
+                            <th class="i18n-tableNotes">Notas</th>
+                            <th class="i18n-tableActions">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="clientsTableBody"></tbody>
@@ -192,7 +181,6 @@
     </div>
 </main>
 
-<!-- FOOTER -->
 <footer class="footer">
     <div class="container">
         <div class="footer-columns">
@@ -209,9 +197,104 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-<script src="app.js"></script>
 <script>
-    // ==================== PANEL DE ADMINISTRACIÓN ====================
+    // ==================== TRADUCCIONES PARA ADMIN ====================
+    const translationsAdmin = {
+        es: {
+            navWeb: "Web", navDocs: "Documentación", navDeposit: "Depósito", navEarly: "Early Access", navDemo: "Demo", navContact: "Contacto",
+            navVerifyBtn: "Verificar", navIntegrateBtn: "Integrar",
+            adminTitle: "🔐 Panel de Administración",
+            adminSubtitle: "Acceso exclusivo para el equipo de Humanhood",
+            connectAdminBtn: "🔌 Conectar con MetaMask",
+            adminPanelTitle: "📊 Panel de Administración",
+            logoutBtn: "Cerrar sesión",
+            addClientTitle: "➕ Añadir nuevo cliente",
+            namePlaceholder: "Nombre/Empresa",
+            addressPlaceholder: "Dirección wallet (0x...)",
+            polygonOption: "🟣 Polygon Mainnet",
+            bnbOption: "🟡 BNB Chain",
+            addClientBtn: "➕ Añadir",
+            filterLabel: "🔍 Filtrar por red:",
+            allOption: "Todas",
+            searchPlaceholder: "Buscar por nombre o dirección...",
+            tableCompany: "Empresa",
+            tableAddress: "Dirección wallet",
+            tableNetwork: "Red",
+            tableBalance: "Saldo depositado",
+            tableQueries: "Consultas realizadas",
+            tableStatus: "Estado",
+            tableNotes: "Notas",
+            tableActions: "Acciones",
+            footerProduct: "Producto", footerHowItWorks: "Cómo funciona", footerPricing: "Precios", footerVerify: "Verificar", footerFaq: "Preguntas frecuentes",
+            footerDevs: "Desarrolladores", footerDocs: "Documentación", footerDemo: "Demo Testnet", footerEarly: "Early Access", footerDeposit: "Depósito USDC", footerContract: "Contrato inteligente",
+            footerResources: "Recursos", footerPolygon: "Polygon", footerBNB: "BNB Chain", footerEthereum: "Ethereum", footerPassport: "Gitcoin Passport", footerTurnstile: "Cloudflare Turnstile",
+            footerLegal: "Legal", footerTerms: "Términos de servicio", footerPrivacy: "Política de privacidad", footerCookies: "Política de cookies", footerGDPR: "GDPR / RGPD",
+            footerContact: "Contacto", footerSupport: "Soporte técnico", footerPartners: "Asóciate con nosotros",
+            footerSocial: "Redes Sociales", footerTwitter: "Twitter", footerGitHub: "GitHub", footerDiscord: "Discord", footerTelegram: "Telegram",
+            footerCopyright: "© 2026 Humanhood. Todos los derechos reservados."
+        },
+        en: {
+            navWeb: "Web", navDocs: "Documentation", navDeposit: "Deposit", navEarly: "Early Access", navDemo: "Demo", navContact: "Contact",
+            navVerifyBtn: "Verify", navIntegrateBtn: "Integrate",
+            adminTitle: "🔐 Admin Panel",
+            adminSubtitle: "Exclusive access for the Humanhood team",
+            connectAdminBtn: "🔌 Connect with MetaMask",
+            adminPanelTitle: "📊 Admin Panel",
+            logoutBtn: "Logout",
+            addClientTitle: "➕ Add new client",
+            namePlaceholder: "Name/Company",
+            addressPlaceholder: "Wallet address (0x...)",
+            polygonOption: "🟣 Polygon Mainnet",
+            bnbOption: "🟡 BNB Chain",
+            addClientBtn: "➕ Add",
+            filterLabel: "🔍 Filter by network:",
+            allOption: "All",
+            searchPlaceholder: "Search by name or address...",
+            tableCompany: "Company",
+            tableAddress: "Wallet address",
+            tableNetwork: "Network",
+            tableBalance: "Deposited balance",
+            tableQueries: "Queries made",
+            tableStatus: "Status",
+            tableNotes: "Notes",
+            tableActions: "Actions",
+            footerProduct: "Product", footerHowItWorks: "How it works", footerPricing: "Pricing", footerVerify: "Verify", footerFaq: "FAQ",
+            footerDevs: "Developers", footerDocs: "Documentation", footerDemo: "Testnet Demo", footerEarly: "Early Access", footerDeposit: "USDC Deposit", footerContract: "Smart Contract",
+            footerResources: "Resources", footerPolygon: "Polygon", footerBNB: "BNB Chain", footerEthereum: "Ethereum", footerPassport: "Gitcoin Passport", footerTurnstile: "Cloudflare Turnstile",
+            footerLegal: "Legal", footerTerms: "Terms of service", footerPrivacy: "Privacy policy", footerCookies: "Cookie policy", footerGDPR: "GDPR",
+            footerContact: "Contact", footerSupport: "Technical support", footerPartners: "Partner with us",
+            footerSocial: "Social Media", footerTwitter: "Twitter", footerGitHub: "GitHub", footerDiscord: "Discord", footerTelegram: "Telegram",
+            footerCopyright: "© 2026 Humanhood. All rights reserved."
+        }
+    };
+
+    let currentLangAdmin = "es";
+
+    function applyLanguageAdmin(lang) {
+        currentLangAdmin = lang;
+        document.documentElement.lang = lang;
+        localStorage.setItem('humanhood_lang_admin', lang);
+        
+        document.querySelectorAll('[class*="i18n-"]').forEach(el => {
+            const classes = el.className.split(' ');
+            const i18nClass = classes.find(c => c.startsWith('i18n-'));
+            if (i18nClass && translationsAdmin[lang][i18nClass.replace('i18n-', '')]) {
+                if (el.tagName === 'BUTTON') el.innerHTML = translationsAdmin[lang][i18nClass.replace('i18n-', '')];
+                else if (el.tagName === 'INPUT') el.placeholder = translationsAdmin[lang][i18nClass.replace('i18n-', '')];
+                else if (el.tagName === 'OPTION') el.text = translationsAdmin[lang][i18nClass.replace('i18n-', '')];
+                else el.innerHTML = translationsAdmin[lang][i18nClass.replace('i18n-', '')];
+            }
+        });
+    }
+
+    const savedLangAdmin = localStorage.getItem('humanhood_lang_admin') || (navigator.language.startsWith('es') ? 'es' : 'en');
+    if(document.getElementById('languageSelect')) {
+        document.getElementById('languageSelect').value = savedLangAdmin;
+        document.getElementById('languageSelect').addEventListener('change', (e) => applyLanguageAdmin(e.target.value));
+    }
+    applyLanguageAdmin(savedLangAdmin);
+
+    // ==================== LÓGICA DE ADMIN ====================
     const CONTRACTS = {
         polygon: {
             address: "0x2A7396876a13812fEFc5773094f217d5380FEeB9",
@@ -436,7 +519,6 @@
     document.getElementById('connectAdminBtn').onclick = login;
     document.getElementById('logoutBtn').onclick = () => { location.reload(); };
 
-    // Menú hamburguesa
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     const closeMenuBtn = document.getElementById('closeMenuBtn');

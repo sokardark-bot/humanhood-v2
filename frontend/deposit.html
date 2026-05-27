@@ -4,25 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Humanhood | Deposit USDC</title>
-    <meta name="description" content="Deposit USDC to use Humanhood API.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        .deposit-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 100px 20px 60px;
-        }
-        .deposit-card {
-            background: #f8fafc;
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 550px;
-            width: 100%;
-            border: 1px solid #e2e8f0;
-        }
+        .deposit-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 100px 20px 60px; }
+        .deposit-card { background: #f8fafc; border-radius: 24px; padding: 40px; max-width: 550px; width: 100%; border: 1px solid #e2e8f0; }
         .input-group { margin: 20px 0; }
         label { display: block; margin-bottom: 8px; color: #64748b; font-size: 0.8rem; font-weight: 500; }
         input { width: 100%; padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; color: #1a1a2e; font-size: 1rem; outline: none; }
@@ -104,8 +90,8 @@
 
 <main class="deposit-container">
     <div class="deposit-card">
-        <h1 style="text-align: center; font-size: 1.8rem; margin-bottom: 8px;">💰 Depositar USDC</h1>
-        <p style="color: #64748b; text-align: center; margin-bottom: 24px;">Deposita saldo en tu cuenta de Humanhood</p>
+        <h1 class="i18n-depositTitle" style="text-align: center; font-size: 1.8rem; margin-bottom: 8px;">💰 Depositar USDC</h1>
+        <p class="i18n-depositSubtitle" style="color: #64748b; text-align: center; margin-bottom: 24px;">Deposita saldo en tu cuenta de Humanhood</p>
 
         <div class="network-selector">
             <div class="network-option polygon" data-network="polygon">🟣 Polygon</div>
@@ -113,25 +99,24 @@
         </div>
 
         <div class="balance-box">
-            <div>💰 Tu USDC depositado</div>
+            <div class="i18n-balanceLabel">💰 Tu USDC depositado</div>
             <div class="amount" id="depositBalance">0.00</div>
             <div style="font-size: 0.7rem; color: #64748b;" id="walletAddress">No conectado</div>
         </div>
 
         <div class="input-group">
-            <label>📥 Cantidad a depositar (USDC)</label>
+            <label class="i18n-amountLabel">📥 Cantidad a depositar (USDC)</label>
             <input type="number" id="depositAmount" placeholder="Ej: 100" step="10" min="10">
         </div>
 
-        <button id="depositBtn" class="btn btn-primary" style="width: 100%;">📥 Depositar USDC</button>
-        <button id="connectBtn" class="btn btn-outline" style="width: 100%; margin-top: 12px;">🔌 Conectar Wallet</button>
+        <button id="depositBtn" class="btn btn-primary i18n-depositBtn" style="width: 100%;">📥 Depositar USDC</button>
+        <button id="connectBtn" class="btn btn-outline i18n-connectBtn" style="width: 100%; margin-top: 12px;">🔌 Conectar Wallet</button>
 
         <div id="status" class="status"></div>
-        <div class="status info" style="margin-top: 20px;">💡 Al depositar, se te pedirá aprobar primero el gasto y luego confirmar el depósito.</div>
+        <div class="status info i18n-infoText" style="margin-top: 20px;">💡 Al depositar, se te pedirá aprobar primero el gasto y luego confirmar el depósito.</div>
     </div>
 </main>
 
-<!-- FOOTER -->
 <footer class="footer">
     <div class="container">
         <div class="footer-columns">
@@ -148,8 +133,72 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-<script src="app.js"></script>
 <script>
+    // ==================== TRADUCCIONES PARA DEPÓSITO ====================
+    const translationsDeposit = {
+        es: {
+            navWeb: "Web", navDocs: "Documentación", navDeposit: "Depósito", navEarly: "Early Access", navDemo: "Demo", navContact: "Contacto",
+            navVerifyBtn: "Verificar", navIntegrateBtn: "Integrar",
+            depositTitle: "💰 Depositar USDC",
+            depositSubtitle: "Deposita saldo en tu cuenta de Humanhood",
+            balanceLabel: "💰 Tu USDC depositado",
+            amountLabel: "📥 Cantidad a depositar (USDC)",
+            depositBtn: "📥 Depositar USDC",
+            connectBtn: "🔌 Conectar Wallet",
+            infoText: "💡 Al depositar, se te pedirá aprobar primero el gasto y luego confirmar el depósito.",
+            footerProduct: "Producto", footerHowItWorks: "Cómo funciona", footerPricing: "Precios", footerVerify: "Verificar", footerFaq: "Preguntas frecuentes",
+            footerDevs: "Desarrolladores", footerDocs: "Documentación", footerDemo: "Demo Testnet", footerEarly: "Early Access", footerDeposit: "Depósito USDC", footerContract: "Contrato inteligente",
+            footerResources: "Recursos", footerPolygon: "Polygon", footerBNB: "BNB Chain", footerEthereum: "Ethereum", footerPassport: "Gitcoin Passport", footerTurnstile: "Cloudflare Turnstile",
+            footerLegal: "Legal", footerTerms: "Términos de servicio", footerPrivacy: "Política de privacidad", footerCookies: "Política de cookies", footerGDPR: "GDPR / RGPD",
+            footerContact: "Contacto", footerSupport: "Soporte técnico", footerPartners: "Asóciate con nosotros",
+            footerSocial: "Redes Sociales", footerTwitter: "Twitter", footerGitHub: "GitHub", footerDiscord: "Discord", footerTelegram: "Telegram",
+            footerCopyright: "© 2026 Humanhood. Todos los derechos reservados."
+        },
+        en: {
+            navWeb: "Web", navDocs: "Documentation", navDeposit: "Deposit", navEarly: "Early Access", navDemo: "Demo", navContact: "Contact",
+            navVerifyBtn: "Verify", navIntegrateBtn: "Integrate",
+            depositTitle: "💰 Deposit USDC",
+            depositSubtitle: "Deposit balance into your Humanhood account",
+            balanceLabel: "💰 Your deposited USDC",
+            amountLabel: "📥 Amount to deposit (USDC)",
+            depositBtn: "📥 Deposit USDC",
+            connectBtn: "🔌 Connect Wallet",
+            infoText: "💡 You will be asked to approve the spending first, then confirm the deposit.",
+            footerProduct: "Product", footerHowItWorks: "How it works", footerPricing: "Pricing", footerVerify: "Verify", footerFaq: "FAQ",
+            footerDevs: "Developers", footerDocs: "Documentation", footerDemo: "Testnet Demo", footerEarly: "Early Access", footerDeposit: "USDC Deposit", footerContract: "Smart Contract",
+            footerResources: "Resources", footerPolygon: "Polygon", footerBNB: "BNB Chain", footerEthereum: "Ethereum", footerPassport: "Gitcoin Passport", footerTurnstile: "Cloudflare Turnstile",
+            footerLegal: "Legal", footerTerms: "Terms of service", footerPrivacy: "Privacy policy", footerCookies: "Cookie policy", footerGDPR: "GDPR",
+            footerContact: "Contact", footerSupport: "Technical support", footerPartners: "Partner with us",
+            footerSocial: "Social Media", footerTwitter: "Twitter", footerGitHub: "GitHub", footerDiscord: "Discord", footerTelegram: "Telegram",
+            footerCopyright: "© 2026 Humanhood. All rights reserved."
+        }
+    };
+
+    let currentLangDeposit = "es";
+
+    function applyLanguageDeposit(lang) {
+        currentLangDeposit = lang;
+        document.documentElement.lang = lang;
+        localStorage.setItem('humanhood_lang_deposit', lang);
+        
+        document.querySelectorAll('[class*="i18n-"]').forEach(el => {
+            const classes = el.className.split(' ');
+            const i18nClass = classes.find(c => c.startsWith('i18n-'));
+            if (i18nClass && translationsDeposit[lang][i18nClass.replace('i18n-', '')]) {
+                if (el.tagName === 'BUTTON') el.innerHTML = translationsDeposit[lang][i18nClass.replace('i18n-', '')];
+                else el.innerHTML = translationsDeposit[lang][i18nClass.replace('i18n-', '')];
+            }
+        });
+    }
+
+    const savedLangDeposit = localStorage.getItem('humanhood_lang_deposit') || (navigator.language.startsWith('es') ? 'es' : 'en');
+    if(document.getElementById('languageSelect')) {
+        document.getElementById('languageSelect').value = savedLangDeposit;
+        document.getElementById('languageSelect').addEventListener('change', (e) => applyLanguageDeposit(e.target.value));
+    }
+    applyLanguageDeposit(savedLangDeposit);
+
+    // ==================== LÓGICA DE DEPÓSITO ====================
     let currentNetwork = "polygon";
     let provider, signer, userAddress;
     let usdcContract, humanhoodContract;
