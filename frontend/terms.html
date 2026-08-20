@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humanhood | Términos de servicio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .legal-container { max-width: 900px; margin: 0 auto; padding: 120px 20px 60px; }
+        .legal-card { background: #f8fafc; border-radius: 24px; padding: 48px; border: 1px solid #e2e8f0; }
+        .legal-card h1 { font-size: 2.2rem; margin-bottom: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .legal-card .last-updated { color: #94a3b8; font-size: 0.85rem; margin-bottom: 32px; }
+        .legal-card h2 { font-size: 1.3rem; color: #1a1a2e; margin-top: 32px; margin-bottom: 12px; }
+        .legal-card p { color: #334155; line-height: 1.7; margin-bottom: 16px; }
+        .legal-card ul { color: #334155; padding-left: 24px; margin-bottom: 16px; }
+        .legal-card ul li { margin-bottom: 8px; }
+        @media (max-width: 768px) { .legal-container { padding: 100px 16px 40px; } .legal-card { padding: 32px 24px; } .legal-card h1 { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+
+<div class="language-selector">
+    <span>🌐</span>
+    <select id="languageSelect">
+        <option value="es">🇪🇸 Español</option>
+        <option value="en">🇬🇧 English</option>
+    </select>
+</div>
+
+<nav class="navbar">
+    <div class="container">
+        <div class="nav-logo" onclick="location.href='index.html'">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="11" r="5" stroke="url(#grad)" stroke-width="2" fill="none"/>
+                <path d="M8 16 L12 13 L12 19 L8 16Z" fill="url(#grad)"/>
+                <path d="M24 16 L20 13 L20 19 L24 16Z" fill="url(#grad)"/>
+                <circle cx="10" cy="22" r="2" fill="url(#grad)"/>
+                <circle cx="22" cy="22" r="2" fill="url(#grad)"/>
+                <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient></defs>
+            </svg>
+            <span class="logo-text">Humanhood</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="i18n-navWeb">Web</a>
+            <a href="docs.html" class="i18n-navDocs">Documentación</a>
+            <a href="deposit.html" class="i18n-navDeposit">Depósito</a>
+            <a href="early-access.html" class="i18n-navEarly">Early Access</a>
+            <a href="demo.html" class="i18n-navDemo">Demo</a>
+            <a href="contact.html" class="i18n-navContact">Contacto</a>
+        </div>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-cta">
+            <a href="index.html#verificar" class="btn btn-outline i18n-navVerifyBtn">Verificar</a>
+            <a href="index.html#precios" class="btn btn-primary i18n-navIntegrateBtn">Integrar</a>
+        </div>
+    </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <span class="logo-text">Humanhood</span>
+        <button id="closeMenuBtn" class="close-menu">✕</button>
+    </div>
+    <div class="mobile-menu-links">
+        <a href="index.html" class="i18n-navWeb">Web</a>
+        <a href="docs.html" class="i18n-navDocs">Documentación</a>
+        <a href="deposit.html" class="i18n-navDeposit">Depósito</a>
+        <a href="early-access.html" class="i18n-navEarly">Early Access</a>
+        <a href="demo.html" class="i18n-navDemo">Demo</a>
+        <a href="contact.html" class="i18n-navContact">Contacto</a>
+        <div class="mobile-menu-cta">
+            <a href="index.html#verificar" class="btn btn-outline i18n-navVerifyBtn">Verificar</a>
+            <a href="index.html#precios" class="btn btn-primary i18n-navIntegrateBtn">Integrar</a>
+        </div>
+    </div>
+</div>
+
+<main class="legal-container">
+    <div class="legal-card">
+        <h1 class="i18n-termsTitle">📜 Términos de servicio</h1>
+        <p class="last-updated i18n-termsUpdated">Última actualización: <strong>15 de junio de 2026</strong></p>
+
+        <p class="i18n-termsIntro">Bienvenido a Humanhood. Al acceder o utilizar nuestro servicio, aceptas cumplir con los siguientes términos y condiciones.</p>
+
+        <h2 class="i18n-termsSection1">1. Aceptación de los términos</h2>
+        <p class="i18n-termsSection1Text">Al utilizar Humanhood, aceptas estos términos. Si no estás de acuerdo, no utilices nuestro servicio.</p>
+
+        <h2 class="i18n-termsSection2">2. Descripción del servicio</h2>
+        <p class="i18n-termsSection2Text">Humanhood proporciona una API de verificación humana descentralizada que permite a proyectos Web3 filtrar bots y sybils mediante Gitcoin Passport y otras herramientas.</p>
+
+        <h2 class="i18n-termsSection3">3. Uso del servicio</h2>
+        <ul class="i18n-termsSection3List">
+            <li>El usuario final se verifica una sola vez.</li>
+            <li>El proyecto cliente paga $0.05 por consulta en Polygon/BNB o $0.10 en Ethereum.</li>
+            <li>No almacenamos datos personales identificables.</li>
+        </ul>
+
+        <h2 class="i18n-termsSection4">4. Precios y pagos</h2>
+        <p class="i18n-termsSection4Text">Los precios se muestran en <strong>USD</strong> y se pagan en USDC. Los depósitos se realizan en el contrato inteligente de Humanhood.</p>
+
+        <h2 class="i18n-termsSection5">5. Limitación de responsabilidad</h2>
+        <p class="i18n-termsSection5Text">Humanhood se proporciona "tal cual". No garantizamos que el servicio esté libre de errores o interrupciones.</p>
+
+        <h2 class="i18n-termsSection6">6. Cambios en los términos</h2>
+        <p class="i18n-termsSection6Text">Podemos actualizar estos términos en cualquier momento. Te notificaremos con antelación razonable.</p>
+
+        <h2 class="i18n-termsSection7">7. Contacto</h2>
+        <p class="i18n-termsSection7Text">Para preguntas sobre estos términos, escríbenos a <strong>info@humanhood.tech</strong>.</p>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-columns">
+            <div class="footer-col"><h4 class="i18n-footerProduct">Producto</h4><a href="index.html#producto" class="i18n-footerHowItWorks">Cómo funciona</a><a href="index.html#precios" class="i18n-footerPricing">Precios</a><a href="index.html#verificar" class="i18n-footerVerify">Verificar</a><a href="index.html#faq" class="i18n-footerFaq">Preguntas frecuentes</a></div>
+            <div class="footer-col"><h4 class="i18n-footerDevs">Desarrolladores</h4><a href="docs.html" class="i18n-footerDocs">Documentación</a><a href="demo.html" class="i18n-footerDemo">Demo Testnet</a><a href="early-access.html" class="i18n-footerEarly">Early Access</a><a href="deposit.html" class="i18n-footerDeposit">Depósito USDC</a><a href="https://github.com/sokardark-bot/humanhood-v2/blob/main/contracts/HumanhoodPaid.sol" target="_blank" class="i18n-footerContract">Contrato inteligente</a></div>
+            <div class="footer-col"><h4 class="i18n-footerResources">Recursos</h4><a href="https://polygon.technology/" target="_blank" class="i18n-footerPolygon">Polygon</a><a href="https://www.bnbchain.org/" target="_blank" class="i18n-footerBNB">BNB Chain</a><a href="https://ethereum.org/" target="_blank" class="i18n-footerEthereum">Ethereum</a><a href="https://passport.gitcoin.co/" target="_blank" class="i18n-footerPassport">Gitcoin Passport</a><a href="https://www.cloudflare.com/products/turnstile/" target="_blank" class="i18n-footerTurnstile">Cloudflare Turnstile</a></div>
+            <div class="footer-col"><h4 class="i18n-footerLegal">Legal</h4><a href="terms.html">Términos de servicio</a><a href="privacy.html">Política de privacidad</a><a href="cookies.html">Política de cookies</a><a href="gdpr.html">GDPR / RGPD</a></div>
+            <div class="footer-col"><h4 class="i18n-footerContact">Contacto</h4><a href="mailto:info@humanhood.tech">info@humanhood.tech</a><a href="contact.html">Formulario de contacto</a><a href="#" class="i18n-footerSupport">Soporte técnico</a><a href="#" class="i18n-footerPartners">Asóciate con nosotros</a></div>
+            <div class="footer-col"><h4 class="i18n-footerSocial">Redes Sociales</h4><a href="https://twitter.com/humanhood" target="_blank" class="i18n-footerTwitter">Twitter</a><a href="https://github.com/sokardark-bot/humanhood-v2" target="_blank" class="i18n-footerGitHub">GitHub</a><a href="https://discord.gg/humanhood" target="_blank" class="i18n-footerDiscord">Discord</a><a href="https://t.me/humanhood" target="_blank" class="i18n-footerTelegram">Telegram</a></div>
+        </div>
+        <div class="footer-bottom"><p class="i18n-footerCopyright">&copy; 2026 Humanhood. Todos los derechos reservados.</p></div>
+        <div class="footer-badges"><span>⚡ Polygon</span><span>🔷 BNB Chain</span><span>🔶 Web3</span></div>
+    </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+    const translationsLegal = {
+        es: {
+            termsTitle: "📜 Términos de servicio",
+            termsUpdated: "Última actualización: <strong>15 de junio de 2026</strong>",
+            termsIntro: "Bienvenido a Humanhood. Al acceder o utilizar nuestro servicio, aceptas cumplir con los siguientes términos y condiciones.",
+            termsSection1: "1. Aceptación de los términos",
+            termsSection1Text: "Al utilizar Humanhood, aceptas estos términos. Si no estás de acuerdo, no utilices nuestro servicio.",
+            termsSection2: "2. Descripción del servicio",
+            termsSection2Text: "Humanhood proporciona una API de verificación humana descentralizada que permite a proyectos Web3 filtrar bots y sybils mediante Gitcoin Passport y otras herramientas.",
+            termsSection3: "3. Uso del servicio",
+            termsSection3List: "El usuario final se verifica una sola vez.\nEl proyecto cliente paga $0.05 por consulta en Polygon/BNB o $0.10 en Ethereum.\nNo almacenamos datos personales identificables.",
+            termsSection4: "4. Precios y pagos",
+            termsSection4Text: "Los precios se muestran en <strong>USD</strong> y se pagan en USDC. Los depósitos se realizan en el contrato inteligente de Humanhood.",
+            termsSection5: "5. Limitación de responsabilidad",
+            termsSection5Text: "Humanhood se proporciona 'tal cual'. No garantizamos que el servicio esté libre de errores o interrupciones.",
+            termsSection6: "6. Cambios en los términos",
+            termsSection6Text: "Podemos actualizar estos términos en cualquier momento. Te notificaremos con antelación razonable.",
+            termsSection7: "7. Contacto",
+            termsSection7Text: "Para preguntas sobre estos términos, escríbenos a <strong>info@humanhood.tech</strong>."
+        },
+        en: {
+            termsTitle: "📜 Terms of Service",
+            termsUpdated: "Last updated: <strong>June 15, 2026</strong>",
+            termsIntro: "Welcome to Humanhood. By accessing or using our service, you agree to comply with the following terms and conditions.",
+            termsSection1: "1. Acceptance of Terms",
+            termsSection1Text: "By using Humanhood, you accept these terms. If you do not agree, do not use our service.",
+            termsSection2: "2. Description of Service",
+            termsSection2Text: "Humanhood provides a decentralized human verification API that enables Web3 projects to filter bots and sybils using Gitcoin Passport and other tools.",
+            termsSection3: "3. Use of Service",
+            termsSection3List: "The end user verifies once.\nThe client project pays $0.05 per query on Polygon/BNB or $0.10 on Ethereum.\nWe do not store personally identifiable information.",
+            termsSection4: "4. Pricing and Payments",
+            termsSection4Text: "Prices are shown in <strong>USD</strong> and paid in USDC. Deposits are made through the Humanhood smart contract.",
+            termsSection5: "5. Limitation of Liability",
+            termsSection5Text: "Humanhood is provided 'as is'. We do not guarantee that the service is error-free or uninterrupted.",
+            termsSection6: "6. Changes to Terms",
+            termsSection6Text: "We may update these terms at any time. We will notify you with reasonable notice.",
+            termsSection7: "7. Contact",
+            termsSection7Text: "For questions about these terms, email us at <strong>info@humanhood.tech</strong>."
+        }
+    };
+
+    function applyLegalLanguage(lang) {
+        document.querySelectorAll('[class*="i18n-terms"]').forEach(el => {
+            const classes = el.className.split(' ');
+            const i18nClass = classes.find(c => c.startsWith('i18n-terms'));
+            if (i18nClass && translationsLegal[lang][i18nClass]) {
+                if (el.tagName === 'UL') {
+                    const items = translationsLegal[lang][i18nClass].split('\n');
+                    el.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+                } else {
+                    el.innerHTML = translationsLegal[lang][i18nClass];
+                }
+            }
+        });
+    }
+
+    const langSelect = document.getElementById('languageSelect');
+    if (langSelect) {
+        langSelect.addEventListener('change', (e) => applyLegalLanguage(e.target.value));
+        applyLegalLanguage(langSelect.value || 'es');
+    }
+
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    if (hamburgerBtn) hamburgerBtn.onclick = () => mobileMenu.classList.add('open');
+    if (closeMenuBtn) closeMenuBtn.onclick = () => mobileMenu.classList.remove('open');
+    document.querySelectorAll('.mobile-menu-links a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.remove('open')));
+    document.addEventListener('click', (e) => {
+        if (mobileMenu && mobileMenu.classList.contains('open')) {
+            if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) mobileMenu.classList.remove('open');
+        }
+    });
+</script>
+</body>
+</html>
