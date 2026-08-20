@@ -406,6 +406,92 @@ const translations = {
     }
 };
 
+// ==================== RATE LIMIT (24 HORAS) ====================
+const VERIFY_COOLDOWN = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
+
+function checkRateLimit(address) {
+    const key = `humanhood_last_verify_${address}`;
+    const lastVerify = localStorage.getItem(key);
+    
+    if (lastVerify) {
+        const timeSince = Date.now() - parseInt(lastVerify);
+        if (timeSince < VERIFY_COOLDOWN) {
+            const hoursLeft = Math.ceil((VERIFY_COOLDOWN - timeSince) / (60 * 60 * 1000));
+            return { allowed: false, hoursLeft };
+        }
+    }
+    return { allowed: true, hoursLeft: 0 };
+}
+
+function setRateLimit(address) {
+    const key = `humanhood_last_verify_${address}`;
+    localStorage.setItem(key, Date.now().toString());
+}
+
+function getRateLimitMessage(hoursLeft) {
+    if (currentLang === 'es') {
+        if (hoursLeft === 1) {
+            return `⏳ Solo puedes verificar una vez cada 24 horas. Espera 1 hora.`;
+        }
+        return `⏳ Solo puedes verificar una vez cada 24 horas. Espera ${hoursLeft} horas.`;
+    } else {
+        if (hoursLeft === 1) {
+            return `⏳ You can only verify once every 24 hours. Wait 1 hour.`;
+        }
+        return `⏳ You can only verify once every 24 hours. Wait ${hoursLeft} hours.`;
+    }
+}
+
+// ==================== ANTIGÜEDAD DE WALLET ====================
+async function checkWalletAge(address, network = 'polygon') {
+    try {
+        const response = await fetch(`/.netlify/functions/get-wallet-age?address=${address}&network=${network}`);
+        const data = await response.json();
+        
+        if (data.hasActivity && data.ageDays !== null) {
+            return { 
+                valid: true, 
+                ageDays: data.ageDays,
+                firstTxDate: data.firstTxDate
+            };
+        }
+        return { valid: false, ageDays: 0 };
+    } catch (error) {
+        console.error("Error checking wallet age:", error);
+        return { valid: false, ageDays: 0 };
+    }
+}
+
+function getWalletAgeMessage(ageDays, firstTxDate) {
+    if (currentLang === 'es') {
+        if (ageDays >= 365) {
+            return `✅ Wallet con ${Math.floor(ageDays / 365)} años de antigüedad (desde ${firstTxDate})`;
+        } else if (ageDays >= 180) {
+            return `✅ Wallet con ${Math.floor(ageDays / 30)} meses de antigüedad (desde ${firstTxDate})`;
+        } else if (ageDays >= 30) {
+            return `✅ Wallet con ${ageDays} días de antigüedad (desde ${firstTxDate})`;
+        } else if (ageDays >= 7) {
+            return `✅ Wallet con ${ageDays} días de antigüedad (desde ${firstTxDate})`;
+        } else if (ageDays > 0) {
+            return `🟡 Wallet nueva (${ageDays} días). La confianza aumenta con el tiempo.`;
+        }
+        return `🟡 Wallet muy nueva. La confianza aumenta con el tiempo.`;
+    } else {
+        if (ageDays >= 365) {
+            return `✅ Wallet with ${Math.floor(ageDays / 365)} years of history (since ${firstTxDate})`;
+        } else if (ageDays >= 180) {
+            return `✅ Wallet with ${Math.floor(ageDays / 30)} months of history (since ${firstTxDate})`;
+        } else if (ageDays >= 30) {
+            return `✅ Wallet with ${ageDays} days of history (since ${firstTxDate})`;
+        } else if (ageDays >= 7) {
+            return `✅ Wallet with ${ageDays} days of history (since ${firstTxDate})`;
+        } else if (ageDays > 0) {
+            return `🟡 New wallet (${ageDays} days). Trust increases over time.`;
+        }
+        return `🟡 Very new wallet. Trust increases over time.`;
+    }
+}
+
 // ==================== FUNCIÓN APPLYLANGUAGE ====================
 function applyLanguage(lang) {
     currentLang = lang;
@@ -566,6 +652,19 @@ if (verifyConnectBtn) {
                 showVerifyStatus(currentLang === 'es' ? "❌ Cambia a Polygon Mainnet en MetaMask" : "❌ Switch to Polygon Mainnet in MetaMask", "error");
                 return;
             }
+            
+            // Mostrar antigüedad de la wallet
+            const walletAge = await checkWalletAge(verifyUserAddress, 'polygon');
+            if (walletAge.valid && walletAge.ageDays > 0) {
+                const ageMessage = getWalletAgeMessage(walletAge.ageDays, walletAge.firstTxDate);
+                showVerifyStatus(ageMessage, "success");
+                setTimeout(() => {
+                    if (verifyStatusDiv.textContent === ageMessage) {
+                        verifyStatusDiv.classList.add('hidden');
+                    }
+                }, 5000);
+            }
+            
             const isHuman = await verifyContract.isHumanVerified(verifyUserAddress);
             if (isHuman) {
                 updateVerifyChecklist('wallet', 'done');
@@ -575,6 +674,10 @@ if (verifyConnectBtn) {
                 showVerifyStatus(currentLang === 'es' ? "✅ Ya estás verificado como humano en la blockchain" : "✅ You are already verified as human on the blockchain", "success");
                 verifyHumanStatusSpan.textContent = "✅ " + (currentLang === 'es' ? "Verificado" : "Verified");
                 verifyHumanStatusSpan.className = "status-badge verified";
+                
+                // Guardar rate limit
+                setRateLimit(verifyUserAddress);
+                
                 return;
             }
             updateVerifyChecklist('wallet', 'done');
@@ -658,11 +761,23 @@ async function checkGitcoinPassportVerify() {
 }
 
 async function registerHumanOnChain() {
+    // ==================== VERIFICAR RATE LIMIT ====================
+    const rateLimit = checkRateLimit(verifyUserAddress);
+    if (!rateLimit.allowed) {
+        showVerifyStatus(getRateLimitMessage(rateLimit.hoursLeft), "error");
+        return;
+    }
+    
     updateVerifyChecklist('blockchain', 'active');
     showVerifyStatus(currentLang === 'es' ? "⛓️ Registrando verificación en la blockchain..." : "⛓️ Registering verification on the blockchain...", "loading");
+    
     try {
         const tx = await verifyContract.verifyMe();
         await tx.wait();
+        
+        // ==================== GUARDAR RATE LIMIT ====================
+        setRateLimit(verifyUserAddress);
+        
         updateVerifyChecklist('blockchain', 'done');
         showVerifyStatus(currentLang === 'es' ? "✅ ¡Verificación exitosa! Ya eres humano en la blockchain." : "✅ Verification successful! You are now human on the blockchain.", "success");
         verifyHumanStatusSpan.textContent = "✅ " + (currentLang === 'es' ? "Verificado" : "Verified");
